@@ -26,14 +26,10 @@ import android.widget.Toast;
 
 public class MeetResults extends Activity {
 	
-	private TextView name;
-	private TextView school;
-	private TextView city;
-	private TextView state;
-	private TextView date;
-    private int diverId;
-	private int meetId;
-	private ListView myList;
+	private TextView name, school, city, state, date;
+    private ListView myList;
+    private int diverId, meetId;
+
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -57,12 +53,7 @@ public class MeetResults extends Activity {
         fillText();
         
         populateListViewFromDB();
-             
-        
-      //changes the title display
-        setTitle("Meet Results");
-        
-     // heads up for the user
+
         Toast.makeText(getApplicationContext(),
     			"Click a diver to see the scores",
     			Toast.LENGTH_LONG).show();

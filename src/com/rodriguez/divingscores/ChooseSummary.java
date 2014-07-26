@@ -67,7 +67,6 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
 
     @Override
     public void onBackPressed(){
-
         final Context context = this;
         Intent intent = new Intent(context, ChooseDiver.class);
         Bundle b = new Bundle();

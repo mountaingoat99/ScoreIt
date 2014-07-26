@@ -23,41 +23,11 @@ import android.widget.Toast;
 
 public class MeetScores extends Activity {
 	
-	private TextView meetName;
-	private TextView schoolName;
-	private TextView schoolCity;
-	private TextView schoolState;
-	private TextView meetDate;
-	private TextView name;
-	private TextView age;
-	private TextView grade;
-	private TextView school;
-	private TextView total;
-    private TextView Type;
-	private TextView score1;
-	private TextView score2;
-	private TextView score3;
-	private TextView score4;
-	private TextView score5;
-	private TextView score6;
-	private TextView score7;
-	private TextView score8;
-	private TextView score9;
-	private TextView score10;
-	private TextView score11;	
-	private TextView s1;
-	private TextView s2;
-	private TextView s3;
-	private TextView s4;
-	private TextView s5;
-	private TextView s6;
-	private TextView s7;
-	private TextView s8;
-	private TextView s9;
-	private TextView s10;
-	private TextView s11;
-    private int diverId;
-	private int meetId;
+	private TextView meetName, schoolName, schoolCity, schoolState, meetDate, name, age,
+                        grade, school, total, Type, score1, score2, score3, score4, score5,
+                        score6, score7, score8, score9, score10, score11, s1, s2, s3, s4,
+                        s5, s6, s7, s8, s9, s10, s11;
+    private int diverId, meetId;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -69,53 +39,19 @@ public class MeetScores extends Activity {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        name = (TextView)findViewById(R.id.nameResults);
-        age = (TextView)findViewById(R.id.ageResults);
-        grade = (TextView)findViewById(R.id.gradeResults);
-        school = (TextView)findViewById(R.id.schoolResults);
-        meetName = (TextView)findViewById(R.id.meetName);
-        schoolName = (TextView)findViewById(R.id.meetSchool);
-        schoolCity = (TextView)findViewById(R.id.MeetCity);
-        schoolState = (TextView)findViewById(R.id.MeetState);
-        meetDate = (TextView)findViewById(R.id.meetDate);
-        total = (TextView)findViewById(R.id.theTotal);
-        Type = (TextView)findViewById(R.id.theType);
-        score1 = (TextView)findViewById(R.id.score1);
-        score2 = (TextView)findViewById(R.id.score2);
-        score3 = (TextView)findViewById(R.id.score3);
-        score4 = (TextView)findViewById(R.id.score4);
-        score5 = (TextView)findViewById(R.id.score5);
-        score6 = (TextView)findViewById(R.id.score6);
-        score7 = (TextView)findViewById(R.id.score7);
-        score8 = (TextView)findViewById(R.id.score8);
-        score9 = (TextView)findViewById(R.id.score9);
-        score10 = (TextView)findViewById(R.id.score10);
-        score11 = (TextView)findViewById(R.id.score11);        
-        s1 = (TextView)findViewById(R.id.score1view);
-        s2 = (TextView)findViewById(R.id.score2view);
-        s3 = (TextView)findViewById(R.id.score3view);
-        s4 = (TextView)findViewById(R.id.score4view);
-        s5 = (TextView)findViewById(R.id.score5view);
-        s6 = (TextView)findViewById(R.id.score6view);
-        s7 = (TextView)findViewById(R.id.score7view);
-        s8 = (TextView)findViewById(R.id.score8view);
-        s9 = (TextView)findViewById(R.id.score9view);
-        s10 = (TextView)findViewById(R.id.score10view);
-        s11 = (TextView)findViewById(R.id.score11view);
+        setupView();
         
         Bundle b = getIntent().getExtras();
         diverId = b.getInt("key");
         meetId = b.getInt("key2");
+
         fillText();
         fillMeet();
         fillScores();
         fillType();
-        
-        //changes the title display
-        setTitle("Meet Scores");
-    }	
-	
-	public void fillText(){
+    }
+
+    public void fillText(){
 		DiverDatabase db = new DiverDatabase(getApplicationContext());
 		ArrayList<String> diverInfo;
 		diverInfo = db.getDiverInfo(diverId);
@@ -264,6 +200,42 @@ public class MeetScores extends Activity {
         int type = db.getType(meetId, diverId);
         String typeString = type + " Meters";
         Type.setText(typeString);
+    }
+
+    private void setupView() {
+        name = (TextView)findViewById(R.id.nameResults);
+        age = (TextView)findViewById(R.id.ageResults);
+        grade = (TextView)findViewById(R.id.gradeResults);
+        school = (TextView)findViewById(R.id.schoolResults);
+        meetName = (TextView)findViewById(R.id.meetName);
+        schoolName = (TextView)findViewById(R.id.meetSchool);
+        schoolCity = (TextView)findViewById(R.id.MeetCity);
+        schoolState = (TextView)findViewById(R.id.MeetState);
+        meetDate = (TextView)findViewById(R.id.meetDate);
+        total = (TextView)findViewById(R.id.theTotal);
+        Type = (TextView)findViewById(R.id.theType);
+        score1 = (TextView)findViewById(R.id.score1);
+        score2 = (TextView)findViewById(R.id.score2);
+        score3 = (TextView)findViewById(R.id.score3);
+        score4 = (TextView)findViewById(R.id.score4);
+        score5 = (TextView)findViewById(R.id.score5);
+        score6 = (TextView)findViewById(R.id.score6);
+        score7 = (TextView)findViewById(R.id.score7);
+        score8 = (TextView)findViewById(R.id.score8);
+        score9 = (TextView)findViewById(R.id.score9);
+        score10 = (TextView)findViewById(R.id.score10);
+        score11 = (TextView)findViewById(R.id.score11);
+        s1 = (TextView)findViewById(R.id.score1view);
+        s2 = (TextView)findViewById(R.id.score2view);
+        s3 = (TextView)findViewById(R.id.score3view);
+        s4 = (TextView)findViewById(R.id.score4view);
+        s5 = (TextView)findViewById(R.id.score5view);
+        s6 = (TextView)findViewById(R.id.score6view);
+        s7 = (TextView)findViewById(R.id.score7view);
+        s8 = (TextView)findViewById(R.id.score8view);
+        s9 = (TextView)findViewById(R.id.score9view);
+        s10 = (TextView)findViewById(R.id.score10view);
+        s11 = (TextView)findViewById(R.id.score11view);
     }
 	
 	@Override

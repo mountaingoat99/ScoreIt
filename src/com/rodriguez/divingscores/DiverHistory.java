@@ -20,14 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DiverHistory extends Activity {
-	
-	private TextView name;
-	private TextView age;
-	private TextView grade;
-	private TextView school;
-    private int diverId;
-	private int meetId;
-	private ListView myList;
+
+    private ListView myList;
+	private TextView name, age, grade, school;
+    private int diverId, meetId;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -50,12 +46,7 @@ public class DiverHistory extends Activity {
         fillText();
         
         populateListViewFromDB();
-		//registerListClickCallback();           
-        
-      //changes the title display
-        setTitle("Diver History");
-        
-      // heads up for the user
+
         Toast.makeText(getApplicationContext(),
     			"Click a meet to see the scores",
     			Toast.LENGTH_LONG).show();		

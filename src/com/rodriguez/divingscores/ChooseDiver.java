@@ -34,16 +34,12 @@ import android.widget.Toast;
 public class ChooseDiver extends Activity implements OnItemSelectedListener {
 
     private Spinner spinnerName;
-    private int diverId = 0;
-    private int meetId = 0;
-    private int diveTotal = 6;
-    private int diveType = 1;
-    private int diverSpinnerPosition;
-    private int meetSpinPosition;
     private RadioButton rbd6, rbd11, rbd1, rbd3;
     private RadioGroup radioGroupTotal, radioGroupType;
-    private boolean checkResult, checkTotals, checkType;
     private TextView MeetName, DiveTotal, DiveType;
+    private int  meetSpinPosition, diverSpinnerPosition, diverId = 0,
+                meetId = 0, diveTotal = 6, diveType = 1;
+    private boolean checkResult, checkTotals, checkType;
     String showDiveTotal;
 
     @Override
@@ -56,19 +52,9 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        MeetName = (TextView)findViewById(R.id.EnterMeetM);
-        DiveTotal = (TextView)findViewById(R.id.TextViewDiveTotals);
-        DiveType = (TextView)findViewById(R.id.TextViewDiveType);
-        // calls custom radio group class
-        radioGroupTotal = (RadioGroup)findViewById(R.id.radioGroupDives);
-        radioGroupType = (RadioGroup)findViewById(R.id.radioGroupDiveTypes);
-        rbd6 = (RadioButton)findViewById(R.id.radioDives6);
-        rbd11 = (RadioButton)findViewById(R.id.radioDives11);
-        rbd1 = (RadioButton)findViewById(R.id.radioType1);
-        rbd3 = (RadioButton)findViewById(R.id.radioType3);
-        spinnerName = (Spinner)findViewById(R.id.spinnerDiverName);
-
+        setUpView();
         loadSpinnerName();
+        spinnerName.setOnItemSelectedListener(this);
 
         Bundle b = getIntent().getExtras();
         meetId = b.getInt("keyMeet");
@@ -77,12 +63,20 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
         spinnerName.setSelection(diverSpinnerPosition);
 
         loadMeetName();
-
-        // call the button press method
         addListenerOnButton();
+    }
 
-        // spinner calls
-        spinnerName.setOnItemSelectedListener(this);
+    private void setUpView() {
+        MeetName = (TextView)findViewById(R.id.EnterMeetM);
+        DiveTotal = (TextView)findViewById(R.id.TextViewDiveTotals);
+        DiveType = (TextView)findViewById(R.id.TextViewDiveType);
+        radioGroupTotal = (RadioGroup)findViewById(R.id.radioGroupDives);
+        radioGroupType = (RadioGroup)findViewById(R.id.radioGroupDiveTypes);
+        rbd6 = (RadioButton)findViewById(R.id.radioDives6);
+        rbd11 = (RadioButton)findViewById(R.id.radioDives11);
+        rbd1 = (RadioButton)findViewById(R.id.radioType1);
+        rbd3 = (RadioButton)findViewById(R.id.radioType3);
+        spinnerName = (Spinner)findViewById(R.id.spinnerDiverName);
     }
 
     @Override

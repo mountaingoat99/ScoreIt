@@ -34,7 +34,6 @@ public class Welcome extends Activity implements OnItemSelectedListener
     private Spinner spinnerName, spinnerMeet;
 	private int diveCount = 0, meetCount = 0, diverId = 0, meetId = 0;
 	private boolean diverCheck, meetCheck;
-    private Bundle savedState;
 
    @Override
    public void onCreate(Bundle savedInstanceState) 
@@ -42,10 +41,9 @@ public class Welcome extends Activity implements OnItemSelectedListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        // call the button press method
+
         addListenerOnButton();
 
-        // spinner calls
         spinnerName = (Spinner)findViewById(R.id.spinnerDiverNameW);
         loadSpinnerName();
         spinnerName.setOnItemSelectedListener(this);

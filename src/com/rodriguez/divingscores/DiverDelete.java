@@ -21,10 +21,7 @@ import android.widget.Toast;
 
 public class DiverDelete extends Activity {
 
-    private TextView name;
-	private TextView age;
-	private TextView grade;
-	private TextView school;
+    private TextView name, age, grade, school;
 	private String nameString;
     private int diverId;
 	
@@ -44,15 +41,10 @@ public class DiverDelete extends Activity {
         school = (TextView)findViewById(R.id.deleteSchool);
         
         Bundle b = getIntent().getExtras();
-        diverId = b.getInt("key"); 
-        //fill Edit Text Boxes
+        diverId = b.getInt("key");
+
         fillEditText();
-        
-        // call the button press method
-        addListenerOnButton();        
-        
-      //changes the title display
-        setTitle("Delete Diver");
+        addListenerOnButton();
     }
 	
 	public void fillEditText(){

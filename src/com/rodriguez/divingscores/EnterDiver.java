@@ -19,14 +19,8 @@ import android.widget.Toast;
 public class EnterDiver extends Activity {
 	
 	Button btnEnterDiver;
-	TextView name;
-	TextView age;
-	TextView grade;
-	TextView school;
-	String nameString;
-	String ageString;
-	String gradeString;
-	String schoolString;
+	TextView name, age, grade, school;
+	String nameString, ageString, gradeString, schoolString;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -38,16 +32,11 @@ public class EnterDiver extends Activity {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        // call the button press method
-        addListenerOnButton();        
-        
-      //changes the title display
-        setTitle("Enter Diver");
+        addListenerOnButton();
     }
 	
 	public void writeNameToDB(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());		
-				
+		DiverDatabase db = new DiverDatabase(getApplicationContext());
 		db.fillDiver(nameString, ageString, gradeString, schoolString);		
 	}
 	

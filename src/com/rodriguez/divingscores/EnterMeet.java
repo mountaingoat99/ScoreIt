@@ -27,10 +27,9 @@ public class EnterMeet extends Activity implements
 OnClickListener {
 
     private RadioGroup radioJudgesGroup;
+    private TextView name, school, city, state;
 	private EditText txtDate;
-    private int judges;
-    private int judgeChecked;
-	private TextView name, school, city, state;
+    private int judges, judgeChecked;
 	private String nameString, schoolString, cityString, stateString, dateString;
 	
 	@Override
@@ -45,11 +44,8 @@ OnClickListener {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         txtDate = (EditText)findViewById(R.id.editTextDate);
         txtDate.setOnClickListener(this);
-        // call the button press method
-        addListenerOnButton();        
-        
-      //changes the title display
-        setTitle("Enter Meet");
+
+        addListenerOnButton();
     }
 	
 	@Override

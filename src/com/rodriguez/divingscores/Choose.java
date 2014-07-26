@@ -30,11 +30,7 @@ import android.widget.Toast;
 public class Choose extends Activity implements OnItemSelectedListener {
 
     private Spinner spinnerMeet;
-	private int meetId = 0;
-    public int meetSpinPosition;
-	private boolean checkResult;
-    private int spinnerPosition;
-    private int savedPosition;
+	private int meetSpinPosition, meetId = 0;
 	
 	@Override
 		public void onCreate(Bundle savedInstanceState) 
@@ -48,6 +44,7 @@ public class Choose extends Activity implements OnItemSelectedListener {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         spinnerMeet = (Spinner)findViewById(R.id.spinnerMeetName);
         loadSpinnerMeet();
+        spinnerMeet.setOnItemSelectedListener(this);
 
         Bundle b = getIntent().getExtras();
         if(b != null) {
@@ -55,10 +52,7 @@ public class Choose extends Activity implements OnItemSelectedListener {
             spinnerMeet.setSelection(meetSpinPosition);
         }
 
-		// call the button press method
 		addListenerOnButton();
-
-		spinnerMeet.setOnItemSelectedListener(this);
 	}
 
     @Override

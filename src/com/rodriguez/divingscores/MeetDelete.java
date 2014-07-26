@@ -21,11 +21,7 @@ import android.widget.Toast;
 
 public class MeetDelete extends Activity {
 
-    private TextView name;
-	private TextView school;
-	private TextView city;
-	private TextView state;
-	private TextView date;
+    private TextView name, school, city, state, date;
 	private String nameString;
     private int meetId;
 	
@@ -47,14 +43,9 @@ public class MeetDelete extends Activity {
         
         Bundle b = getIntent().getExtras();
         meetId = b.getInt("key");
-        // fill edit text boxes
+
         fillEditText();
-        
-        // call the button press method
-        addListenerOnButton();        
-        
-      //changes the title display
-        setTitle("Delete Meet");
+        addListenerOnButton();
     }
 	
 	public void fillEditText(){

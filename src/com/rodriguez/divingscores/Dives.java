@@ -15,12 +15,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,23 +39,11 @@ public class Dives extends Activity implements OnItemSelectedListener
     private RadioButton radioTuck, radioPike, radioFree, radioStraight;
     private TextView view4, view5, view6, view7;
     private Spinner score1, score2, score3, score4, score5, score6, score7;
-    private int s1, s2, s3, s4, s5, s6, s7;
-    private int judges;
-    private int diverId;
-    private int meetId;
-    private int diveType;
-    private int divePosition = 1;
-    private int diveTotal = 0;
-    private int boardType = 0;
-    private double sc1, sc2, sc3, sc4, sc5, sc6, sc7, diveScoreTotal = 0.0, multiplier = 0.0;
-    private double dive1 = 0.0, dive2 = 0.0, dive3 = 0.0, dive4 = 0.0,
-                    dive5 = 0.0, dive6 = 0.0, dive7 = 0.0, dive8 = 0.0,
-                    dive9 = 0.0, dive10 = 0.0, dive11 = 0.0, total = 0.0;
-
+    private int judges, diverId, meetId, diveType, divePosition = 1, boardType = 0;
+    private double sc1, sc2, sc3, diveScoreTotal = 0.0, multiplier = 0.0;
     private List<String> diveName;
-    private List<String> scoreNames;
-    ArrayList<Double> Scores = new ArrayList<>();
-    boolean hidebtn;
+    private ArrayList<Double> Scores = new ArrayList<>();
+    boolean hidebutton;
     String stringId = null;
 	
     @Override
@@ -69,16 +55,6 @@ public class Dives extends Activity implements OnItemSelectedListener
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
-        if(savedInstanceState != null){
-            s1 = savedInstanceState.getInt("score1");
-            s2 = savedInstanceState.getInt("score2");
-            s3 = savedInstanceState.getInt("score3");
-            s4 = savedInstanceState.getInt("score4");
-            s5 = savedInstanceState.getInt("score5");
-            s6 = savedInstanceState.getInt("score6");
-            s7 = savedInstanceState.getInt("score7");
-        }
-
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setUpView();
 
@@ -98,15 +74,6 @@ public class Dives extends Activity implements OnItemSelectedListener
         spinner.setOnItemSelectedListener(this);
         loadScoreSpinners();
         loadSpinnerData();
-
-        score1.setSelection(s1);
-        score1.setSelection(s2);
-        score1.setSelection(s3);
-        score1.setSelection(s4);
-        score1.setSelection(s5);
-        score1.setSelection(s6);
-        score1.setSelection(s7);
-
         setTitle();
         getDiveTotals();
         showScores();
@@ -115,33 +82,12 @@ public class Dives extends Activity implements OnItemSelectedListener
     }
 
     @Override
-    protected void onSaveInstanceState (Bundle outState){
-        outState.putInt("score1", score1.getSelectedItemPosition());
-        outState.putInt("score2", score2.getSelectedItemPosition());
-        outState.putInt("score3", score3.getSelectedItemPosition());
-        outState.putInt("score4", score4.getSelectedItemPosition());
-        outState.putInt("score5", score5.getSelectedItemPosition());
-        outState.putInt("score6", score6.getSelectedItemPosition());
-        outState.putInt("score7", score7.getSelectedItemPosition());
-
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position,
                                long id) {
         if(spinner.getSelectedItemPosition() == 0)
-            hidebtn = false;
+            hidebutton = false;
         else
-        hidebtn = true;
-
-
-
-        //if(id < 0)   //          TODO this does not work as it is ready any spinner, not just the dive
-            //hidebtn = false;
-        //else
-            //hidebtn = true;
-
+        hidebutton = true;
     }
 
     private void checkRadios() {
@@ -226,7 +172,7 @@ public class Dives extends Activity implements OnItemSelectedListener
     //loads the spinners for the scores
     private void loadScoreSpinners(){
         ScoresDatabase db = new ScoresDatabase(getApplicationContext());
-        scoreNames = db.getScores();
+        List<String> scoreNames = db.getScores();
 
         ArrayAdapter<String> da = new ArrayAdapter<>(this,
                 R.layout.spinner_item, scoreNames);
@@ -247,7 +193,7 @@ public class Dives extends Activity implements OnItemSelectedListener
 
     	btnTotal.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
-                if (hidebtn) {
+                if (hidebutton) {
                     getScoreText();
                     //if (missed)
                         //return;
@@ -269,7 +215,7 @@ public class Dives extends Activity implements OnItemSelectedListener
 
     private void calcScores() {
         ResultDatabase db = new ResultDatabase(getApplicationContext());
-        total = db.getTotalScore(meetId, diverId);                  // gets total score
+        double total = db.getTotalScore(meetId, diverId);
         // Converts and sorts the ArrayList for processing
         Double[] theScores = new Double[ Scores.size()];
         Scores.toArray(theScores);
@@ -305,17 +251,17 @@ public class Dives extends Activity implements OnItemSelectedListener
         ArrayList<Double> scores;
         scores = db.checkResults(meetId, diverId);                  // checks the previous scores
 
-        dive1 = scores.get(0);
-        dive2 = scores.get(1);
-        dive3 = scores.get(2);
-        dive4 = scores.get(3);
-        dive5 = scores.get(4);
-        dive6 = scores.get(5);
-        dive7 = scores.get(6);
-        dive8 = scores.get(7);
-        dive9 = scores.get(8);
-        dive10 = scores.get(9);
-        dive11 = scores.get(10);
+        double dive1 = scores.get(0);
+        double dive2 = scores.get(1);
+        double dive3 = scores.get(2);
+        double dive4 = scores.get(3);
+        double dive5 = scores.get(4);
+        double dive6 = scores.get(5);
+        double dive7 = scores.get(6);
+        double dive8 = scores.get(7);
+        double dive9 = scores.get(8);
+        double dive10 = scores.get(9);
+        double dive11 = scores.get(10);
 
         int resultIndex;
         if(dive1 == 0.0){                                           // if previous is empty fills the next one
@@ -375,110 +321,30 @@ public class Dives extends Activity implements OnItemSelectedListener
     }
 
     private void getScoreText(){
-        //missed = false;
-        //if(score1.getSelectedItem().toString().equals("0.0")) {
-            sc1 = Double.parseDouble(score1.getSelectedItem().toString());
-            Scores.add(sc1);
-        //}
-//        else {
-//            Toast.makeText(getApplicationContext(),
-//                    "You missed score one!",
-//                    Toast.LENGTH_LONG
-//            ).show();
-//            missed = true;
-//            return;
-        //}
-        //if(score2.getSelectedItem().toString().equals("0.0")) {
-            sc2 = Double.parseDouble(score2.getSelectedItem().toString());
-            Scores.add(sc2);
-        //}else{
-          //  Toast.makeText(getApplicationContext(),
-            //        "You missed score two!",
-              //      Toast.LENGTH_LONG
-           // ).show();
-           // missed = true;
-           // return;
-        //}
-        //if(score3.getSelectedItem().toString().equals("0.0")) {
-            sc3 = Double.parseDouble(score3.getSelectedItem().toString());
-            Scores.add(sc3);
-        //}else{
-          //  Toast.makeText(getApplicationContext(),
-            //        "You missed score three!",
-              //      Toast.LENGTH_LONG
-            //).show();
-            //missed = true;
-            //return;
-        //}
+        sc1 = Double.parseDouble(score1.getSelectedItem().toString());
+        Scores.add(sc1);
+        sc2 = Double.parseDouble(score2.getSelectedItem().toString());
+        Scores.add(sc2);
+        sc3 = Double.parseDouble(score3.getSelectedItem().toString());
+        Scores.add(sc3);
 
+        double sc5;
+        double sc4;
         if(judges == 5){
-            //if(score4.getSelectedItem().toString().equals("0.0")) {
-                sc4 = Double.parseDouble(score4.getSelectedItem().toString());
-                Scores.add(sc4);
-            //}else{
-              //  Toast.makeText(getApplicationContext(),
-                //        "You missed score four!",
-                  //      Toast.LENGTH_LONG
-                //).show();
-                //missed = true;
-                //return;
-            //}
-           // if(score5.getSelectedItem().toString().equals("0.0")) {
-                sc5 = Double.parseDouble(score5.getSelectedItem().toString());
-                Scores.add(sc5);
-            //}else{
-              //  Toast.makeText(getApplicationContext(),
-                //        "You missed score five!",
-                //  //      Toast.LENGTH_LONG
-                //).show();
-                //missed = true;
-                //return;
-            //}
+            sc4 = Double.parseDouble(score4.getSelectedItem().toString());
+            Scores.add(sc4);
+            sc5 = Double.parseDouble(score5.getSelectedItem().toString());
+            Scores.add(sc5);
         }
         if(judges == 7){
-         //   if(score4.getSelectedItem().toString().equals("0.0")) {
-                sc4 = Double.parseDouble(score4.getSelectedItem().toString());
-                Scores.add(sc4);
-           // }else{
-             //   Toast.makeText(getApplicationContext(),
-               //         "You missed score four!",
-                 //       Toast.LENGTH_LONG
-                //).show();
-                //missed = true;
-                //return;
-           // }
-            //if(score5.getSelectedItem().toString().equals("0.0")) {
-                sc5 = Double.parseDouble(score5.getSelectedItem().toString());
-                Scores.add(sc5);
-            //}else{
-              //  Toast.makeText(getApplicationContext(),
-                //        "You missed score five!",
-                  //      Toast.LENGTH_LONG
-                //).show();
-                //missed = true;
-                //return;
-           // }
-            //if(score6.getSelectedItem().toString().equals("0.0")) {
-                sc6 = Double.parseDouble(score6.getSelectedItem().toString());
-                Scores.add(sc6);
-            //}else{
-              //  Toast.makeText(getApplicationContext(),
-                //        "You missed score six!",
-                  //      Toast.LENGTH_LONG
-                //).show();
-                //missed = true;
-               // return;
-            //}
-            //if(score7.getSelectedItem().toString().equals("0.0")) {
-                sc7 = Double.parseDouble(score7.getSelectedItem().toString());
-                Scores.add(sc7);
-            //}else{
-              //  Toast.makeText(getApplicationContext(),
-                //        "You missed score seven!",
-                  //      Toast.LENGTH_LONG
-                //).show();
-                //missed = true;
-            //}
+            sc4 = Double.parseDouble(score4.getSelectedItem().toString());
+            Scores.add(sc4);
+            sc5 = Double.parseDouble(score5.getSelectedItem().toString());
+            Scores.add(sc5);
+            double sc6 = Double.parseDouble(score6.getSelectedItem().toString());
+            Scores.add(sc6);
+            double sc7 = Double.parseDouble(score7.getSelectedItem().toString());
+            Scores.add(sc7);
         }
     }
 
@@ -516,8 +382,8 @@ public class Dives extends Activity implements OnItemSelectedListener
 
     private void getDiveTotals(){
         DiveTotalDatabase db = new DiveTotalDatabase(getApplicationContext());
-        diveTotal = db.searchTotals(meetId, diverId);
-        // TODO add in a way to not let user input anything else if diveTotal is 11
+        int diveTotal = db.searchTotals(meetId, diverId);
+        // TODO add in a way to not let user input anything else if diveTotal is 11, might not need this
     }
 
     private void setTitle(){
@@ -561,7 +427,9 @@ public class Dives extends Activity implements OnItemSelectedListener
         }
     }
 
-    private void setUpView(){radioFree = (RadioButton)findViewById(R.id.radioFree);
+    private void setUpView(){
+
+        radioFree = (RadioButton)findViewById(R.id.radioFree);
         radioPike = (RadioButton)findViewById(R.id.radioPike);
         radioTuck = (RadioButton)findViewById(R.id.radioTuck);
         radioStraight = (RadioButton)findViewById(R.id.radioStraight);

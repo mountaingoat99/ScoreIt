@@ -44,6 +44,17 @@ public class MeetEdit extends Activity implements
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        setupView();
+        date.setOnClickListener(this);
+
+        Bundle b = getIntent().getExtras();
+        meetId = b.getInt("key");
+
+        fillEditText();
+        addListenerOnButton();
+    }
+
+    private void setupView() {
         name = (EditText)findViewById(R.id.editTextNameEM);
         school = (EditText)findViewById(R.id.editTextSchoolEM);
         city = (EditText)findViewById(R.id.editTextCityEM);
@@ -53,24 +64,9 @@ public class MeetEdit extends Activity implements
         judge3 = (RadioButton)findViewById(R.id.radio3J);
         judge5 = (RadioButton)findViewById(R.id.radio5J);
         judge7 = (RadioButton)findViewById(R.id.radio7J);
-
-        date.setOnClickListener(this);
-
-        
-        // get the parameter diver id from the Intent        
-        Bundle b = getIntent().getExtras();
-        meetId = b.getInt("key");
-        //fill Edit Text Boxes
-        fillEditText();
-        
-        // call the button press method
-        addListenerOnButton();        
-        
-      //changes the title display
-        setTitle("Edit Meet");
     }
-	
-	public void fillEditText(){
+
+    public void fillEditText(){
 		MeetDatabase db = new MeetDatabase(getApplicationContext());
 		ArrayList<String> meetInfo;
 		meetInfo = db.getMeetInfo(meetId);

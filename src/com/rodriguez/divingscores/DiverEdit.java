@@ -21,18 +21,9 @@ import android.widget.Toast;
 
 public class DiverEdit extends Activity {
 
-    private EditText name;
-	private EditText age;
-	private EditText grade;
-	private EditText school;
-	private String nameString;
-	private String ageString;
-	private String gradeString;
-	private String schoolString;
-	private String nameEdit;
-	private String ageEdit;
-	private String gradeEdit;
-	private String schoolEdit;
+    private EditText name, age, grade, school;
+	private String nameString, ageString, gradeString, schoolString, nameEdit,
+                    ageEdit, gradeEdit, schoolEdit;
 	private int diverId;	
 	
 	@Override
@@ -49,18 +40,11 @@ public class DiverEdit extends Activity {
         age = (EditText)findViewById(R.id.editTextAgeED);
         grade = (EditText)findViewById(R.id.editTextGradeED);
         school = (EditText)findViewById(R.id.editTextSchoolED);
-        
-        // get the parameter diver id from the Intent        
         Bundle b = getIntent().getExtras();
         diverId = b.getInt("key");
-        //fill Edit Text Boxes
+
         fillEditText();
-        
-        // call the button press method
-        addListenerOnButton();        
-        
-      //changes the title display
-        setTitle("Edit Diver");
+        addListenerOnButton();
     }
 	
 	public void fillEditText(){
