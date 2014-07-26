@@ -1,0 +1,154 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:ignore="NotSibling" >
+
+    <TextView
+        android:id="@+id/Choices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/AndroidDarkBlue"
+        android:gravity="center"
+        android:text="@string/welcome_add"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/white"/>
+
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Choices"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp" >
+
+        <Button
+            android:id="@+id/buttonNewDiver"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/enter_new_diver_info"
+            android:textSize="@dimen/button_text"
+            android:textColor="@color/button_text"/>
+
+        <Button
+            android:id="@+id/buttonNewMeet"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/enter_new_meet_info"
+            android:textSize="@dimen/button_text"
+            android:textColor="@color/button_text"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/ShowDivers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/AndroidDarkBlue"
+        android:gravity="center"
+        android:text="@string/current_diver_info"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/white"
+        android:layout_below="@id/layout1" />
+    
+   <Spinner
+        android:id="@+id/spinnerDiverNameW"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ShowDivers"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:prompt="@string/choose_diver" />
+   
+   <LinearLayout
+       android:id="@+id/diverBtnLayout"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/spinnerDiverNameW"
+       android:layout_marginLeft="8dp"
+       android:layout_marginRight="8dp"
+       android:orientation="horizontal" >
+
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/ShowMeets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/diverBtnLayout"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/AndroidDarkBlue"
+        android:gravity="center"
+        android:text="@string/current_meet_info"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/white" />
+    
+    <Spinner
+        android:id="@+id/spinnerMeetNameW"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ShowMeets"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:prompt="@string/choose_meet" />
+    
+    <LinearLayout
+       android:id="@+id/meetBtnLayout"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/spinnerMeetNameW"
+       android:layout_marginLeft="8dp"
+       android:layout_marginRight="8dp"
+       android:orientation="horizontal" >   
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/Divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/meetBtnLayout"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/AndroidDarkBlue"
+        android:gravity="center"
+        android:text=""
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/buttonStartNewMeet"
+        style="@android:style/Widget.Holo.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/Divider"
+        android:text="@string/start_meet"
+        android:layout_alignLeft="@+id/ShowDivers"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:textSize="@dimen/button_text"
+        android:textColor="@color/button_text"
+        android:layout_marginBottom="16dp"/>
+        
+</RelativeLayout>

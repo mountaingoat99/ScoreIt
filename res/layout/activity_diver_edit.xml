@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="NotSibling" >
+    
+    <TextView
+        android:id="@+id/EditDiver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/header"
+        android:gravity="center"
+        android:text="@string/choose_diver_edit"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/header_text" />
+
+    <EditText
+        android:id="@+id/editTextNameED"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/EditDiver"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/enterNameED"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="8dp"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/random_text">
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/enterNameED"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextNameED"
+        android:layout_marginLeft="8dp"
+        android:text="@string/name"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/static_text" />
+    
+    <EditText
+        android:id="@+id/editTextAgeED"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/enterNameED"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/enterNameED"
+        android:ems="10"
+        android:inputType="number"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="8dp"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/random_text">
+
+    </EditText>
+
+    <TextView
+        android:id="@+id/EditAgeED"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextAgeED"
+        android:layout_alignLeft="@+id/enterNameED"
+        android:text="@string/age"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/static_text" />
+    
+    <EditText
+        android:id="@+id/editTextGradeED"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextAgeED"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/enterNameED"
+        android:ems="10"
+        android:inputType="text"
+        android:layout_marginRight="8dp"
+        android:layout_alignParentEnd="true"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/random_text">
+
+    </EditText>
+
+    <TextView
+        android:id="@+id/enterGradeN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextGradeED"
+        android:layout_marginLeft="8dp"
+        android:text="@string/grade"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/static_text" />
+    
+    <EditText
+        android:id="@+id/editTextSchoolED"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextGradeED"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/enterNameED"
+        android:ems="10"
+        android:inputType="text"
+        android:layout_marginRight="8dp"
+        android:layout_alignParentEnd="true"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/random_text">
+
+    </EditText>
+
+    <TextView
+        android:id="@+id/enterSchoolN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextSchoolED"
+        android:layout_marginLeft="8dp"
+        android:text="@string/school"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/static_text"/>
+
+    <TextView
+        android:id="@+id/Divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/enterSchoolN"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/header"
+        android:gravity="center"
+        android:text=""
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/header_text"/>
+
+    <Button
+        android:id="@+id/buttonDiverE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Divider"
+        android:text="@string/edit"
+        android:textSize="@dimen/button_text"
+        android:textColor="@color/button_text"
+        style="@android:style/Widget.Holo.Button"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true" />
+
+</RelativeLayout>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" >
+    
+    <TextView
+			android:id="@+id/meet"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			/>
+	<TextView
+			android:id="@+id/dive1"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_alignParentRight="true"
+			/>
+	
+	<TextView
+			android:id="@+id/dive2"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			/>
+	<TextView
+			android:id="@+id/dive3"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_alignParentRight="true"
+			/>
+	
+	<TextView
+			android:id="@+id/dive4"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_alignParentRight="true"
+			/>
+	
+	<TextView
+			android:id="@+id/dive5"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			/>
+	
+	<TextView
+			android:id="@+id/dive6"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_alignParentRight="true"
+			/>
+	
+	<TextView
+			android:id="@+id/dive7"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_alignParentRight="true"
+			/>
+	
+	<TextView
+			android:id="@+id/dive8"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			/>
+	<TextView
+			android:id="@+id/dive9"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_alignParentRight="true"
+			/>
+	
+	<TextView
+			android:id="@+id/dive10"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_alignParentRight="true"
+			/>
+	
+	<TextView
+			android:id="@+id/dive11"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			/>
+	
+	<Textview
+	    	android:id="@+id/totalScore"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			/>
+
+</RelativeLayout>

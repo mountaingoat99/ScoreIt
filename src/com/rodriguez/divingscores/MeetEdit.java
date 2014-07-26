@@ -1,0 +1,217 @@
+package com.rodriguez.divingscores;
+
+import info.sqlite.helper.MeetDatabase;
+
+import java.util.ArrayList;
+
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
+public class MeetEdit extends Activity {
+
+    private RadioGroup radioJudgesGroup;
+    private RadioButton judge3, judge5, judge7;
+	private EditText name, school, city, state, date;
+	private String nameString, schoolString, cityString, stateString, dateString, nameEdit,
+            schoolEdit, cityEdit, stateEdit, dateEdit, judgeString;
+	private int meetId, judges, judgeChecked;
+	
+	@Override
+    public void onCreate(Bundle savedInstanceState) 
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_meet_edit);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        name = (EditText)findViewById(R.id.editTextNameEM);
+        school = (EditText)findViewById(R.id.editTextSchoolEM);
+        city = (EditText)findViewById(R.id.editTextCityEM);
+        state = (EditText)findViewById(R.id.editTextStateEM);
+        date = (EditText)findViewById(R.id.editTextDateEM);
+        radioJudgesGroup = (RadioGroup)findViewById(R.id.radioGroupMeet);
+        judge3 = (RadioButton)findViewById(R.id.radio3J);
+        judge5 = (RadioButton)findViewById(R.id.radio5J);
+        judge7 = (RadioButton)findViewById(R.id.radio7J);
+
+        
+        // get the parameter diver id from the Intent        
+        Bundle b = getIntent().getExtras();
+        meetId = b.getInt("key");
+        //fill Edit Text Boxes
+        fillEditText();
+        
+        // call the button press method
+        addListenerOnButton();        
+        
+      //changes the title display
+        setTitle("Edit Meet");
+    }
+	
+	public void fillEditText(){
+		MeetDatabase db = new MeetDatabase(getApplicationContext());
+		ArrayList<String> meetInfo;
+		meetInfo = db.getMeetInfo(meetId);
+		
+		if(!meetInfo.isEmpty()){
+			nameString = meetInfo.get(0);
+			schoolString = meetInfo.get(1);
+			cityString = meetInfo.get(2);
+			stateString = meetInfo.get(3);
+			dateString = meetInfo.get(4);
+            judgeString = meetInfo.get(5);
+		
+			name.setText(nameString);
+			school.setText(schoolString);
+			city.setText(cityString);
+			state.setText(stateString);
+			date.setText(dateString);
+
+            if(judgeString.equals("3")){
+                judge3.setChecked(true);
+                judge5.setChecked(false);
+                judge7.setChecked(false);
+            }
+            if(judgeString.equals("5")){
+                judge5.setChecked(true);
+                judge3.setChecked(false);
+                judge7.setChecked(false);
+            }
+            if (judgeString.equals("7")) {
+                judge7.setChecked(true);
+                judge3.setChecked(false);
+                judge5.setChecked(false);
+            }
+		}
+		else
+		{
+			Toast.makeText(getApplicationContext(),
+        			"Meet is corrupted, please delete and add again",
+        			Toast.LENGTH_LONG).show();
+			Intent intent = new Intent(getBaseContext(), Welcome.class);
+			startActivity(intent);
+		}
+	}
+	
+	public void editNameinDB(String newName){
+		MeetDatabase db = new MeetDatabase(getApplicationContext());
+		db.editMeetName(meetId, newName);
+	}
+	
+	public void editSchoolinDB(String newSchool){
+		MeetDatabase db = new MeetDatabase(getApplicationContext());
+		db.editMeetSchool(meetId, newSchool);
+	}
+	
+	public void editCityinDB(String newCity){
+		MeetDatabase db = new MeetDatabase(getApplicationContext());
+		db.editMeetCity(meetId, newCity);
+	}
+	
+	public void editStateinDB(String newState){
+		MeetDatabase db = new MeetDatabase(getApplicationContext());
+		db.editMeetState(meetId, newState);
+	}
+	
+	public void editDateinDB(String newDate){
+		MeetDatabase db = new MeetDatabase(getApplicationContext());
+		db.editMeetDate(meetId, newDate);
+	}
+
+    public void editJudgeinDB(int newJudge){
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        db.editMeetJudges(meetId, newJudge);
+    }
+	
+	public void addListenerOnButton()
+    {
+		final Context context = this;
+
+        Button btnEditMeet = (Button) findViewById(R.id.buttonMeetE);
+    	btnEditMeet.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                nameEdit = name.getText().toString();
+                schoolEdit = school.getText().toString();
+                cityEdit = city.getText().toString();
+                stateEdit = state.getText().toString();
+                dateEdit = date.getText().toString();
+                judgeChecked = radioJudgesGroup.getCheckedRadioButtonId();
+                if (judgeChecked == R.id.radio3J)
+                    judges = 3;
+                if (judgeChecked == R.id.radio5J)
+                    judges = 5;
+                if (judgeChecked == R.id.radio7J)
+                    judges = 7;
+
+                if (nameEdit.isEmpty() || schoolEdit.isEmpty()
+                        || cityEdit.isEmpty() || stateEdit.isEmpty()
+                        || dateEdit.isEmpty()) {
+                    Toast.makeText(getApplicationContext(),
+                            "Please make an entry in all fields", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (!nameEdit.equals(nameString)) {
+                    editNameinDB(nameEdit);
+                }
+                if (!schoolEdit.equals(schoolString)) {
+                    editSchoolinDB(schoolEdit);
+                }
+                if (!cityEdit.equals(cityString)) {
+                    editCityinDB(cityEdit);
+                }
+                if (!stateEdit.equals(stateString)) {
+                    editStateinDB(stateEdit);
+                }
+                if (!dateEdit.equals(dateString)) {
+                    editDateinDB(dateEdit);
+                }
+
+                editJudgeinDB(judges);
+                Toast.makeText(getApplicationContext(),
+                        "Diver has been edited to " + nameEdit + ", "
+                                + schoolEdit + ", " + cityEdit + ", "
+                                + stateEdit + ", " + dateEdit + ", Judges: "
+                                + judges, Toast.LENGTH_LONG
+                ).show();
+                Intent intent = new Intent(context, Welcome.class);
+                startActivity(intent);
+            }
+        });
+    }
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) 
+    {
+        getMenuInflater().inflate(R.menu.activity_meet_edit, menu);
+        return true;
+    }
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) 
+    {
+        switch (item.getItemId()) 
+        {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}
