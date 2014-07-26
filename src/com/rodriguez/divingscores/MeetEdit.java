@@ -3,9 +3,11 @@ package com.rodriguez.divingscores;
 import info.sqlite.helper.MeetDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,12 +18,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-public class MeetEdit extends Activity {
+public class MeetEdit extends Activity implements
+        OnClickListener{
 
     private RadioGroup radioJudgesGroup;
     private RadioButton judge3, judge5, judge7;
@@ -49,6 +53,8 @@ public class MeetEdit extends Activity {
         judge3 = (RadioButton)findViewById(R.id.radio3J);
         judge5 = (RadioButton)findViewById(R.id.radio5J);
         judge7 = (RadioButton)findViewById(R.id.radio7J);
+
+        date.setOnClickListener(this);
 
         
         // get the parameter diver id from the Intent        
@@ -213,5 +219,34 @@ public class MeetEdit extends Activity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if (v == date) {
+
+            // Process to get Current Date
+            final Calendar c = Calendar.getInstance();
+            int mYear = c.get(Calendar.YEAR);
+            int mMonth = c.get(Calendar.MONTH);
+            int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+            // Launch Date Picker Dialog
+            DatePickerDialog dpd = new DatePickerDialog(this,
+                    new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(DatePicker view, int year,
+                                              int monthOfYear, int dayOfMonth) {
+                            // Display Selected date in textbox
+                            date.setText(dayOfMonth + "-"
+                                    + (monthOfYear + 1) + "-" + year);
+                        }
+                    }, mYear, mMonth, mDay
+            );
+            dpd.show();
+        }
+
     }
 }

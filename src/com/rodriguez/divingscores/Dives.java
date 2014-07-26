@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,8 +24,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import info.controls.EditTextLocker;
 import info.controls.NothingSelectedSpinnerAdapter;
 import info.sqlite.helper.BackDatabase;
 import info.sqlite.helper.DiveTotalDatabase;
@@ -35,6 +32,7 @@ import info.sqlite.helper.InwardDatabase;
 import info.sqlite.helper.MeetDatabase;
 import info.sqlite.helper.ResultDatabase;
 import info.sqlite.helper.ReverseDatabase;
+import info.sqlite.helper.ScoresDatabase;
 import info.sqlite.helper.TwistDatabase;
 
 public class Dives extends Activity implements OnItemSelectedListener
@@ -42,8 +40,8 @@ public class Dives extends Activity implements OnItemSelectedListener
 	private Spinner spinner;
     private RadioButton radioTuck, radioPike, radioFree, radioStraight;
     private TextView view4, view5, view6, view7;
-    private EditText score1, score2, score3, score4, score5, score6, score7;
-    private String s1, s2, s3, s4, s5, s6, s7;
+    private Spinner score1, score2, score3, score4, score5, score6, score7;
+    private int s1, s2, s3, s4, s5, s6, s7;
     private int judges;
     private int diverId;
     private int meetId;
@@ -51,22 +49,16 @@ public class Dives extends Activity implements OnItemSelectedListener
     private int divePosition = 1;
     private int diveTotal = 0;
     private int boardType = 0;
-    private double sc1 = 0.0, sc2 = 0.0, sc3 = 0.0, sc4 = 0.0, sc5 = 0.0,
-                    sc6 = 0.0, sc7 = 0.0, diveScoreTotal = 0.0, multiplier = 0.0;
+    private double sc1, sc2, sc3, sc4, sc5, sc6, sc7, diveScoreTotal = 0.0, multiplier = 0.0;
     private double dive1 = 0.0, dive2 = 0.0, dive3 = 0.0, dive4 = 0.0,
                     dive5 = 0.0, dive6 = 0.0, dive7 = 0.0, dive8 = 0.0,
                     dive9 = 0.0, dive10 = 0.0, dive11 = 0.0, total = 0.0;
 
     private List<String> diveName;
+    private List<String> scoreNames;
     ArrayList<Double> Scores = new ArrayList<>();
-    boolean missed = false;
     boolean hidebtn;
     String stringId = null;
-
-    private EditText editText;
-
-    private EditText decimalEditText;
-
 	
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -78,34 +70,17 @@ public class Dives extends Activity implements OnItemSelectedListener
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
         if(savedInstanceState != null){
-            s1 = savedInstanceState.getString("score1");
-            s2 = savedInstanceState.getString("score2");
-            s3 = savedInstanceState.getString("score3");
-            s4 = savedInstanceState.getString("score4");
-            s5 = savedInstanceState.getString("score5");
-            s6 = savedInstanceState.getString("score6");
-            s7 = savedInstanceState.getString("score7");
+            s1 = savedInstanceState.getInt("score1");
+            s2 = savedInstanceState.getInt("score2");
+            s3 = savedInstanceState.getInt("score3");
+            s4 = savedInstanceState.getInt("score4");
+            s5 = savedInstanceState.getInt("score5");
+            s6 = savedInstanceState.getInt("score6");
+            s7 = savedInstanceState.getInt("score7");
         }
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setUpView();
-        setDownFocus();
-        setEditText();
-
-        if(s1 != null)
-            score1.setText(s1);
-        if(s2 != null)
-            score1.setText(s2);
-        if(s3 != null)
-            score1.setText(s3);
-        if(s4 != null)
-            score1.setText(s4);
-        if(s5 != null)
-            score1.setText(s5);
-        if(s6 != null)
-            score1.setText(s6);
-        if(s7 != null)
-            score1.setText(s7);
 
         Bundle b = getIntent().getExtras();
         diverId = b.getInt("keyDiver");
@@ -113,62 +88,41 @@ public class Dives extends Activity implements OnItemSelectedListener
         diveType = b.getInt("diveType");
         boardType = b.getInt("boardType");
 
+        score1.setOnItemSelectedListener(this);
+        score2.setOnItemSelectedListener(this);
+        score3.setOnItemSelectedListener(this);
+        score4.setOnItemSelectedListener(this);
+        score5.setOnItemSelectedListener(this);
+        score6.setOnItemSelectedListener(this);
+        score7.setOnItemSelectedListener(this);
+        spinner.setOnItemSelectedListener(this);
+        loadScoreSpinners();
+        loadSpinnerData();
+
+        score1.setSelection(s1);
+        score1.setSelection(s2);
+        score1.setSelection(s3);
+        score1.setSelection(s4);
+        score1.setSelection(s5);
+        score1.setSelection(s6);
+        score1.setSelection(s7);
+
         setTitle();
         getDiveTotals();
         showScores();
         addListenerOnButton();
-        spinner.setOnItemSelectedListener(this);
-        loadSpinnerData();
         checkRadios();
-    }
-
-    private void setEditText() {
-
-        EditTextLocker editTextLocker1 = new EditTextLocker(score1);
-        editTextLocker1.limitCharacters(3);
-        editTextLocker1.limitFractionDigitsinDecimal(1);
-        //editTextLocker1.maxTextInput(11);
-
-        EditTextLocker editTextLocker2 = new EditTextLocker(score2);
-        editTextLocker2.limitCharacters(3);
-        editTextLocker2.limitFractionDigitsinDecimal(3);
-        //editTextLocker2.maxTextInput(11);
-
-        EditTextLocker editTextLocker3 = new EditTextLocker(score3);
-        editTextLocker3.limitCharacters(3);
-        editTextLocker3.limitFractionDigitsinDecimal(3);
-        //editTextLocker3.maxTextInput(11);
-
-        EditTextLocker editTextLocker4 = new EditTextLocker(score4);
-        editTextLocker4.limitCharacters(3);
-        editTextLocker4.limitFractionDigitsinDecimal(3);
-        //editTextLocker4.maxTextInput(11);
-
-        EditTextLocker editTextLocker5 = new EditTextLocker(score5);
-        editTextLocker5.limitCharacters(3);
-        editTextLocker5.limitFractionDigitsinDecimal(3);
-        //editTextLocker5.maxTextInput(11);
-
-        EditTextLocker editTextLocker6 = new EditTextLocker(score6);
-        editTextLocker6.limitCharacters(3);
-        editTextLocker6.limitFractionDigitsinDecimal(3);
-        //editTextLocker6.maxTextInput(11);
-
-        EditTextLocker editTextLocker7 = new EditTextLocker(score7);
-        editTextLocker7.limitCharacters(3);
-        editTextLocker7.limitFractionDigitsinDecimal(3);
-        //editTextLocker7.maxTextInput(11);
     }
 
     @Override
     protected void onSaveInstanceState (Bundle outState){
-        outState.putString("score1", score1.getText().toString());
-        outState.putString("score2", score2.getText().toString());
-        outState.putString("score3", score3.getText().toString());
-        outState.putString("score4", score4.getText().toString());
-        outState.putString("score5", score5.getText().toString());
-        outState.putString("score6", score6.getText().toString());
-        outState.putString("score7", score7.getText().toString());
+        outState.putInt("score1", score1.getSelectedItemPosition());
+        outState.putInt("score2", score2.getSelectedItemPosition());
+        outState.putInt("score3", score3.getSelectedItemPosition());
+        outState.putInt("score4", score4.getSelectedItemPosition());
+        outState.putInt("score5", score5.getSelectedItemPosition());
+        outState.putInt("score6", score6.getSelectedItemPosition());
+        outState.putInt("score7", score7.getSelectedItemPosition());
 
         super.onSaveInstanceState(outState);
     }
@@ -176,10 +130,17 @@ public class Dives extends Activity implements OnItemSelectedListener
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position,
                                long id) {
-        if(id < 0)
+        if(spinner.getSelectedItemPosition() == 0)
             hidebtn = false;
         else
-            hidebtn = true;
+        hidebtn = true;
+
+
+
+        //if(id < 0)   //          TODO this does not work as it is ready any spinner, not just the dive
+            //hidebtn = false;
+        //else
+            //hidebtn = true;
 
     }
 
@@ -261,6 +222,23 @@ public class Dives extends Activity implements OnItemSelectedListener
     					dataAdapter, R.layout.dive_style_spinner_row_nothing_selected, this));
     
     }
+
+    //loads the spinners for the scores
+    private void loadScoreSpinners(){
+        ScoresDatabase db = new ScoresDatabase(getApplicationContext());
+        scoreNames = db.getScores();
+
+        ArrayAdapter<String> da = new ArrayAdapter<>(this,
+                R.layout.spinner_item, scoreNames);
+        da.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        score1.setAdapter(da);
+        score2.setAdapter(da);
+        score3.setAdapter(da);
+        score4.setAdapter(da);
+        score5.setAdapter(da);
+        score6.setAdapter(da);
+        score7.setAdapter(da);
+    }
     
     public void addListenerOnButton()
     {
@@ -271,8 +249,8 @@ public class Dives extends Activity implements OnItemSelectedListener
             public void onClick(View arg0) {
                 if (hidebtn) {
                     getScoreText();
-                    if (missed)
-                        return;
+                    //if (missed)
+                        //return;
                     calcScores();
                     Bundle b = new Bundle();
                     b.putInt("keyDiver", diverId);
@@ -397,110 +375,110 @@ public class Dives extends Activity implements OnItemSelectedListener
     }
 
     private void getScoreText(){
-        missed = false;
-        if(!TextUtils.isEmpty(score1.getText())) {
-            sc1 = Double.parseDouble(score1.getText().toString());
+        //missed = false;
+        //if(score1.getSelectedItem().toString().equals("0.0")) {
+            sc1 = Double.parseDouble(score1.getSelectedItem().toString());
             Scores.add(sc1);
-        }
-        else {
-            Toast.makeText(getApplicationContext(),
-                    "You missed score one!",
-                    Toast.LENGTH_LONG
-            ).show();
-            missed = true;
-            return;
-        }
-        if(!TextUtils.isEmpty(score2.getText())) {
-            sc2 = Double.parseDouble(score2.getText().toString());
+        //}
+//        else {
+//            Toast.makeText(getApplicationContext(),
+//                    "You missed score one!",
+//                    Toast.LENGTH_LONG
+//            ).show();
+//            missed = true;
+//            return;
+        //}
+        //if(score2.getSelectedItem().toString().equals("0.0")) {
+            sc2 = Double.parseDouble(score2.getSelectedItem().toString());
             Scores.add(sc2);
-        }else{
-            Toast.makeText(getApplicationContext(),
-                    "You missed score two!",
-                    Toast.LENGTH_LONG
-            ).show();
-            missed = true;
-            return;
-        }
-        if(!TextUtils.isEmpty(score3.getText())) {
-            sc3 = Double.parseDouble(score3.getText().toString());
+        //}else{
+          //  Toast.makeText(getApplicationContext(),
+            //        "You missed score two!",
+              //      Toast.LENGTH_LONG
+           // ).show();
+           // missed = true;
+           // return;
+        //}
+        //if(score3.getSelectedItem().toString().equals("0.0")) {
+            sc3 = Double.parseDouble(score3.getSelectedItem().toString());
             Scores.add(sc3);
-        }else{
-            Toast.makeText(getApplicationContext(),
-                    "You missed score three!",
-                    Toast.LENGTH_LONG
-            ).show();
-            missed = true;
-            return;
-        }
+        //}else{
+          //  Toast.makeText(getApplicationContext(),
+            //        "You missed score three!",
+              //      Toast.LENGTH_LONG
+            //).show();
+            //missed = true;
+            //return;
+        //}
 
         if(judges == 5){
-            if(!TextUtils.isEmpty(score4.getText())) {
-                sc4 = Double.parseDouble(score4.getText().toString());
+            //if(score4.getSelectedItem().toString().equals("0.0")) {
+                sc4 = Double.parseDouble(score4.getSelectedItem().toString());
                 Scores.add(sc4);
-            }else{
-                Toast.makeText(getApplicationContext(),
-                        "You missed score four!",
-                        Toast.LENGTH_LONG
-                ).show();
-                missed = true;
-                return;
-            }
-            if(!TextUtils.isEmpty(score5.getText())) {
-                sc5 = Double.parseDouble(score5.getText().toString());
+            //}else{
+              //  Toast.makeText(getApplicationContext(),
+                //        "You missed score four!",
+                  //      Toast.LENGTH_LONG
+                //).show();
+                //missed = true;
+                //return;
+            //}
+           // if(score5.getSelectedItem().toString().equals("0.0")) {
+                sc5 = Double.parseDouble(score5.getSelectedItem().toString());
                 Scores.add(sc5);
-            }else{
-                Toast.makeText(getApplicationContext(),
-                        "You missed score five!",
-                        Toast.LENGTH_LONG
-                ).show();
-                missed = true;
-                return;
-            }
+            //}else{
+              //  Toast.makeText(getApplicationContext(),
+                //        "You missed score five!",
+                //  //      Toast.LENGTH_LONG
+                //).show();
+                //missed = true;
+                //return;
+            //}
         }
         if(judges == 7){
-            if(!TextUtils.isEmpty(score4.getText())) {
-                sc4 = Double.parseDouble(score4.getText().toString());
+         //   if(score4.getSelectedItem().toString().equals("0.0")) {
+                sc4 = Double.parseDouble(score4.getSelectedItem().toString());
                 Scores.add(sc4);
-            }else{
-                Toast.makeText(getApplicationContext(),
-                        "You missed score four!",
-                        Toast.LENGTH_LONG
-                ).show();
-                missed = true;
-                return;
-            }
-            if(!TextUtils.isEmpty(score5.getText())) {
-                sc5 = Double.parseDouble(score5.getText().toString());
+           // }else{
+             //   Toast.makeText(getApplicationContext(),
+               //         "You missed score four!",
+                 //       Toast.LENGTH_LONG
+                //).show();
+                //missed = true;
+                //return;
+           // }
+            //if(score5.getSelectedItem().toString().equals("0.0")) {
+                sc5 = Double.parseDouble(score5.getSelectedItem().toString());
                 Scores.add(sc5);
-            }else{
-                Toast.makeText(getApplicationContext(),
-                        "You missed score five!",
-                        Toast.LENGTH_LONG
-                ).show();
-                missed = true;
-                return;
-            }
-            if(!TextUtils.isEmpty(score6.getText())) {
-                sc6 = Double.parseDouble(score6.getText().toString());
+            //}else{
+              //  Toast.makeText(getApplicationContext(),
+                //        "You missed score five!",
+                  //      Toast.LENGTH_LONG
+                //).show();
+                //missed = true;
+                //return;
+           // }
+            //if(score6.getSelectedItem().toString().equals("0.0")) {
+                sc6 = Double.parseDouble(score6.getSelectedItem().toString());
                 Scores.add(sc6);
-            }else{
-                Toast.makeText(getApplicationContext(),
-                        "You missed score six!",
-                        Toast.LENGTH_LONG
-                ).show();
-                missed = true;
-                return;
-            }
-            if(!TextUtils.isEmpty(score7.getText())) {
-                sc7 = Double.parseDouble(score7.getText().toString());
+            //}else{
+              //  Toast.makeText(getApplicationContext(),
+                //        "You missed score six!",
+                  //      Toast.LENGTH_LONG
+                //).show();
+                //missed = true;
+               // return;
+            //}
+            //if(score7.getSelectedItem().toString().equals("0.0")) {
+                sc7 = Double.parseDouble(score7.getSelectedItem().toString());
                 Scores.add(sc7);
-            }else{
-                Toast.makeText(getApplicationContext(),
-                        "You missed score seven!",
-                        Toast.LENGTH_LONG
-                ).show();
-                missed = true;
-            }
+            //}else{
+              //  Toast.makeText(getApplicationContext(),
+                //        "You missed score seven!",
+                  //      Toast.LENGTH_LONG
+                //).show();
+                //missed = true;
+            //}
         }
     }
 
@@ -587,26 +565,18 @@ public class Dives extends Activity implements OnItemSelectedListener
         radioPike = (RadioButton)findViewById(R.id.radioPike);
         radioTuck = (RadioButton)findViewById(R.id.radioTuck);
         radioStraight = (RadioButton)findViewById(R.id.radioStraight);
-        score1 = (EditText)findViewById(R.id.editScore1);
-        score2 = (EditText)findViewById(R.id.editScore2);
-        score3 = (EditText)findViewById(R.id.editScore3);
-        score4 = (EditText)findViewById(R.id.editScore4);
-        score5 = (EditText)findViewById(R.id.editScore5);
-        score6 = (EditText)findViewById(R.id.editScore6);
-        score7 = (EditText)findViewById(R.id.editScore7);
+        score1 = (Spinner)findViewById(R.id.editScore1);
+        score2 = (Spinner)findViewById(R.id.editScore2);
+        score3 = (Spinner)findViewById(R.id.editScore3);
+        score4 = (Spinner)findViewById(R.id.editScore4);
+        score5 = (Spinner)findViewById(R.id.editScore5);
+        score6 = (Spinner)findViewById(R.id.editScore6);
+        score7 = (Spinner)findViewById(R.id.editScore7);
         view4 =  (TextView)findViewById(R.id.score4);
         view5 =  (TextView)findViewById(R.id.score5);
         view6 =  (TextView)findViewById(R.id.score6);
         view7 =  (TextView)findViewById(R.id.score7);
         spinner = (Spinner)findViewById(R.id.listDives);
-    }
-    private void setDownFocus(){
-        score1.setNextFocusDownId(R.id.editScore2);
-        score2.setNextFocusDownId(R.id.editScore3);
-        score3.setNextFocusDownId(R.id.editScore4);
-        score4.setNextFocusDownId(R.id.editScore5);
-        score5.setNextFocusDownId(R.id.editScore6);
-        score6.setNextFocusDownId(R.id.editScore7);
     }
     
     @Override

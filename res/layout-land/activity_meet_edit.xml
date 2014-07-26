@@ -139,6 +139,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@+id/enterNameEM"
+            android:hint="@string/date_enter_style"
+            android:focusable="false"
             android:ems="10"
             android:inputType="date"
             android:layout_marginRight="8dp"

@@ -132,6 +132,7 @@
         android:layout_alignLeft="@+id/editTextState"
         android:layout_below="@+id/editTextState"
         android:layout_marginTop="16dp"
+        android:focusable="false"
         android:ems="10"
         android:hint="@string/date_enter_style"
         android:maxLines="1"

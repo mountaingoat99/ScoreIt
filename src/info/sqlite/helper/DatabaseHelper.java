@@ -10,6 +10,7 @@ import info.sqlite.model.DivesDB;
 import info.sqlite.model.ForwardDB;
 import info.sqlite.model.InwardDB;
 import info.sqlite.model.ReverseDB;
+import info.sqlite.model.ScoresDB;
 import info.sqlite.model.TwistDB;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -35,7 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String TABLE_RESULTS = "results";
     protected static final String TABLE_DIVE_TOTALS = "dive_total";
     protected static final String TABLE_DIVE_TYPE = "dive_type";
-
+    protected static final String TABLE_SCORES = "scores";
 
 	// common column names
 	protected static final String KEY_ID = "id";
@@ -88,6 +89,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //dive type column names
     private static final String DIVE_TYPE = "type";
+
+    protected static final String DIGITS = "digits";
+
+    public static String getTableScores() { return TABLE_SCORES; }
 
     public static String getTableDiveType() { return TABLE_DIVE_TYPE; }
 
@@ -321,6 +326,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String CREATE_TABLE_DIVES = "CREATE TABLE "
 			+ TABLE_DIVES + "(" + KEY_ID + " INTEGER, " 
 			+ DIVE_NAME + " TEXT " + ")";
+
+    public static final String CREATE_TABLE_SCORES = "CREATE TABLE "
+            + TABLE_SCORES + "(" + KEY_ID + " INTEGER, "
+            + DIGITS + " TEXT " + ")";
 	
 	public static final String CREATE_TABLE_DIVER_NAME = "CREATE TABLE "
 			+ TABLE_DIVER_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -383,6 +392,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_REVERSE);
 		db.execSQL(CREATE_TABLE_TWIST);
 		db.execSQL(CREATE_TABLE_DIVES);
+        db.execSQL(CREATE_TABLE_SCORES);
 		db.execSQL(CREATE_TABLE_DIVER_NAME);
 		db.execSQL(CREATE_TABLE_MEET_NAME);
 		db.execSQL(CREATE_TABLE_RESULTS);
@@ -397,7 +407,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         fillInwardDives(db);
         fillReverseDives(db);
         fillTwistDives(db);
-        fillDives(db); 
+        fillDives(db);
+        fillScores(db);
         // Testing
         //fillResults(db);
 	}
@@ -410,6 +421,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_REVERSE);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_TWIST);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SCORES);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVER_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEET_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESULTS);
@@ -427,6 +439,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(DIVE_NAME, dives.getDiveName());
 
         db.insert(TABLE_DIVES, null, values);
+    }
+
+    public void createScores(ScoresDB score, SQLiteDatabase db){
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID, score.getId());
+        values.put(DIGITS, score.getDigits());
+
+        db.insert(TABLE_SCORES, null, values);
     }
 
     public void createForward(ForwardDB forward, SQLiteDatabase db) {
@@ -513,7 +533,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			
 		db.insert(TABLE_REVERSE, null, values);
 	}
-			
+
 	private void fillDives(SQLiteDatabase db){
 			
 		DivesDB dive1 = new DivesDB(1, "Forward Dives");
@@ -528,6 +548,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		createDives(dive4, db);
 		createDives(dive5, db);
 	}
+
+    private void fillScores(SQLiteDatabase db){
+        ScoresDB score1 = new ScoresDB(1, "0.0");
+        ScoresDB score2 = new ScoresDB(2, "0.5");
+        ScoresDB score3 = new ScoresDB(3, "1.0");
+        ScoresDB score4 = new ScoresDB(4, "1.5");
+        ScoresDB score5 = new ScoresDB(5, "2.0");
+        ScoresDB score6 = new ScoresDB(6, "2.5");
+        ScoresDB score7 = new ScoresDB(7, "3.0");
+        ScoresDB score8 = new ScoresDB(8, "3.5");
+        ScoresDB score9 = new ScoresDB(9, "4.0");
+        ScoresDB score10 = new ScoresDB(10, "4.5");
+        ScoresDB score11 = new ScoresDB(11, "5.0");
+        ScoresDB score12 = new ScoresDB(12,"5.5");
+        ScoresDB score13 = new ScoresDB(13, "6.0");
+        ScoresDB score14 = new ScoresDB(14, "6.5");
+        ScoresDB score15 = new ScoresDB(15, "7.0");
+        ScoresDB score16 = new ScoresDB(16, "7.5");
+        ScoresDB score17 = new ScoresDB(17, "8.0");
+        ScoresDB score18 = new ScoresDB(18, "8.5");
+        ScoresDB score19 = new ScoresDB(19, "9.0");
+        ScoresDB score20 = new ScoresDB(20, "9.5");
+        ScoresDB score21 = new ScoresDB(21, "10");
+
+        createScores(score1, db);
+        createScores(score2, db);
+        createScores(score3, db);
+        createScores(score4, db);
+        createScores(score5, db);
+        createScores(score6, db);
+        createScores(score7, db);
+        createScores(score8, db);
+        createScores(score9, db);
+        createScores(score10, db);
+        createScores(score11, db);
+        createScores(score12, db);
+        createScores(score13, db);
+        createScores(score14, db);
+        createScores(score15, db);
+        createScores(score16, db);
+        createScores(score17, db);
+        createScores(score18, db);
+        createScores(score19, db);
+        createScores(score20, db);
+        createScores(score21, db);
+    }
 
     // fill dive tables with data
     private void fillForwardDives(SQLiteDatabase db) {

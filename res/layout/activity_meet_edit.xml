@@ -136,13 +136,12 @@ tools:ignore="NotSibling" >
         android:layout_marginTop="8dp"
         android:layout_toRightOf="@+id/enterNameEM"
         android:ems="10"
-        android:inputType="date"
+        android:hint="@string/date_enter_style"
+        android:focusable="false"
         android:layout_marginRight="8dp"
         android:layout_alignParentEnd="true"
         android:textSize="@dimen/text_size_small"
-        android:textColor="@color/random_text">
-
-    </EditText>
+        android:textColor="@color/random_text"/>
 
     <TextView
         android:id="@+id/enterDateEM"
