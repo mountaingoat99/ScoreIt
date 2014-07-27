@@ -457,18 +457,38 @@ public class Dives extends Activity implements OnItemSelectedListener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
-        switch (item.getItemId()) 
+        final Context context = this;
+        switch (item.getItemId())
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_failed_dive:
+                Intent intent = new Intent(context, FailedDive.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_enter_dive_score:
+                Intent intent1 = new Intent(context, EnterFinalDiveScore.class);
+                startActivity(intent1);
+                break;
+            case R.id.menu_change_dive_score:
+                Intent intent2 = new Intent(context, ChangeDiveScore.class);
+                startActivity(intent2);
+                break;
+            case R.id.menu_how_to:
+                Intent intent3 = new Intent(context, HowTo.class);
+                startActivity(intent3);
+                break;
+            case R.id.menu_about:
+                Intent intent4 = new Intent(context, About.class);
+                startActivity(intent4);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
-		// TODO Auto-generated method stub
-		
+
 	}
 }

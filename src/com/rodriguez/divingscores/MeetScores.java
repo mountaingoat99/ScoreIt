@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.Locale;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -248,11 +250,20 @@ public class MeetScores extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
-        switch (item.getItemId()) 
+        final Context context = this;
+        switch (item.getItemId())
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_how_to:
+                Intent intent3 = new Intent(context, HowTo.class);
+                startActivity(intent3);
+                break;
+            case R.id.menu_about:
+                Intent intent4 = new Intent(context, About.class);
+                startActivity(intent4);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

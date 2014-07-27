@@ -43,6 +43,7 @@ public class ResultDatabase extends DatabaseHelper {
                 resultsInfo.add(c.getDouble(11));
             }while(c.moveToNext());
         }
+        c.close();
         return resultsInfo;
     }
 
@@ -108,8 +109,10 @@ public class ResultDatabase extends DatabaseHelper {
 							+ " AND diver_id = " + diverid;
 		Cursor c = db.rawQuery(selectQuery, null);
 		if(c.getCount() <= 0){
+            c.close();
 			return false;
-		}		
+		}
+        c.close();
 		return true;		
 	}
 	

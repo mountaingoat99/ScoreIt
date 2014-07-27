@@ -1,9 +1,7 @@
 package com.rodriguez.divingscores;
 
 import info.controls.NothingSelectedSpinnerAdapter;
-import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.MeetDatabase;
-import info.sqlite.helper.ResultDatabase;
 
 import java.util.List;
 
@@ -22,9 +20,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class Choose extends Activity implements OnItemSelectedListener {
@@ -143,7 +139,18 @@ public class Choose extends Activity implements OnItemSelectedListener {
                 Intent intent1 = new Intent(context, EnterMeet.class);
                 startActivity(intent1);
                 break;
-
+            case R.id.menu_remove_diver_from_meet:
+                Intent intent2 = new Intent(context, RemoveDiverFromMeet.class);
+                startActivity(intent2);
+                break;
+            case R.id.menu_how_to:
+                Intent intent3 = new Intent(context, HowTo.class);
+                startActivity(intent3);
+                break;
+            case R.id.menu_about:
+                Intent intent4 = new Intent(context, About.class);
+                startActivity(intent4);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }	

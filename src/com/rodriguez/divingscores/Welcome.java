@@ -366,7 +366,7 @@ public class Welcome extends Activity implements OnItemSelectedListener
 	
 	public void onNothingSelected(AdapterView<?> arg0) 
 	{
-		// TODO Auto-generated method stub		
+
 	}
 	
 	@Override
@@ -379,11 +379,20 @@ public class Welcome extends Activity implements OnItemSelectedListener
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
+        final Context context = this;
         switch (item.getItemId()) 
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_how_to:
+                Intent intent3 = new Intent(context, HowTo.class);
+                startActivity(intent3);
+                break;
+            case R.id.menu_about:
+                Intent intent4 = new Intent(context, About.class);
+                startActivity(intent4);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

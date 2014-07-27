@@ -37,6 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String TABLE_DIVE_TOTALS = "dive_total";
     protected static final String TABLE_DIVE_TYPE = "dive_type";
     protected static final String TABLE_SCORES = "scores";
+    protected static final String TABLE_JUDGE_SCORES = "judge_scores";
 
 	// common column names
 	protected static final String KEY_ID = "id";
@@ -90,199 +91,170 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //dive type column names
     private static final String DIVE_TYPE = "type";
 
+    // judges scores values tables
     protected static final String DIGITS = "digits";
 
+    // judge scores table
+    protected  static final String DIVE_NUMBER = "dive_number";
+    protected static final String SCORE_1 = "score_1";
+    protected static final String SCORE_2 = "score_2";
+    protected static final String SCORE_3 = "score_3";
+    protected static final String SCORE_4 = "score_4";
+    protected static final String SCORE_5 = "score_5";
+    protected static final String SCORE_6 = "score_6";
+    protected static final String SCORE_7 = "score_7";
+
+    public static String getTableJudgeScores() { return TABLE_JUDGE_SCORES; }
     public static String getTableScores() { return TABLE_SCORES; }
-
     public static String getTableDiveType() { return TABLE_DIVE_TYPE; }
-
     public static String getDiveCount() { return DIVE_COUNT; }
-
 	public static String[] getAllKeys() {
 		return ALL_KEYS;
 	}
-
 	public static void setAllKeys(String[] allKeys) {
 		ALL_KEYS = allKeys;
 	}
-
 	public static String getTableForward() {
 		return TABLE_FORWARD;
 	}
-
 	public static String getTableBack() {
 		return TABLE_BACK;
 	}
-
 	public static String getTableInward() {
 		return TABLE_INWARD;
 	}
-
 	public static String getTableReverse() {
 		return TABLE_REVERSE;
 	}
-
 	public static String getTableTwist() {
 		return TABLE_TWIST;
 	}
-
 	public static String getTableDives() {
 		return TABLE_DIVES;
 	}
-
 	public static String getTableDiverName() {
 		return TABLE_DIVER_NAME;
 	}
-
 	public static String getTableMeetName() {
 		return TABLE_MEET_NAME;
 	}
-
 	public static String getTableResults() {
 		return TABLE_RESULTS;
 	}
-
     public static String getTableDiveTotals() { return TABLE_DIVE_TOTALS; }
-
 	public static String getKeyId() {
 		return KEY_ID;
 	}
-
 	public static String getDiveName() {
 		return DIVE_NAME;
 	}
-
 	public static String getOneS() {
 		return ONE_S;
 	}
-
 	public static String getOneP() {
 		return ONE_P;
 	}
-
 	public static String getOneT() {
 		return ONE_T;
 	}
-
 	public static String getOneF() {
 		return ONE_F;
 	}
-
 	public static String getThreeS() {
 		return THREE_S;
 	}
-
 	public static String getThreeP() {
 		return THREE_P;
 	}
-
 	public static String getThreeT() {
 		return THREE_T;
 	}
-
 	public static String getThreeF() {
 		return THREE_F;
 	}
-
 	public static String getDiverName() {
 		return DIVER_NAME;
 	}
-
 	public static String getDiverAge() {
 		return DIVER_AGE;
 	}
-
 	public static String getDiverGrade() {
 		return DIVER_GRADE;
 	}
-
 	public static String getDiverSchool() {
 		return DIVER_SCHOOL;
 	}
-
 	public static String getMeetName() {
 		return MEET_NAME;
 	}
-
 	public static String getMeetSchool() {
 		return MEET_SCHOOL;
 	}
-
 	public static String getMeetCity() {
 		return MEET_CITY;
 	}
-
 	public static String getMeetState() {
 		return MEET_STATE;
 	}
-
 	public static String getMeetDate() {
 		return MEET_DATE;
 	}
 	public static String getMeetJudges(){
 		return MEET_JUDGES;
 	}
-
 	public static String getMeetId() {
 		return MEET_ID;
 	}
-
 	public static String getDiverId() {
 		return DIVER_ID;
 	}
-
 	public static String getDive1() {
 		return DIVE_1;
 	}
-
 	public static String getDive2() {
 		return DIVE_2;
 	}
-
 	public static String getDive3() {
 		return DIVE_3;
 	}
-
 	public static String getDive4() {
 		return DIVE_4;
 	}
-
 	public static String getDive5() {
 		return DIVE_5;
 	}
-
 	public static String getDive6() {
 		return DIVE_6;
 	}
-
 	public static String getDive7() {
 		return DIVE_7;
 	}
-
 	public static String getDive8() {
 		return DIVE_8;
 	}
-
 	public static String getDive9() {
 		return DIVE_9;
 	}
-
 	public static String getDive10() {
 		return DIVE_10;
 	}
-
 	public static String getDive11() {
 		return DIVE_11;
 	}
-
-	public static String getTotalScore() {
+    public static String getDiveNumber() { return DIVE_NUMBER; }
+    public static String getScore1() { return SCORE_1; }
+    public static String getScore2() { return SCORE_2; }
+    public static String getScore3() { return SCORE_3; }
+    public static String getScore4() { return SCORE_4; }
+    public static String getScore5() { return SCORE_5; }
+    public static String getScore6() { return SCORE_6; }
+    public static String getScore7() { return SCORE_7; }
+    public static String getTotalScore() {
 		return TOTAL_SCORE;
 	}
-
 	public static void setTotalScore(String totalScore) {
 		TOTAL_SCORE = totalScore;
 	}
-
 	public static String getLog() {
 		return LOG;
 	}
@@ -361,21 +333,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "FOREIGN KEY (" + DIVER_ID + ") REFERENCES " + TABLE_DIVER_NAME + " (id))";
 
     public static final String CREATE_TABLE_DIVE_TYPE = "CREATE TABLE "
-            + TABLE_DIVE_TYPE + "(" + KEY_ID + " INTEGER PRiMARY KEY AUTOINCREMENT, "
+            + TABLE_DIVE_TYPE + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + MEET_ID + " INTEGER, "  + DIVER_ID + " INTEGER, "
             + DIVE_TYPE + " INTEGER, "
+            + "FOREIGN KEY (" + MEET_ID + ") REFERENCES " + TABLE_MEET_NAME + " (id), "
+            + "FOREIGN KEY (" + DIVER_ID + ") REFERENCES " + TABLE_DIVER_NAME + " (id))";
+
+    public static final String CREATE_TABLE_JUDGE_SCORES = "CREATE TABLE "
+            + TABLE_JUDGE_SCORES + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + MEET_ID + " INTEGER, "  + DIVER_ID + " INTEGER, " + DIVE_NUMBER + " INTEGER, "
+            + SCORE_1 + " TEXT, " + SCORE_2 + " TEXT, " + SCORE_3 + " TEXT, "
+            + SCORE_4 + " TEXT, " + SCORE_5 + " TEXT, " + SCORE_6 + " TEXT, " + SCORE_7 + " TEXT, "
             + "FOREIGN KEY (" + MEET_ID + ") REFERENCES " + TABLE_MEET_NAME + " (id), "
             + "FOREIGN KEY (" + DIVER_ID + ") REFERENCES " + TABLE_DIVER_NAME + " (id))";
 
     //---------------Triggers---------------------------------------------------------------------//
     public static final String DIVER_DELETE_TRIGGER = "CREATE TRIGGER diver_delete_trigger "
             + "BEFORE DELETE ON " + TABLE_DIVER_NAME + " FOR EACH ROW BEGIN "
+            + "DELETE FROM " + TABLE_JUDGE_SCORES + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_RESULTS + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_DIVE_TOTALS + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_DIVE_TYPE + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; END";
 
     public static final String MEET_DELETE_TRIGGER = "CREATE TRIGGER meet_delete_trigger "
             + "BEFORE DELETE ON " + TABLE_MEET_NAME + " FOR EACH ROW BEGIN "
+            + "DELETE FROM " + TABLE_JUDGE_SCORES + " WHERE " + MEET_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_RESULTS + " WHERE " + MEET_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_DIVE_TOTALS + " WHERE " + MEET_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_DIVE_TYPE + " WHERE " + MEET_ID + " = old." + KEY_ID + "; END";
@@ -398,6 +380,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_RESULTS);
         db.execSQL(CREATE_TABLE_DIVE_TOTAL);
         db.execSQL(CREATE_TABLE_DIVE_TYPE);
+        db.execSQL(CREATE_TABLE_JUDGE_SCORES);
         db.execSQL((DIVER_DELETE_TRIGGER));
         db.execSQL((MEET_DELETE_TRIGGER));
 
@@ -409,8 +392,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         fillTwistDives(db);
         fillDives(db);
         fillScores(db);
-        // Testing
-        //fillResults(db);
 	}
 
 	@Override
@@ -427,6 +408,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESULTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVE_TOTALS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVE_TYPE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_JUDGE_SCORES);
         db.execSQL("DROP TABLE IF EXISTS " + DIVER_DELETE_TRIGGER);
         db.execSQL("DROP TABLE IF EXISTS " + MEET_DELETE_TRIGGER);
 
@@ -782,21 +764,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		createTwist(twist45, db);
 		createTwist(twist46, db);
 	}
-
-    //fills results table with fake data
-
-
-    // fills results with test data
-	/*private void fillResults(SQLiteDatabase db){
-		ResultsDB result1 = new ResultsDB(1, 1, 2, "30.3", "30.4", "30.6", "30.7", "30.8", "30.1",
-								"30.2", "30.5", "31.5", "58.2", "30.5", "240.8");
-		ResultsDB result2 = new ResultsDB(2, 2, 2, "20.5", "20.5", "20.5", "20.5", "20.5", "20.5",
-								"0.0", "0.0", "0.0", "0.0", "0.0", "180.5");
-		ResultsDB result3 = new ResultsDB(3, 3, 1, "35.5", "35.5", "35.5", "35.5", "35.5", "35.5",
-								"35.5", "35.5", "35.5", "35.5", "35.5", "400.8");
-
-		createResults(result1, db);
-		createResults(result2, db);
-		createResults(result3, db);
-	}*/
 }

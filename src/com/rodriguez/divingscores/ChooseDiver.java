@@ -255,18 +255,39 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        final Context context = this;
         switch (item.getItemId())
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_enter_diver:
+                Intent intent = new Intent(context, EnterDiver.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_enter_meet:
+                Intent intent1 = new Intent(context, EnterMeet.class);
+                startActivity(intent1);
+                break;
+            case R.id.menu_remove_diver_from_meet:
+                Intent intent2 = new Intent(context, RemoveDiverFromMeet.class);
+                startActivity(intent2);
+                break;
+            case R.id.menu_how_to:
+                Intent intent3 = new Intent(context, HowTo.class);
+                startActivity(intent3);
+                break;
+            case R.id.menu_about:
+                Intent intent4 = new Intent(context, About.class);
+                startActivity(intent4);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void onNothingSelected(AdapterView<?> arg0)
     {
-        // TODO Auto-generated method stub
+
     }
 
 }
