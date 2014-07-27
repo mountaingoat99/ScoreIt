@@ -381,7 +381,7 @@
                 android:visibility="invisible"/>
 
             <Spinner
-                android:id="@+id/editFake"
+                android:id="@+id/Fake1"
                 android:layout_width="75dp"
                 android:layout_height="38dp"
                 android:textSize="@dimen/text_size_small"
@@ -411,7 +411,7 @@
             style="@android:style/Widget.Holo.Button"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"/>
-    
+
     </RelativeLayout>
 </ScrollView>
 

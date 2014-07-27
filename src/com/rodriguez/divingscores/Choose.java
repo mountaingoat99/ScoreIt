@@ -129,11 +129,21 @@ public class Choose extends Activity implements OnItemSelectedListener {
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
+        final Context context = this;
         switch (item.getItemId()) 
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_enter_diver:
+                Intent intent = new Intent(context, EnterDiver.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_enter_meet:
+                Intent intent1 = new Intent(context, EnterMeet.class);
+                startActivity(intent1);
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }	

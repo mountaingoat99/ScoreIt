@@ -199,5 +199,12 @@
     <string name="one_meter">1 Meter</string>
     <string name="three_meter">3 Meter</string>
     <string name="type_of_dives">Dive Type:</string>
+    <string name="about_string">About</string>
+    <string name="how_to_string">How To</string>
+    <string name="add_dive_score">Enter Final Dive Score</string>
+    <string name="failed_dive">Failed Dive</string>
+    <string name="change_dive_score">Change Dive Score</string>
+    <string name="enter_new_meet_menu">Enter New Meet</string>
+
 
 </resources>

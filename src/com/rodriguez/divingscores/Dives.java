@@ -446,7 +446,7 @@ public class Dives extends Activity implements OnItemSelectedListener
         view7 =  (TextView)findViewById(R.id.score7);
         spinner = (Spinner)findViewById(R.id.listDives);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) 
     {
