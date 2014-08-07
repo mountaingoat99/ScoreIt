@@ -1,10 +1,11 @@
 package com.rodriguez.divingscores;
 
 import info.controls.NothingSelectedSpinnerAdapter;
-import info.sqlite.helper.DatabaseHelper;
+import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiveTotalDatabase;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.DivesDatabase;
+import info.sqlite.helper.JudgeScoreDatabase;
 import info.sqlite.helper.MeetDatabase;
 import info.sqlite.helper.ResultDatabase;
 import info.sqlite.helper.TypeDatabase;
@@ -27,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,8 +39,13 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
 					s1v, s2v, s3v, s4v, s5v, s6v, s7v, s8v, s9v, s10v, s11v, total,
                     totalView, diveTypeText, diveTypeShow;
     private Spinner spinner;
-	private int diverId, meetId, diveTotal, diveType, type, diverSpinnerPosition;
-    String typeString;
+    private Button judgeButton, totalbutton;
+	private int diverId, meetId, diveTotal, diveType, type, diverSpinnerPosition, diveNumber;
+    String s1String, s2String, s3String, s4String, s5String, s6String, s7String,
+            s8String, s9String, s10String, s11String;
+    String typeString, noDive = "There are no scores entered yet.";
+    Boolean failed, dive6 = false, dive11 = false;
+    Double totalScore;
 
     @Override
 		public void onCreate(Bundle savedInstanceState)
@@ -60,9 +67,11 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
         diverSpinnerPosition = b.getInt("keySpin");
 
         getDiveTotals();
+        getDiveNumber();
 		fillText();
         fillType();
         fillScores();
+        addListenerOnButton();
 	}
 
     @Override
@@ -77,9 +86,85 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
         startActivity(intent);
     }
 
+    public void addListenerOnButton(){
+        final Context context = this;
+
+        judgeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (diveType > 0) {
+                    Bundle b = new Bundle();
+                    b.putInt("keyDiver", diverId);
+                    b.putInt("keyMeet", meetId);
+                    b.putInt("diveType", diveType);
+                    b.putInt("boardType", type);
+                    Intent intent = new Intent(context, Dives.class);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Please choose a dive category!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        totalbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (diveType > 0) {
+                    Bundle b = new Bundle();
+                    b.putInt("keyDiver", diverId);
+                    b.putInt("keyMeet", meetId);
+                    b.putInt("diveType", diveType);
+                    b.putInt("boardType", type);
+                    Intent intent = new Intent(context, EnterFinalDiveScore.class);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Please choose a dive category!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position,
+                               long id) {
+        if(id == -1){
+            return;
+        }
+        else{
+            switch(position){
+                case 1:
+                    diveType = 1;
+                    break;
+                case 2:
+                    diveType = 2;
+                    break;
+                case 3:
+                    diveType = 3;
+                    break;
+                case 4:
+                    diveType = 4;
+                    break;
+                case 5:
+                    diveType = 5;
+                    break;
+            }
+        }
+    }
+
     private void getDiveTotals(){
         DiveTotalDatabase db = new DiveTotalDatabase(getApplicationContext());
         diveTotal = db.searchTotals(meetId, diverId);
+    }
+
+    private void getDiveNumber(){
+        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
+        diveNumber = db.getDiveNumber(meetId, diverId);
     }
 	
 	private void fillText(){
@@ -100,111 +185,223 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
 	}	
 	
 	private void fillScores(){
-		ResultDatabase db = new ResultDatabase(getApplicationContext());
-		ArrayList<Double> scores;
-		scores = db.getResultsList(meetId, diverId);
+        getScoresFromDB();
+        String failDive = "F";
+        int numberOfDive;
 
-        String s1String = Double.toString(scores.get(0));
-        String s2String = Double.toString(scores.get(1));
-        String s3String = Double.toString(scores.get(2));
-        String s4String = Double.toString(scores.get(3));
-        String s5String = Double.toString(scores.get(4));
-        String s6String = Double.toString(scores.get(5));
-        String s7String = Double.toString(scores.get(6));
-        String s8String = Double.toString(scores.get(7));
-        String s9String = Double.toString(scores.get(8));
-        String s10String = Double.toString(scores.get(9));
-        String s11String = Double.toString(scores.get(10));
-		
-		ResultsDB result = new ResultsDB();
-        Double totalScore = (result.calcScoreTotal(scores.get(0), scores.get(1), scores.get(2),
-                scores.get(3), scores.get(4), scores.get(5), scores.get(6),
-                scores.get(7), scores.get(8), scores.get(9), scores.get(10)));
         DecimalFormat d = new DecimalFormat("0.00");
         Double totalScore2 = Double.parseDouble(d.format(totalScore));
 
         String totalString = Double.toString(totalScore2);
-		if(!totalString.equals("0.0")){
+		if(diveNumber != 0){
 			totalView.setVisibility(View.VISIBLE);
 			total.setVisibility(View.VISIBLE);
 			total.setText(totalString);
             diveTypeText.setVisibility(View.VISIBLE);
             diveTypeShow.setVisibility(View.VISIBLE);
             diveTypeShow.setText(typeString);
+        } else {
+            totalView.setVisibility(View.GONE);
+            diveTypeText.setVisibility(View.GONE);
+            diveTypeShow.setVisibility(View.GONE);
+            total.setVisibility(View.VISIBLE);
+            total.setText(noDive);
         }
-		if(!s1String.equals("0.0")){
-			s1v.setVisibility(View.VISIBLE);
-			s1.setVisibility(View.VISIBLE);
-			s1.setText(s1String);
-		}
-		if(!s2String.equals("0.0")){
-			s2v.setVisibility(View.VISIBLE);
-			s2.setVisibility(View.VISIBLE);
-			s2.setText(s2String);
-		}
-		if(!s3String.equals("0.0")){
-			s3v.setVisibility(View.VISIBLE);
-			s3.setVisibility(View.VISIBLE);
-			s3.setText(s3String);			
-		}
-		if(!s4String.equals("0.0")){
-			s4v.setVisibility(View.VISIBLE);
-			s4.setVisibility(View.VISIBLE);
-			s4.setText(s4String);
-		}
-		if(!s5String.equals("0.0")){
-			s5v.setVisibility(View.VISIBLE);
-			s5.setVisibility(View.VISIBLE);
-			s5.setText(s5String);
-		}
-		if(!s6String.equals("0.0")){
-			s6v.setVisibility(View.VISIBLE);
-			s6.setVisibility(View.VISIBLE);
-			s6.setText(s6String);
-            if(diveTotal == 6){
-                //spinner.setVisibility(View.GONE);
-                Toast.makeText(getApplicationContext(),
-                        "Congratulations, all six dives are complete," +
-                                " total score is " + totalString,
-                        Toast.LENGTH_LONG).show();
-                spinner.setEnabled(false);
-                return;
+        numberOfDive = 1;
+        failed = checkFailedDive(numberOfDive);
+        if(failed) {
+            s1v.setVisibility(View.VISIBLE);
+            s1.setVisibility(View.VISIBLE);
+            s1.setText(failDive);
+        }else {
+            if(diveNumber >= 1){
+			    s1v.setVisibility(View.VISIBLE);
+			    s1.setVisibility(View.VISIBLE);
+                s1.setText(s1String);
             }
 		}
-		if(!s7String.equals("0.0")){
-			s7v.setVisibility(View.VISIBLE);
-			s7.setVisibility(View.VISIBLE);
-			s7.setText(s7String);
-		}
-		if(!s8String.equals("0.0")){
-			s8v.setVisibility(View.VISIBLE);
-			s8.setVisibility(View.VISIBLE);
-			s8.setText(s8String);
-		}
-		if(!s9String.equals("0.0")){
-			s9v.setVisibility(View.VISIBLE);
-			s9.setVisibility(View.VISIBLE);
-			s9.setText(s9String);
-		}
-		if(!s10String.equals("0.0")){
-			s10v.setVisibility(View.VISIBLE);
-			s10.setVisibility(View.VISIBLE);
-			s10.setText(s10String);
-		}
-		if(!s11String.equals("0.0")){
-			s11v.setVisibility(View.VISIBLE);
-			s11.setVisibility(View.VISIBLE);
-			s11.setText(s11String);
-            if(diveTotal == 11){
+        numberOfDive = 2;
+        failed = checkFailedDive(numberOfDive);
+        if(failed) {
+            s2v.setVisibility(View.VISIBLE);
+            s2.setVisibility(View.VISIBLE);
+            s2.setText(failDive);
+        }else {
+            if(diveNumber >= 2){
+                s2v.setVisibility(View.VISIBLE);
+                s2.setVisibility(View.VISIBLE);
+                s2.setText(s2String);
+            }
+        }
+        numberOfDive = 3;
+        failed = checkFailedDive(numberOfDive);
+        if(failed) {
+            s3v.setVisibility(View.VISIBLE);
+            s3.setVisibility(View.VISIBLE);
+            s3.setText(failDive);
+        }else {
+            if(diveNumber >= 3){
+                s3v.setVisibility(View.VISIBLE);
+                s3.setVisibility(View.VISIBLE);
+                s3.setText(s3String);
+            }
+        }
+        numberOfDive = 4;
+        failed = checkFailedDive(numberOfDive);
+        if(failed) {
+            s4v.setVisibility(View.VISIBLE);
+            s4.setVisibility(View.VISIBLE);
+            s4.setText(failDive);
+        }else {
+            if(diveNumber >= 4){
+                s4v.setVisibility(View.VISIBLE);
+                s4.setVisibility(View.VISIBLE);
+                s4.setText(s4String);
+            }
+        }
+        numberOfDive = 5;
+        failed = checkFailedDive(numberOfDive);
+        if(failed) {
+            s5v.setVisibility(View.VISIBLE);
+            s5.setVisibility(View.VISIBLE);
+            s5.setText(failDive);
+        }else {
+            if(diveNumber >= 5){
+                s5v.setVisibility(View.VISIBLE);
+                s5.setVisibility(View.VISIBLE);
+                s5.setText(s5String);
+            }
+        }
+        numberOfDive = 6;
+        failed = checkFailedDive(numberOfDive);
+        if(failed) {
+            s6v.setVisibility(View.VISIBLE);
+            s6.setVisibility(View.VISIBLE);
+            s6.setText(failDive);
+        }else {
+            if(diveNumber >= 6){
+                s6v.setVisibility(View.VISIBLE);
+                s6.setVisibility(View.VISIBLE);
+                s6.setText(s6String);
+                //dive6 = true;
+            }
+        }
+        //if(dive6 && diveTotal == 6){    //TODO remove these after test fail on last dive
+        if(diveNumber == 6 && diveTotal == 6){
+            Toast.makeText(getApplicationContext(),
+                    "Congratulations, all six dives are complete," +
+                            " total score is " + totalString,
+                    Toast.LENGTH_LONG).show();
+            judgeButton.setVisibility(View.GONE);
+            totalbutton.setVisibility(View.GONE);
+            spinner.setEnabled(false);
+            return;
+        }
+        numberOfDive = 7;
+        failed = checkFailedDive(numberOfDive);
+        if(failed) {
+            s7v.setVisibility(View.VISIBLE);
+            s7.setVisibility(View.VISIBLE);
+            s7.setText(failDive);
+        }else {
+            if(diveNumber >= 7){
+                s7v.setVisibility(View.VISIBLE);
+                s7.setVisibility(View.VISIBLE);
+                s7.setText(s7String);
+            }
+        }
+        numberOfDive = 8;
+        failed = checkFailedDive(numberOfDive);
+        if(failed) {
+            s8v.setVisibility(View.VISIBLE);
+            s8.setVisibility(View.VISIBLE);
+            s8.setText(failDive);
+        }else {
+            if(diveNumber >= 8){
+                s8v.setVisibility(View.VISIBLE);
+                s8.setVisibility(View.VISIBLE);
+                s8.setText(s8String);
+            }
+        }
+        numberOfDive = 9;
+        failed = checkFailedDive(numberOfDive);
+        if(failed) {
+            s9v.setVisibility(View.VISIBLE);
+            s9.setVisibility(View.VISIBLE);
+            s9.setText(failDive);
+        }else {
+            if(diveNumber >= 9){
+                s9v.setVisibility(View.VISIBLE);
+                s9.setVisibility(View.VISIBLE);
+                s9.setText(s9String);
+            }
+        }
+        numberOfDive = 10;
+        failed = checkFailedDive(numberOfDive);
+        if(failed) {
+            s10v.setVisibility(View.VISIBLE);
+            s10.setVisibility(View.VISIBLE);
+            s10.setText(failDive);
+        }else {
+            if(diveNumber >= 10){
+                s10v.setVisibility(View.VISIBLE);
+                s10.setVisibility(View.VISIBLE);
+                s10.setText(s10String);
+            }
+        }
+        numberOfDive = 11;
+        failed = checkFailedDive(numberOfDive);
+        if(failed) {
+            s11v.setVisibility(View.VISIBLE);
+            s11.setVisibility(View.VISIBLE);
+            s11.setText(failDive);
+        }else {
+            if(diveNumber == 11){
+                s11v.setVisibility(View.VISIBLE);
+                s11.setVisibility(View.VISIBLE);
+                s11.setText(s11String);
+                //dive11 = true;
+            }
+        }
+            //if(dive11 && diveTotal == 11){
+            if(diveNumber == 11 && diveTotal == 11){
                 //spinner.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(),
                         "Congratulations, all eleven dives are complete," +
                                 " total score is " + totalString,
                         Toast.LENGTH_LONG).show();
+                judgeButton.setVisibility(View.GONE);
+                totalbutton.setVisibility(View.GONE);
                 spinner.setEnabled(false);
             }
 		}
-	}
+
+    public void getScoresFromDB(){
+        ResultDatabase db = new ResultDatabase(getApplicationContext());
+        ArrayList<Double> scores;
+        scores = db.getResultsList(meetId, diverId);
+        s1String = Double.toString(scores.get(0));
+        s2String = Double.toString(scores.get(1));
+        s3String = Double.toString(scores.get(2));
+        s4String = Double.toString(scores.get(3));
+        s5String = Double.toString(scores.get(4));
+        s6String = Double.toString(scores.get(5));
+        s7String = Double.toString(scores.get(6));
+        s8String = Double.toString(scores.get(7));
+        s9String = Double.toString(scores.get(8));
+        s10String = Double.toString(scores.get(9));
+        s11String = Double.toString(scores.get(10));
+
+        ResultsDB result = new ResultsDB();
+        totalScore = (result.calcScoreTotal(scores.get(0), scores.get(1), scores.get(2),
+                scores.get(3), scores.get(4), scores.get(5), scores.get(6),
+                scores.get(7), scores.get(8), scores.get(9), scores.get(10)));
+    }
+
+    public boolean checkFailedDive(int numberDive){
+        JudgeScoreDatabase db = new JudgeScoreDatabase(getApplicationContext());
+        return failed = db.checkFailed(meetId, diverId, numberDive);
+    }
 	
 	private void loadSpinnerData(){
 		DivesDatabase db = new DivesDatabase(getApplicationContext());
@@ -220,43 +417,6 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
    				new NothingSelectedSpinnerAdapter(
    						dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this));
 		
-	}
-	
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position,
-			long id) {
-        final Context context = this;
-
-		if(id == -1){
-			return;
-		}
-		else{
-			switch(position){
-			case 1:
-                diveType = 1;
-				break;
-			case 2:
-                diveType = 2;
-				break;
-			case 3:
-                diveType = 3;
-				break;
-			case 4:
-                diveType = 4;
-				break;
-			case 5:
-                diveType = 5;
-				break;
-			}
-            Bundle b = new Bundle();
-            b.putInt("keyDiver", diverId);
-            b.putInt("keyMeet", meetId);
-            b.putInt("diveType", diveType);
-            b.putInt("boardType", type);
-            Intent intent = new Intent(context, Dives.class);
-            intent.putExtras(b);
-            startActivity(intent);
-		}		
 	}
 
     private void fillType(){
@@ -295,6 +455,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
         diveTypeText = (TextView)findViewById(R.id.diveType);
         diveTypeShow = (TextView)findViewById(R.id.theType);
         spinner = (Spinner)findViewById(R.id.spinnerDiveCatC);
+        judgeButton = (Button)findViewById(R.id.buttonJudgeScore);
+        totalbutton = (Button)findViewById(R.id.buttonTotalScore);
     }
 	
 	@Override
@@ -314,16 +476,23 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.menu_change_dive_score:
-                Intent intent = new Intent(context, ChangeDiveScore.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_how_to:
-                Intent intent3 = new Intent(context, HowTo.class);
-                startActivity(intent3);
-                break;
-            case R.id.menu_about:
-                Intent intent4 = new Intent(context, About.class);
-                startActivity(intent4);
+                if(diveNumber == 0){
+                    Toast.makeText(getApplicationContext(),
+                            "This Diver has no scores yet",
+                            Toast.LENGTH_LONG).show();
+                    break;
+                } else {
+                    Bundle b = new Bundle();
+                    b.putInt("keyDiver", diverId);
+                    b.putInt("keyMeet", meetId);
+                    Intent intent = new Intent(context, ChangeDiveScore.class);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                    break;
+                }
+            case R.id.menu_rankings:
+                Intent intent2 = new Intent(context, Rankings.class);
+                startActivity(intent2);
                 break;
         }
         return super.onOptionsItemSelected(item);

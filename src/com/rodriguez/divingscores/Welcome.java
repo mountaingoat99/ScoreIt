@@ -5,10 +5,12 @@ import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.MeetDatabase;
 import info.sqlite.model.DiverTotalDB;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -19,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -33,7 +36,9 @@ public class Welcome extends Activity implements OnItemSelectedListener
 {
     private Spinner spinnerName, spinnerMeet;
 	private int diveCount = 0, meetCount = 0, diverId = 0, meetId = 0;
-	private boolean diverCheck, meetCheck;
+	private boolean diverCheck = false, meetCheck = false;
+
+    final Context context = this;
 
    @Override
    public void onCreate(Bundle savedInstanceState) 
@@ -55,7 +60,12 @@ public class Welcome extends Activity implements OnItemSelectedListener
 
     @Override
     public void onBackPressed() {
-        // do not allow any back presses on the Welcome screen
+        // do not allow any back presses on the Welcome screen to other activities
+        // just exit the app
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
     }
 
    	private void loadSpinnerName(){
@@ -103,22 +113,25 @@ public class Welcome extends Activity implements OnItemSelectedListener
                diverCheck = ddb.checkDiver();
                MeetDatabase mdb = new MeetDatabase(getApplicationContext());
                meetCheck = mdb.checkMeet();
-               if(diverCheck || meetCheck) {
+               if(diverCheck && meetCheck) {
                    Intent intent = new Intent(context, Choose.class);
                    startActivity(intent);
                } else {
+                   if(!diverCheck && !meetCheck) {
+                       Toast.makeText(getApplicationContext(),
+                               "Please add a Diver and a Meet before starting a meet",
+                               Toast.LENGTH_LONG).show();
+                       return;
+                   }
                    if(!diverCheck){
                        Toast.makeText(getApplicationContext(),
                                "Please add a diver before starting a meet",
                                Toast.LENGTH_LONG).show();
-                   } else if(!meetCheck)
-                   {
+                       return;
+                   }
+                   if(!meetCheck) {
                        Toast.makeText(getApplicationContext(),
                                "Please add a Meet before starting a meet",
-                               Toast.LENGTH_LONG).show();
-                   } else {
-                       Toast.makeText(getApplicationContext(),
-                               "Please add a Diver and a Meet before starting a meet",
                                Toast.LENGTH_LONG).show();
                    }
                }
@@ -211,11 +224,20 @@ public class Welcome extends Activity implements OnItemSelectedListener
 
 					@Override
 					public void onClick(View v) {
-						Intent intent = new Intent(getBaseContext(), DiverHistory.class);
-						Bundle b = new Bundle();
-						b.putInt("key", diverId);
-						intent.putExtras(b);
-						startActivity(intent);				
+                        MeetDatabase db = new MeetDatabase(getApplicationContext());
+                        ArrayList<String> meetInfo;
+                        meetInfo = db.getMeetHistory(diverId);
+                        if(!meetInfo.isEmpty()) {
+                            Intent intent = new Intent(getBaseContext(), DiverHistory.class);
+                            Bundle b = new Bundle();
+                            b.putInt("key", diverId);
+                            intent.putExtras(b);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "Diver has not been in any meets yet",
+                                    Toast.LENGTH_LONG).show();
+                        }
 					}			
 				});	
 				
@@ -311,11 +333,20 @@ public class Welcome extends Activity implements OnItemSelectedListener
 
 					@Override
 					public void onClick(View v) {
-						Intent intent = new Intent(getBaseContext(), MeetResults.class);
-						Bundle b = new Bundle();
-						b.putInt("key", meetId);
-						intent.putExtras(b);
-						startActivity(intent);				
+                        DiverDatabase db = new DiverDatabase(getApplicationContext());
+                        ArrayList<String> diverInfo;
+                        diverInfo = db.getDiverHistory(meetId);
+                        if(!diverInfo.isEmpty()) {
+                            Intent intent = new Intent(getBaseContext(), MeetResults.class);
+                            Bundle b = new Bundle();
+                            b.putInt("key", meetId);
+                            intent.putExtras(b);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "Meet has no divers associated with it",
+                                    Toast.LENGTH_LONG).show();
+                        }
 					}			
 				});	
 				
@@ -390,8 +421,13 @@ public class Welcome extends Activity implements OnItemSelectedListener
                 startActivity(intent3);
                 break;
             case R.id.menu_about:
-                Intent intent4 = new Intent(context, About.class);
-                startActivity(intent4);
+                Intent intent2 = new Intent(context, About.class);
+                startActivity(intent2);
+                //showDialog();
+                break;
+            case R.id.menu_rankings:
+                Intent intent1 = new Intent(context, Rankings.class);
+                startActivity(intent1);
                 break;
         }
         return super.onOptionsItemSelected(item);

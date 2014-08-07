@@ -24,9 +24,11 @@ import java.util.Arrays;
 import java.util.List;
 import info.controls.NothingSelectedSpinnerAdapter;
 import info.sqlite.helper.BackDatabase;
+import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiveTotalDatabase;
 import info.sqlite.helper.ForwardDatabase;
 import info.sqlite.helper.InwardDatabase;
+import info.sqlite.helper.JudgeScoreDatabase;
 import info.sqlite.helper.MeetDatabase;
 import info.sqlite.helper.ResultDatabase;
 import info.sqlite.helper.ReverseDatabase;
@@ -39,16 +41,15 @@ public class Dives extends Activity implements OnItemSelectedListener
     private RadioButton radioTuck, radioPike, radioFree, radioStraight;
     private TextView view4, view5, view6, view7;
     private Spinner score1, score2, score3, score4, score5, score6, score7;
-    private int judges, diverId, meetId, diveType, divePosition = 1, boardType = 0;
-    private double sc1, sc2, sc3, diveScoreTotal = 0.0, multiplier = 0.0;
+    private int judges, diverId, meetId, diveType, diveNumber, divePosition = 1, boardType = 0;
+    private double sc1, sc2, sc3, sc4, sc5, sc6, sc7, diveScoreTotal = 0.0, multiplier = 0.0;
     private List<String> diveName;
     private ArrayList<Double> Scores = new ArrayList<>();
-    boolean hidebutton;
-    String stringId = null;
+    boolean hidebutton, ifZeroTotal = true;
+    String stringId = null, failedDive = "P";
 	
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dives);
         ActionBar actionBar = getActionBar();
@@ -75,7 +76,7 @@ public class Dives extends Activity implements OnItemSelectedListener
         loadScoreSpinners();
         loadSpinnerData();
         setTitle();
-        getDiveTotals();
+        getDiveNumber();
         showScores();
         addListenerOnButton();
         checkRadios();
@@ -87,8 +88,14 @@ public class Dives extends Activity implements OnItemSelectedListener
         if(spinner.getSelectedItemPosition() == 0)
             hidebutton = false;
         else
-        hidebutton = true;
+            hidebutton = true;
     }
+
+    private void getDiveNumber(){
+        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
+        diveNumber = db.getDiveNumber(meetId, diverId);
+    }
+
 
     private void checkRadios() {
         radioStraight.setOnClickListener(new OnClickListener() {
@@ -138,25 +145,55 @@ public class Dives extends Activity implements OnItemSelectedListener
 
         switch (diveType){
             case 1:
-                ForwardDatabase fdb = new ForwardDatabase(getApplicationContext());
-                diveName = fdb.getForwardNames();
-                break;
+                if(boardType == 1) {
+                    ForwardDatabase fdb = new ForwardDatabase(getApplicationContext());
+                    diveName = fdb.getForwardOneNames();
+                    break;
+                } else {
+                    ForwardDatabase fdb = new ForwardDatabase(getApplicationContext());
+                    diveName = fdb.getForwardThreeNames();
+                    break;
+                }
             case 2:
-                BackDatabase bdb = new BackDatabase(getApplicationContext());
-                diveName = bdb.getBackNames();
-                break;
+                if(boardType == 1) {
+                    BackDatabase bdb = new BackDatabase(getApplicationContext());
+                    diveName = bdb.getBackOneNames();
+                    break;
+                } else {
+                    BackDatabase bdb = new BackDatabase(getApplicationContext());
+                    diveName = bdb.getBackThreeNames();
+                    break;
+                }
             case 3:
-                ReverseDatabase rdb = new ReverseDatabase(getApplicationContext());
-                diveName = rdb.getReverseNames();
-                break;
+                if(boardType == 1){
+                    ReverseDatabase rdb = new ReverseDatabase(getApplicationContext());
+                    diveName = rdb.getReverseOneNames();
+                    break;
+                } else {
+                    ReverseDatabase rdb = new ReverseDatabase(getApplicationContext());
+                    diveName = rdb.getReverseThreeNames();
+                    break;
+                }
             case 4:
-                InwardDatabase idb = new InwardDatabase(getApplicationContext());
-                diveName = idb.getInwardNames();
-                break;
+                if(boardType == 1) {
+                    InwardDatabase idb = new InwardDatabase(getApplicationContext());
+                    diveName = idb.getInwardOneNames();
+                    break;
+                } else {
+                    InwardDatabase idb = new InwardDatabase(getApplicationContext());
+                    diveName = idb.getInwardThreeNames();
+                    break;
+                }
             case 5:
-                TwistDatabase tdb = new TwistDatabase(getApplicationContext());
-                diveName = tdb.getTwistNames();
-                break;
+                if(boardType == 1) {
+                    TwistDatabase tdb = new TwistDatabase(getApplicationContext());
+                    diveName = tdb.getTwistOneNames();
+                    break;
+                } else {
+                    TwistDatabase tdb = new TwistDatabase(getApplicationContext());
+                    diveName = tdb.getTwistThreeNames();
+                    break;
+                }
         }
     	ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, diveName);
@@ -194,16 +231,31 @@ public class Dives extends Activity implements OnItemSelectedListener
     	btnTotal.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
                 if (hidebutton) {
-                    getScoreText();
-                    //if (missed)
-                        //return;
-                    calcScores();
-                    Bundle b = new Bundle();
-                    b.putInt("keyDiver", diverId);
-                    b.putInt("keyMeet", meetId);
-                    Intent intent = new Intent(context, ChooseSummary.class);
-                    intent.putExtras(b);
-                    startActivity(intent);
+                    getMultiplier();
+                    if(multiplier != 0.0) {
+                        getScoreText();
+                        incrementDiveNumber();
+                        calcScores();
+                        if(ifZeroTotal) {
+                            updateJudgeScores();
+                            Bundle b = new Bundle();
+                            b.putInt("keyDiver", diverId);
+                            b.putInt("keyMeet", meetId);
+                            Intent intent = new Intent(context, ChooseSummary.class);
+                            intent.putExtras(b);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "Please enter at least one judge score," +
+                                            " or fail the dive using the menu button.",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(getApplicationContext(),
+                                "Dive and Position is not valid, " +
+                                        "Please Choose a Valid Combination.",
+                                Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Please Choose a Dive Category",
@@ -213,8 +265,15 @@ public class Dives extends Activity implements OnItemSelectedListener
         });
     }
 
+    private void incrementDiveNumber(){
+        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
+        diveNumber ++;
+        db.updateDiveNumber(meetId, diverId, diveNumber);
+    }
+
     private void calcScores() {
         ResultDatabase db = new ResultDatabase(getApplicationContext());
+        double diveTotal;
         double total = db.getTotalScore(meetId, diverId);
         // Converts and sorts the ArrayList for processing
         Double[] theScores = new Double[ Scores.size()];
@@ -244,106 +303,148 @@ public class Dives extends Activity implements OnItemSelectedListener
                 diveScoreTotal = diveScoreTotal + list.get(i);
             }
         }
-        getMultiplier();
-        double diveTotal = diveScoreTotal * multiplier;
-        total = total + diveTotal;                             // gets total incremented meet score
+        if(multiplier != 0.0) {
+            diveTotal = diveScoreTotal * multiplier;
+        }else{
+            diveTotal = diveScoreTotal;
+        }
+        total = total + diveTotal;
 
-        ArrayList<Double> scores;
-        scores = db.checkResults(meetId, diverId);                  // checks the previous scores
-
-        double dive1 = scores.get(0);
-        double dive2 = scores.get(1);
-        double dive3 = scores.get(2);
-        double dive4 = scores.get(3);
-        double dive5 = scores.get(4);
-        double dive6 = scores.get(5);
-        double dive7 = scores.get(6);
-        double dive8 = scores.get(7);
-        double dive9 = scores.get(8);
-        double dive10 = scores.get(9);
-        double dive11 = scores.get(10);
+        if(diveTotal < .5){
+            ifZeroTotal = false;
+            return;
+        }
 
         int resultIndex;
-        if(dive1 == 0.0){                                           // if previous is empty fills the next one
+        if(diveNumber == 1){
             resultIndex = 3;
             db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
-        if(dive2 == 0.0){
+        if(diveNumber == 2){
             resultIndex = 4;
             db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
-        if(dive3 == 0.0){
+        if(diveNumber == 3){
             resultIndex = 5;
             db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
-        if(dive4 == 0.0){
+        if(diveNumber == 4){
             resultIndex = 6;
             db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
-        if(dive5 == 0.0){
+        if(diveNumber == 5){
             resultIndex = 7;
             db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
-        if(dive6 == 0.0){
+        if(diveNumber == 6){
             resultIndex = 8;
             db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
-        if(dive7 == 0.0){
+        if(diveNumber == 7){
             resultIndex = 9;
             db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
-        if(dive8 == 0.0){
+        if(diveNumber == 8){
             resultIndex = 10;
             db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
-        if(dive9 == 0.0){
+        if(diveNumber == 9){
             resultIndex = 11;
             db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
-        if(dive10 == 0.0){
+        if(diveNumber == 10){
             resultIndex = 12;
             db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
-        if(dive11 == 0.0){
+        if(diveNumber == 11){
             resultIndex = 13;
             db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
         }
     }
 
+    private void updateJudgeScores(){
+        JudgeScoreDatabase db = new JudgeScoreDatabase(getApplicationContext());
+        String diveCategory = null;
+        switch (diveType){
+            case 1:
+                diveCategory = "Forward Dive";
+                break;
+            case 2:
+                diveCategory = "Back Dive";
+                break;
+            case 3:
+                diveCategory = "Reverse Dive";
+                break;
+            case 4:
+                diveCategory = "Inward Dive";
+                break;
+            case 5:
+                diveCategory = "Twist Dive";
+                break;
+        }
+
+        String DivePosition = null;
+        switch (divePosition){
+            case 1:
+                DivePosition = "Straight";
+                break;
+            case 2:
+                DivePosition = "Pike";
+                break;
+            case 3:
+                DivePosition = "Tuck";
+                break;
+            case 4:
+                DivePosition = "Free";
+                break;
+        }
+
+        String diveTypeName = spinner.getSelectedItem().toString();
+
+        db.fillNewJudgeScores(meetId, diverId, diveNumber, diveCategory, diveTypeName, DivePosition,
+                             failedDive, sc1, sc2, sc3, sc4, sc5, sc6, sc7, multiplier);
+    }
+
     private void getScoreText(){
+        Scores.clear();
         sc1 = Double.parseDouble(score1.getSelectedItem().toString());
         Scores.add(sc1);
         sc2 = Double.parseDouble(score2.getSelectedItem().toString());
         Scores.add(sc2);
         sc3 = Double.parseDouble(score3.getSelectedItem().toString());
         Scores.add(sc3);
+        sc4 = 0.0;
+        sc5 = 0.0;
+        sc6 = 0.0;
+        sc7 = 0.0;
 
-        double sc5;
-        double sc4;
         if(judges == 5){
             sc4 = Double.parseDouble(score4.getSelectedItem().toString());
             Scores.add(sc4);
             sc5 = Double.parseDouble(score5.getSelectedItem().toString());
             Scores.add(sc5);
+            sc6 = 0.0;
+            sc7 = 0.0;
+
         }
         if(judges == 7){
             sc4 = Double.parseDouble(score4.getSelectedItem().toString());
             Scores.add(sc4);
             sc5 = Double.parseDouble(score5.getSelectedItem().toString());
             Scores.add(sc5);
-            double sc6 = Double.parseDouble(score6.getSelectedItem().toString());
+            sc6 = Double.parseDouble(score6.getSelectedItem().toString());
             Scores.add(sc6);
-            double sc7 = Double.parseDouble(score7.getSelectedItem().toString());
+            sc7 = Double.parseDouble(score7.getSelectedItem().toString());
             Scores.add(sc7);
         }
     }
@@ -378,12 +479,6 @@ public class Dives extends Activity implements OnItemSelectedListener
                 multiplier = tdb.getDOD(diveId, divePosition, boardType);
                 break;
         }
-    }
-
-    private void getDiveTotals(){
-        DiveTotalDatabase db = new DiveTotalDatabase(getApplicationContext());
-        int diveTotal = db.searchTotals(meetId, diverId);
-        // TODO add in a way to not let user input anything else if diveTotal is 11, might not need this
     }
 
     private void setTitle(){
@@ -448,41 +543,47 @@ public class Dives extends Activity implements OnItemSelectedListener
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) 
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_dives, menu);
         return true;
     }
     
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) 
-    {
+    public boolean onOptionsItemSelected(MenuItem item){
         final Context context = this;
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()){
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.menu_failed_dive:
-                Intent intent = new Intent(context, FailedDive.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_enter_dive_score:
-                Intent intent1 = new Intent(context, EnterFinalDiveScore.class);
-                startActivity(intent1);
-                break;
-            case R.id.menu_change_dive_score:
-                Intent intent2 = new Intent(context, ChangeDiveScore.class);
-                startActivity(intent2);
-                break;
-            case R.id.menu_how_to:
-                Intent intent3 = new Intent(context, HowTo.class);
-                startActivity(intent3);
-                break;
-            case R.id.menu_about:
-                Intent intent4 = new Intent(context, About.class);
-                startActivity(intent4);
-                break;
+                if (hidebutton) {
+                    getMultiplier();
+                    if (multiplier != 0.0) {
+                        String diveTypeName = spinner.getSelectedItem().toString();
+                        Intent intent = new Intent(context, FailedDive.class);
+                        Bundle b = new Bundle();
+                        b.putInt("keyDiver", diverId);
+                        b.putInt("keyMeet", meetId);
+                        b.putInt("keyDiveType", diveType);
+                        b.putString("keyDiveTypeName", diveTypeName);
+                        b.putInt("keyDivePosition", divePosition);
+                        b.putInt("boardType", boardType);
+                        intent.putExtras(b);
+                        startActivity(intent);
+                        break;
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "Dive and Position is not valid, " +
+                                        "Please Choose a Valid Combination.",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Please Choose a Dive Category",
+                            Toast.LENGTH_LONG).show();
+                    break;
+                }
         }
         return super.onOptionsItemSelected(item);
     }

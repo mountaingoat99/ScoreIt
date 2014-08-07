@@ -1,6 +1,8 @@
 package com.rodriguez.divingscores;
 
 import info.controls.NothingSelectedSpinnerAdapter;
+import info.sqlite.helper.DatabaseHelper;
+import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiveTotalDatabase;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.MeetDatabase;
@@ -12,14 +14,20 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -31,6 +39,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 public class ChooseDiver extends Activity implements OnItemSelectedListener {
 
     private Spinner spinnerName;
@@ -39,12 +49,12 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
     private TextView MeetName, DiveTotal, DiveType;
     private int  meetSpinPosition, diverSpinnerPosition, diverId = 0,
                 meetId = 0, diveTotal = 6, diveType = 1;
-    private boolean checkResult, checkTotals, checkType;
+    private boolean checkResult, checkTotals, checkType, checkDiveNumber;
     String showDiveTotal;
+    final Context context = this;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState)    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_diver);
         ActionBar actionBar = getActionBar();
@@ -58,6 +68,7 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
 
         Bundle b = getIntent().getExtras();
         meetId = b.getInt("keyMeet");
+        diverId = b.getInt("keyDiver");
         diverSpinnerPosition = b.getInt("keySpin");
         meetSpinPosition = b.getInt("keyMeetPosition");
         spinnerName.setSelection(diverSpinnerPosition);
@@ -129,18 +140,22 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
         btnNext.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
                 if (diverId != 0 && meetId != 0) {
-                    ResultDatabase db = new ResultDatabase(getApplicationContext());
                     // checks to see if a diver and meet are attached to results yet
+                    ResultDatabase db = new ResultDatabase(getApplicationContext());
                     checkResult = db.checkResult(meetId, diverId);
-
                     if (!checkResult) {
                         // enters 0 values in the results database
                         db.createEmptyResult(meetId, diverId);
                     }
+                    // checks to see if a diver and meet are attached to a diveNumber yet
+                    DiveNumberDatabase dbn = new DiveNumberDatabase(getApplicationContext());
+                    checkDiveNumber = dbn.checkNumber(meetId, diverId);
+                    if(!checkDiveNumber){
+                        dbn.createNewDiveNumber(meetId, diverId);
+                    }
 
                     enterDiveTotal();
                     enterDiveType();
-
                     Intent intent = new Intent(context, ChooseSummary.class);
                     Bundle b = new Bundle();
                     b.putInt("keyDiver", diverId);
@@ -178,6 +193,7 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
             showDiveTotal = howManyDives + showDiveTotal;
             DiveTotal.setText(showDiveTotal);
         }else {
+            DiveTotal.setText("How Many Dives?");
             radioGroupTotal.setVisibility(View.VISIBLE);
         }
     }
@@ -193,6 +209,7 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
             DiveType.setVisibility(View.GONE);
         }else {
             radioGroupType.setVisibility(View.VISIBLE);
+            DiveType.setVisibility(View.VISIBLE);
         }
     }
 
@@ -246,18 +263,15 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.activity_choose, menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_choose_diver, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         final Context context = this;
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
@@ -270,24 +284,30 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
                 startActivity(intent1);
                 break;
             case R.id.menu_remove_diver_from_meet:
-                Intent intent2 = new Intent(context, RemoveDiverFromMeet.class);
+                if(diverId != 0) {
+                    Intent intent2 = new Intent(context, RemoveDiverFromMeet.class);
+                    Bundle b = new Bundle();
+                    b.putInt("keyDiver", diverId);
+                    b.putInt("keyMeet", meetId);
+                    intent2.putExtras(b);
+                    startActivity(intent2);
+                    //showAlert();
+                    break;
+                }else{
+                    Toast.makeText(getApplicationContext(),
+                            "Please Choose a Diver",
+                            Toast.LENGTH_LONG).show();
+                    break;
+                }
+            case R.id.menu_rankings:
+                Intent intent2 = new Intent(context, Rankings.class);
                 startActivity(intent2);
-                break;
-            case R.id.menu_how_to:
-                Intent intent3 = new Intent(context, HowTo.class);
-                startActivity(intent3);
-                break;
-            case R.id.menu_about:
-                Intent intent4 = new Intent(context, About.class);
-                startActivity(intent4);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void onNothingSelected(AdapterView<?> arg0)
-    {
+    public void onNothingSelected(AdapterView<?> arg0)    {
 
     }
-
 }

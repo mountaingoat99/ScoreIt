@@ -1,5 +1,6 @@
 package com.rodriguez.divingscores;
 
+import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.MeetDatabase;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class DiverHistory extends Activity {
 
     private ListView myList;
 	private TextView name, age, grade, school;
-    private int diverId, meetId;
+    private int diverId, meetId, diveNumber;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -79,44 +80,46 @@ public class DiverHistory extends Activity {
 		}
 	}
 	
-	private void populateListViewFromDB() {				
+	private void populateListViewFromDB() {
 		MeetDatabase db = new MeetDatabase(getApplicationContext());
 		ArrayList<String> meetInfo;
 		meetInfo = db.getMeetHistory(diverId);	
-		
-		if (!meetInfo.isEmpty()){
-			ArrayAdapter<String> adapter = new ArrayAdapter<>(
-					this, R.layout.list_item, meetInfo);
-			myList.setAdapter(adapter);	
-		}
-		else
-		{
-			Toast.makeText(getApplicationContext(),
-        			"Diver has not been in any meets yet",
-        			Toast.LENGTH_LONG).show();
-			Intent intent = new Intent(getBaseContext(), Welcome.class);
-			startActivity(intent);
-		}
-		
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(
+			this, R.layout.list_item, meetInfo);
+		myList.setAdapter(adapter);
 		myList.setOnItemClickListener(new OnItemClickListener(){
 			
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				String stringId = myList.getItemAtPosition(position).toString();				
-				
-				MeetDatabase db = new MeetDatabase(getApplicationContext());				
-				meetId = db.getId(stringId);
-				
-				Intent intent = new Intent(getBaseContext(), MeetScores.class);
-				Bundle b = new Bundle();
-				b.putInt("key", diverId);
-				b.putInt("key2", meetId);
-				intent.putExtras(b);
-				startActivity(intent);				
+                String stringId;
+                stringId = myList.getItemAtPosition(position).toString();
+                MeetDatabase db = new MeetDatabase(getApplicationContext());
+                meetId = db.getId(stringId);
+                getDiveNumber();
+                if(diveNumber == 0){
+                    Toast.makeText(getApplicationContext(),
+                            "Diver has no scores at this meet yet",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    stringId = myList.getItemAtPosition(position).toString();
+                    meetId = db.getId(stringId);
+                    Intent intent = new Intent(getBaseContext(), MeetScores.class);
+                    Bundle b = new Bundle();
+                    b.putInt("key", diverId);
+                    b.putInt("key2", meetId);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
 			}
 		});	
-	}		
+	}
+
+    private void getDiveNumber(){
+        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
+        diveNumber = db.getDiveNumber(meetId, diverId);
+    }
 	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) 
@@ -138,9 +141,9 @@ public class DiverHistory extends Activity {
                 Intent intent3 = new Intent(context, HowTo.class);
                 startActivity(intent3);
                 break;
-            case R.id.menu_about:
-                Intent intent4 = new Intent(context, About.class);
-                startActivity(intent4);
+            case R.id.menu_rankings:
+                Intent intent2 = new Intent(context, Rankings.class);
+                startActivity(intent2);
                 break;
         }
         return super.onOptionsItemSelected(item);

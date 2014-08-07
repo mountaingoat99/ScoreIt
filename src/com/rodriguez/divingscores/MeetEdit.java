@@ -218,10 +218,6 @@ public class MeetEdit extends Activity implements
                 Intent intent3 = new Intent(context, HowTo.class);
                 startActivity(intent3);
                 break;
-            case R.id.menu_about:
-                Intent intent4 = new Intent(context, About.class);
-                startActivity(intent4);
-                break;
         }
         return super.onOptionsItemSelected(item);
     }

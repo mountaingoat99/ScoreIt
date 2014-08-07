@@ -1,5 +1,6 @@
 package com.rodriguez.divingscores;
 
+import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.MeetDatabase;
 
@@ -29,7 +30,7 @@ public class MeetResults extends Activity {
 	
 	private TextView name, school, city, state, date;
     private ListView myList;
-    private int diverId, meetId;
+    private int diverId, meetId, diveNumber;
 
 	
 	@Override
@@ -102,38 +103,42 @@ public class MeetResults extends Activity {
 		DiverDatabase db = new DiverDatabase(getApplicationContext());
 		ArrayList<String> diverInfo;
 		diverInfo = db.getDiverHistory(meetId);
-		
-		if (!diverInfo.isEmpty()){
-			ArrayAdapter<String> adapter = new ArrayAdapter<>(
-					this, R.layout.list_item, diverInfo);
-			myList.setAdapter(adapter);
-		}else{
-			Toast.makeText(getApplicationContext(),
-        			"Meet has no divers associated with it",
-        			Toast.LENGTH_LONG).show();
-			Intent intent = new Intent(getBaseContext(), Welcome.class);
-			startActivity(intent);
-		}
-		
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(
+			this, R.layout.list_item, diverInfo);
+		myList.setAdapter(adapter);
 		myList.setOnItemClickListener(new OnItemClickListener(){
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				String stringId = myList.getItemAtPosition(position).toString();
-				
-				DiverDatabase db = new DiverDatabase(getApplicationContext());				
-				diverId = db.getId(stringId);
-				
-				Intent intent = new Intent(getBaseContext(), MeetScores.class);
-				Bundle b = new Bundle();
-				b.putInt("key", diverId);
-				b.putInt("key2", meetId);
-				intent.putExtras(b);
-				startActivity(intent);				
+                String stringId;
+                stringId = myList.getItemAtPosition(position).toString();
+                DiverDatabase db = new DiverDatabase(getApplicationContext());
+                diverId = db.getId(stringId);
+                getDiveNumber();
+                if(diveNumber == 0){
+                    Toast.makeText(getApplicationContext(),
+                            "Diver has no scores at this meet yet",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    stringId = myList.getItemAtPosition(position).toString();
+                    diverId = db.getId(stringId);
+                    Intent intent = new Intent(getBaseContext(), MeetScores.class);
+                    Bundle b = new Bundle();
+                    b.putInt("key", diverId);
+                    b.putInt("key2", meetId);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
 			}			
 		});	
 	}
+
+    private void getDiveNumber(){
+        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
+        diveNumber = db.getDiveNumber(meetId, diverId);
+    }
 	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) 
@@ -155,9 +160,9 @@ public class MeetResults extends Activity {
                 Intent intent3 = new Intent(context, HowTo.class);
                 startActivity(intent3);
                 break;
-            case R.id.menu_about:
-                Intent intent4 = new Intent(context, About.class);
-                startActivity(intent4);
+            case R.id.menu_rankings:
+                Intent intent2 = new Intent(context, Rankings.class);
+                startActivity(intent2);
                 break;
         }
         return super.onOptionsItemSelected(item);

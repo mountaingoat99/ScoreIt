@@ -1,32 +1,74 @@
 package com.rodriguez.divingscores;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.rodriguez.divingscores.R;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import info.sqlite.helper.DiverDatabase;
 
 public class RemoveDiverFromMeet extends Activity {
+
+    private Button cancel, yes;
+    private int meetId, diverId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_remove_diver_from_meet);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        cancel = (Button)findViewById(R.id.buttonCancel);
+        yes = (Button)findViewById(R.id.buttonYes);
+
+        Bundle b = getIntent().getExtras();
+        meetId = b.getInt("keyMeet");
+        diverId = b.getInt("keyDiver");
+
+        addListenerOnButton();
+    }
+
+    public void addListenerOnButton(){
+        final Context context = this;
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        yes.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                DiverDatabase db = new DiverDatabase(getApplicationContext());
+                db.removeDiverFromMeet(meetId, diverId);
+                Intent intent1 = new Intent(context, Welcome.class);
+                startActivity(intent1);
+            }
+        });
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.remove_diver_from_meet, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
