@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    tools:ignore="NotSibling" >
+    tools:ignore="NotSibling">
 
     <TextView
         android:id="@+id/Choices"

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="120dp"
+    android:padding="4dp">
+
+    <TextView android:id="@+id/name"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/random_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <TextView android:id="@+id/scoreName"
+        android:textSize="@dimen/text_size_small"
+        android:layout_below="@id/name"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:textColor="@color/static_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/score_total"/>
+
+    <TextView android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_toRightOf="@id/scoreName"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="24dp"
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="@color/random_text"
+        android:text=""/>
+
+    <TextView android:id="@+id/diveNumberName"
+        android:textSize="@dimen/text_size_medium"
+        android:layout_below="@id/name"
+        android:layout_toRightOf="@id/score"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:textColor="@color/static_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dive_number"/>
+
+    <TextView android:id="@+id/diveNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_toRightOf="@id/diveNumberName"
+        android:layout_alignBaseline="@id/diveNumberName"
+        android:layout_marginTop="8dp"
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="@color/random_text"
+        android:text=""/>
+
+</RelativeLayout>

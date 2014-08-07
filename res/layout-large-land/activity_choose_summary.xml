@@ -32,13 +32,44 @@
         	android:gravity="center"
         	android:prompt="@string/please_choose" />
 
-    	<View
-    	    android:id="@+id/View1C"
-    	    android:layout_width="fill_parent"
-    	    android:layout_height="1dp"
-    	    android:layout_below="@id/spinnerDiveCatC"
-    	    android:background="@color/header"
-            android:layout_marginTop="8dp" />
+        <LinearLayout
+            android:id="@+id/layout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spinnerDiveCatC"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp" >
+
+            <Button
+                android:id="@+id/buttonJudgeScore"
+                style="@android:style/Widget.Holo.Button"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/enter_judge_scores"
+                android:textSize="@dimen/button_text"
+                android:textColor="@color/button_text"/>
+
+            <Button
+                android:id="@+id/buttonTotalScore"
+                style="@android:style/Widget.Holo.Button"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/enter_total_score"
+                android:textSize="@dimen/button_text"
+                android:textColor="@color/button_text"/>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/View0"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/layout3"
+            android:layout_marginTop="8dp"
+            android:background="@color/header" />
 
         <LinearLayout
             android:id="@+id/layout1"
@@ -47,7 +78,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
-            android:layout_below="@id/View1C">
+            android:layout_below="@id/View0">
 
             <View
                 android:layout_width="0dp"
@@ -213,7 +244,7 @@
                     android:id="@+id/score1view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_1"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -237,7 +268,7 @@
                     android:id="@+id/score2view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_2"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -261,7 +292,7 @@
                     android:id="@+id/score3view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_3"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -285,7 +316,7 @@
                     android:id="@+id/score4view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_4"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -323,7 +354,7 @@
                     android:id="@+id/score5view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_5"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -347,7 +378,7 @@
                     android:id="@+id/score6view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_6"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -371,7 +402,7 @@
                     android:id="@+id/score7view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_7"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -395,7 +426,7 @@
                     android:id="@+id/score8view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_8"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -433,7 +464,7 @@
                     android:id="@+id/score9view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_9"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -457,7 +488,7 @@
                     android:id="@+id/score10view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="12dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_10"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -481,7 +512,7 @@
                     android:id="@+id/score11view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_11"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -505,7 +536,7 @@
                     android:id="@+id/fake"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_11"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
