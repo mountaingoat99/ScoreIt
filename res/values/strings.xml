@@ -169,8 +169,8 @@
     <string name="choose_date">Choose Date</string>
     <string name="date_enter_style">dd/mm/yyyy</string>
     <string name="title_activity_choose">Choose your Meet</string>
-    <string name="current_diver_info">Current Divers</string>
-    <string name="current_meet_info">Current Meets</string>
+    <string name="current_diver_info">View Divers</string>
+    <string name="current_meet_info">View Meets</string>
     <string name="start_meet">Enter Scores</string>
     <string name="history">History</string>
     <string name="edit">Edit</string>
@@ -201,6 +201,13 @@
     <string name="three_meter">3 Meter</string>
     <string name="type_of_dives">Dive Type:</string>
     <string name="about_string">About</string>
+    <string name="contact">Contact</string>
+    <string name="why">My Daughter was a diver in high school and now she competes in college.
+                        I built this app to keep track of scores during the meet, and hopefully you
+                        find it useful. If you have any questions, find a bug, or want to request new
+                        features feel free to contact me. Thanks for downloading!</string>
+    <string name="my_name">Jeremey Rodriguez</string>
+    <string name="email">jeremey.rodriguez@outlook.com</string>
     <string name="how_to_string">How To</string>
     <string name="add_dive_score">Enter Final Dive Score</string>
     <string name="failed_dive">Failed Dive</string>
@@ -213,5 +220,51 @@
     <string name="title_activity_failed_dive">Failed Dive</string>
     <string name="title_activity_enter_final_dive_score">Enter Final Dive Score</string>
     <string name="title_activity_remove_diver_from_meet">Remove Diver From Meet</string>
+    <string name="sure_failed_dive">Are you sure you want to fail this dive?</string>
+    <string name="yes">Yes</string>
+    <string name="return_button">Return</string>
+    <string name="enter_judge_scores">Enter Scores</string>
+    <string name="enter_total_score">Enter Total Score</string>
+    <string name="total_score">Total Score:</string>
+    <string name="initial_total_score">0.0</string>
+    <string name="change_dive_scores">Change a Score</string>
+    <string name="choose_dive_number">Choose Dive Number</string>
+    <string name="update_score">Update Scores</string>
+    <string name="failed">Failed?</string>
+    <string name="remove_diver_title">Remove Diver From Meet?</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="sure_remove_diver">This will also delete all scores from this meet if anything has been entered.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="youtubelink">FakeLink</string>
+    <string name="dialog_title">Change a Score</string>
+    <string name="dialog_message">To "Fail" a dive enter "0.00" in the Total box. You can only update the Total Score or the Judges Scores.
+                        Updating the Total Score will set all Judge Scores to Zero.
+                        Updating the Judges Scores will always recalculate the Total Score.</string>
+    <string name="how_to1">\t Start by entering divers and meets and then click the "Enter Scores" button.
+                        From there you can choose which Meet you will be attending, then which Diver you want to enter scores for.</string>
+    <string name="how_to2">\t You can enter multiple divers during a meet. Calculate scores by either entering the judges scores
+                        or just enter the total score. The app will keep a running total of the score as the meet progresses.
+                        You can also edit the scores in case you entered the wrong value, or enter a failed dive. Use the Android
+                        Menu/Overflow buttons on the top right of the screen.</string>
+    <string name="how_to3">\t I encourage you to watch the YouTube video demonstration of the app and all of its features. If you have
+                        questions or comments please use the About menu in the Welcome screen to contact me.</string>
+    <string name="title_activity_view_dive_info">View Dive Info</string>
+    <string name="dive_info">Dive Info</string>
+    <string name="dive_type_name">Dive Type:</string>
+    <string name="dive_name">Dive Name:</string>
+    <string name="dive_position_name">Dive Position:</string>
+    <string name="dive_info_popup">Click on a dive score to see detailed information</string>
+    <string name="judge_1">Judge 1:</string>
+    <string name="judge_2">Judge 2:</string>
+    <string name="judge_3">Judge 3:</string>
+    <string name="judge_4">Judge 4:</string>
+    <string name="judge_5">Judge 5:</string>
+    <string name="judge_6">Judge 6:</string>
+    <string name="judge_7">Judge 7:</string>
+    <string name="title_activity_rankings">Rankings</string>
+    <string name="title_activity_rankings_by_meet">RankingsByMeet</string>
+    <string name="rankings_menu">Meet Rankings</string>
+    <string name="dive_number">Dive Number:</string>
 
 </resources>
