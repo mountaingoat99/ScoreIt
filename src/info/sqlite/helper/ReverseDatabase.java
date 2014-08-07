@@ -17,10 +17,11 @@ public class ReverseDatabase extends DatabaseHelper {
 
     public ReverseDatabase(Context context) { super(context); }
 
-    public List<String> getReverseNames(){
+    public List<String> getReverseOneNames(){
         List<String> diveNames = new ArrayList<>();
 
-        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_REVERSE;
+        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_REVERSE
+                + " WHERE one_meter= 1";
 
         Log.e(getLog(), selectQuery);
 
@@ -34,6 +35,29 @@ public class ReverseDatabase extends DatabaseHelper {
             }while (c.moveToNext());
         }
         c.close();
+        db.close();
+        return diveNames;
+    }
+
+    public List<String> getReverseThreeNames(){
+        List<String> diveNames = new ArrayList<>();
+
+        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_REVERSE
+                + " WHERE three_meter= 1";
+
+        Log.e(getLog(), selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()){
+            do{
+                ReverseDB r = new ReverseDB();
+                diveNames.add(r.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
+            }while (c.moveToNext());
+        }
+        c.close();
+        db.close();
         return diveNames;
     }
 
@@ -54,6 +78,7 @@ public class ReverseDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return id;
     }
 
@@ -112,6 +137,7 @@ public class ReverseDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return  dod;
     }
 }

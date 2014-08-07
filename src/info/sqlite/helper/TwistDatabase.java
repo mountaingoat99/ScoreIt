@@ -16,9 +16,11 @@ public class TwistDatabase extends DatabaseHelper {
 
     public TwistDatabase(Context context) { super(context); }
 
-    public List<String> getTwistNames(){
+    public List<String> getTwistOneNames(){
         List<String> diveNames = new ArrayList<>();
-        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_TWIST;
+        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_TWIST
+                + " WHERE one_meter= 1";
+
         Log.e(getLog(), selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -31,6 +33,28 @@ public class TwistDatabase extends DatabaseHelper {
             }while (c.moveToNext());
         }
         c.close();
+        db.close();
+        return diveNames;
+    }
+
+    public List<String> getTwistThreeNames(){
+        List<String> diveNames = new ArrayList<>();
+        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_TWIST
+                + " WHERE three_meter= 1";
+
+        Log.e(getLog(), selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()){
+            do{
+                TwistDB t = new TwistDB();
+                diveNames.add(t.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
+            }while (c.moveToNext());
+        }
+        c.close();
+        db.close();
         return diveNames;
     }
 
@@ -51,6 +75,7 @@ public class TwistDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return id;
     }
 
@@ -109,6 +134,7 @@ public class TwistDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return  dod;
     }
 }

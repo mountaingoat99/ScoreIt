@@ -33,6 +33,7 @@ public class DivesDatabase extends DatabaseHelper {
             }while (c.moveToNext());
         }
         c.close();
+        db.close();
         return diveNames;
     }
 

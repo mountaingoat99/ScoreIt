@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.rodriguez.divingscores.FailedDive;
+
 import info.sqlite.model.BackDB;
 import info.sqlite.model.DivesDB;
 import info.sqlite.model.ForwardDB;
@@ -38,12 +40,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String TABLE_DIVE_TYPE = "dive_type";
     protected static final String TABLE_SCORES = "scores";
     protected static final String TABLE_JUDGE_SCORES = "judge_scores";
+    protected static final String TABLE_DIVE_NUMBER = "dive_number";
 
 	// common column names
 	protected static final String KEY_ID = "id";
     protected static final String MEET_ID = "meet_id";
     protected static final String DIVER_ID = "diver_id";
 	protected static final String DIVE_NAME = "name";
+    protected static final String THREE_METER = "three_meter";
+    protected static final String ONE_METER = "one_meter";
     protected static final String ONE_S = "oneS";
     protected static final String ONE_P = "oneP";
     protected static final String ONE_T = "oneT";
@@ -83,7 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String DIVE_9 = "dive_9";
     protected static final String DIVE_10 = "dive_10";
     protected static final String DIVE_11 = "dive_11";
-    protected static String TOTAL_SCORE = "total_score";
+    protected static final String TOTAL_SCORE = "total_score";
 
     //dive totals columns names
     protected static final String DIVE_COUNT = "dive_count";
@@ -95,7 +100,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String DIGITS = "digits";
 
     // judge scores table
-    protected  static final String DIVE_NUMBER = "dive_number";
+    protected static final String DIVE_CATEGORY = "dive_category";
+    protected static final String DIVE_TYPE_NAME = "dive_type_name";
+    protected static final String DIVE_POSITION = "dive_position";
+    protected static final String DIVE_NUMBER = "dive_number";
+    protected static final String FAILED_DIVE = "failed";
     protected static final String SCORE_1 = "score_1";
     protected static final String SCORE_2 = "score_2";
     protected static final String SCORE_3 = "score_3";
@@ -103,6 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String SCORE_5 = "score_5";
     protected static final String SCORE_6 = "score_6";
     protected static final String SCORE_7 = "score_7";
+    protected static final String MULTIPLIER = "multiplier";
 
     public static String getTableJudgeScores() { return TABLE_JUDGE_SCORES; }
     public static String getTableScores() { return TABLE_SCORES; }
@@ -148,7 +158,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static String getDiveName() {
 		return DIVE_NAME;
 	}
-	public static String getOneS() {
+    public static String getThreeMeter() { return THREE_METER; }
+    public static String getOneMeter() { return ONE_METER; }
+    public static String getOneS() {
 		return ONE_S;
 	}
 	public static String getOneP() {
@@ -241,7 +253,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static String getDive11() {
 		return DIVE_11;
 	}
+    public static String getDiveCategory() { return DIVE_CATEGORY; }
+    public static String getDiveTypeName() { return DIVE_TYPE_NAME; }
+    public static String getDivePosition() { return DIVE_POSITION;  }
     public static String getDiveNumber() { return DIVE_NUMBER; }
+    public static String getFailedDive() { return FAILED_DIVE; }
     public static String getScore1() { return SCORE_1; }
     public static String getScore2() { return SCORE_2; }
     public static String getScore3() { return SCORE_3; }
@@ -249,19 +265,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static String getScore5() { return SCORE_5; }
     public static String getScore6() { return SCORE_6; }
     public static String getScore7() { return SCORE_7; }
+    public static String getMultiplier() { return MULTIPLIER; }
+
     public static String getTotalScore() {
 		return TOTAL_SCORE;
 	}
-	public static void setTotalScore(String totalScore) {
-		TOTAL_SCORE = totalScore;
-	}
-	public static String getLog() {
+    public static String getTableDiveNumber() { return TABLE_DIVE_NUMBER; }
+    public static String getLog() {
 		return LOG;
 	}
 
 	// table create statements
 	public static final String CREATE_TABLE_FORWARD = "CREATE TABLE "
 			+ TABLE_FORWARD + "(" + KEY_ID + " INTEGER, "
+            + ONE_METER + " TEXT, " + THREE_METER + " TEXT, "
 			+ DIVE_NAME + " TEXT, " + ONE_S + " REAL, " + ONE_P + " REAL, "
 			+ ONE_T + " REAL, " + ONE_F + " REAL, " + THREE_S + " REAL, "
 			+ THREE_P + " REAL, " + THREE_T + " REAL, " + THREE_F + " REAL "
@@ -269,6 +286,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	public static final String CREATE_TABLE_BACK = "CREATE TABLE "
 			+ TABLE_BACK + "(" + KEY_ID + " INTEGER, "
+            + ONE_METER + " TEXT, " + THREE_METER + " TEXT, "
 			+ DIVE_NAME + " TEXT, " + ONE_S + " REAL, " + ONE_P + " REAL, "
 			+ ONE_T + " REAL, " + ONE_F + " REAL, " + THREE_S + " REAL, "
 			+ THREE_P + " REAL, " + THREE_T + " REAL, " + THREE_F + " REAL "
@@ -276,6 +294,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	public static final String CREATE_TABLE_INWARD = "CREATE TABLE "
 			+ TABLE_INWARD + "(" + KEY_ID + " INTEGER, "
+            + ONE_METER + " TEXT, " + THREE_METER + " TEXT, "
 			+ DIVE_NAME + " TEXT, " + ONE_S + " REAL, " + ONE_P + " REAL, "
 			+ ONE_T + " REAL, " + ONE_F + " REAL, " + THREE_S + " REAL, "
 			+ THREE_P + " REAL, " + THREE_T + " REAL, " + THREE_F + " REAL "
@@ -283,6 +302,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	public static final String CREATE_TABLE_REVERSE = "CREATE TABLE "
 			+ TABLE_REVERSE + "(" + KEY_ID + " INTEGER, "
+            + ONE_METER + " TEXT, " + THREE_METER + " TEXT, "
 			+ DIVE_NAME + " TEXT, " + ONE_S + " REAL, " + ONE_P + " REAL, "
 			+ ONE_T + " REAL, " + ONE_F + " REAL, " + THREE_S + " REAL, "
 			+ THREE_P + " REAL, " + THREE_T + " REAL, " + THREE_F + " REAL "
@@ -290,6 +310,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	public static final String CREATE_TABLE_TWIST = "CREATE TABLE "
 			+ TABLE_TWIST + "(" + KEY_ID + " INTEGER, "
+            + ONE_METER + " TEXT, " + THREE_METER + " TEXT, "
 			+ DIVE_NAME + " TEXT, " + ONE_S + " REAL, " + ONE_P + " REAL, "
 			+ ONE_T + " REAL, " + ONE_F + " REAL, " + THREE_S + " REAL, "
 			+ THREE_P + " REAL, " + THREE_T + " REAL, " + THREE_F + " REAL "
@@ -320,7 +341,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ DIVE_1 + " TEXT, " + DIVE_2 + " TEXT, " + DIVE_3 + " TEXT, "
 			+ DIVE_4 + " TEXT, " + DIVE_5 + " TEXT, " + DIVE_6 + " TEXT, "
 			+ DIVE_7 + " TEXT, " + DIVE_8 + " TEXT, " + DIVE_9 + " TEXT, "
-			+ DIVE_10 + " TEXT, " + DIVE_11 + " TEXT, " +  TOTAL_SCORE + " TEXT, "
+			+ DIVE_10 + " TEXT, " + DIVE_11 + " TEXT, " +  TOTAL_SCORE + " REAL, "
             + "FOREIGN KEY (" + MEET_ID + ") REFERENCES " + TABLE_MEET_NAME + " (id), "
             + "FOREIGN KEY (" + DIVER_ID + ") REFERENCES " + TABLE_DIVER_NAME + " (id))";
 
@@ -342,14 +363,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String CREATE_TABLE_JUDGE_SCORES = "CREATE TABLE "
             + TABLE_JUDGE_SCORES + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + MEET_ID + " INTEGER, "  + DIVER_ID + " INTEGER, " + DIVE_NUMBER + " INTEGER, "
+            + DIVE_CATEGORY + " TEXT, " + DIVE_TYPE_NAME + " TEXT, "
+            + DIVE_POSITION + " TEXT, " + FAILED_DIVE + " TEXT, "
             + SCORE_1 + " TEXT, " + SCORE_2 + " TEXT, " + SCORE_3 + " TEXT, "
             + SCORE_4 + " TEXT, " + SCORE_5 + " TEXT, " + SCORE_6 + " TEXT, " + SCORE_7 + " TEXT, "
+            + MULTIPLIER + " TEXT, "
+            + "FOREIGN KEY (" + MEET_ID + ") REFERENCES " + TABLE_MEET_NAME + " (id), "
+            + "FOREIGN KEY (" + DIVER_ID + ") REFERENCES " + TABLE_DIVER_NAME + " (id))";
+
+    public static final String CREATE_TABLE_DIVE_NUMBER = "CREATE TABLE "
+            + TABLE_DIVE_NUMBER + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + MEET_ID + " INTEGER, "  + DIVER_ID + " INTEGER, "
+            + DIVE_NUMBER + " INTEGER, "
             + "FOREIGN KEY (" + MEET_ID + ") REFERENCES " + TABLE_MEET_NAME + " (id), "
             + "FOREIGN KEY (" + DIVER_ID + ") REFERENCES " + TABLE_DIVER_NAME + " (id))";
 
     //---------------Triggers---------------------------------------------------------------------//
     public static final String DIVER_DELETE_TRIGGER = "CREATE TRIGGER diver_delete_trigger "
             + "BEFORE DELETE ON " + TABLE_DIVER_NAME + " FOR EACH ROW BEGIN "
+            + "DELETE FROM " + TABLE_DIVE_NUMBER + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_JUDGE_SCORES + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_RESULTS + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_DIVE_TOTALS + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; "
@@ -357,6 +389,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String MEET_DELETE_TRIGGER = "CREATE TRIGGER meet_delete_trigger "
             + "BEFORE DELETE ON " + TABLE_MEET_NAME + " FOR EACH ROW BEGIN "
+            + "DELETE FROM " + TABLE_DIVE_NUMBER + " WHERE " + MEET_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_JUDGE_SCORES + " WHERE " + MEET_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_RESULTS + " WHERE " + MEET_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_DIVE_TOTALS + " WHERE " + MEET_ID + " = old." + KEY_ID + "; "
@@ -381,6 +414,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_DIVE_TOTAL);
         db.execSQL(CREATE_TABLE_DIVE_TYPE);
         db.execSQL(CREATE_TABLE_JUDGE_SCORES);
+        db.execSQL(CREATE_TABLE_DIVE_NUMBER);
         db.execSQL((DIVER_DELETE_TRIGGER));
         db.execSQL((MEET_DELETE_TRIGGER));
 
@@ -409,11 +443,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVE_TOTALS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVE_TYPE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_JUDGE_SCORES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVE_NUMBER);
         db.execSQL("DROP TABLE IF EXISTS " + DIVER_DELETE_TRIGGER);
         db.execSQL("DROP TABLE IF EXISTS " + MEET_DELETE_TRIGGER);
 
 		onCreate(db);		
 	}
+
     public void createDives(DivesDB dives, SQLiteDatabase db){
 
         ContentValues values = new ContentValues();
@@ -431,10 +467,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_SCORES, null, values);
     }
 
-    public void createForward(ForwardDB forward, SQLiteDatabase db) {
+    public void createForward(ForwardDB forward, SQLiteDatabase db) {   //TODO add in new values
 
         ContentValues values = new ContentValues();
         values.put(KEY_ID, forward.getId());
+        values.put(ONE_METER, forward.getOneMeter());
+        values.put(THREE_METER, forward.getThreeMeter());
         values.put(DIVE_NAME, forward.getDiveName());
         values.put(ONE_S, forward.getOneA());
         values.put(ONE_P, forward.getOneB());
@@ -452,6 +490,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			
 		ContentValues values = new ContentValues();
 		values.put(KEY_ID, twist.getId());
+        values.put(ONE_METER, twist.getOneMeter());
+        values.put(THREE_METER, twist.getThreeMeter());
 		values.put(DIVE_NAME, twist.getDiveName());
 		values.put(ONE_S, twist.getOneA());
 		values.put(ONE_P, twist.getOneB());
@@ -469,6 +509,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			
 		ContentValues values = new ContentValues();
 		values.put(KEY_ID, back.getId());
+        values.put(ONE_METER, back.getOneMeter());
+        values.put(THREE_METER, back.getThreeMeter());
 		values.put(DIVE_NAME, back.getDiveName());
 		values.put(ONE_S, back.getOneA());
 		values.put(ONE_P, back.getOneB());
@@ -486,6 +528,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			
 		ContentValues values = new ContentValues();
 		values.put(KEY_ID, inward.getId());
+        values.put(ONE_METER, inward.getOneMeter());
+        values.put(THREE_METER, inward.getThreeMeter());
 		values.put(DIVE_NAME, inward.getDiveName());
 		values.put(ONE_S, inward.getOneA());
 		values.put(ONE_P, inward.getOneB());
@@ -503,6 +547,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			
 		ContentValues values = new ContentValues();
 		values.put(KEY_ID, reverse.getId());
+        values.put(ONE_METER, reverse.getOneMeter());
+        values.put(THREE_METER, reverse.getThreeMeter());
 		values.put(DIVE_NAME, reverse.getDiveName());
 		values.put(ONE_S, reverse.getOneA());
 		values.put(ONE_P, reverse.getOneB());
@@ -580,17 +626,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // fill dive tables with data
     private void fillForwardDives(SQLiteDatabase db) {
 
-        ForwardDB forward1 = new ForwardDB(101, "Forward Dive", 1.4, 1.3, 1.2, 0.0, 1.6, 1.5, 1.4, 0.0);
-        ForwardDB forward2 = new ForwardDB(102, "Forward Somersault", 1.6, 1.5, 1.4, 0.0, 1.7, 1.6, 1.5, 0.0);
-        ForwardDB forward3 = new ForwardDB(103, "Forward 1 1/2 Somersault", 0.0, 1.7, 1.6, 0.0, 1.9, 1.6, 1.5, 0.0);
-        ForwardDB forward4 = new ForwardDB(104, "Forward Double Somersault", 0.0, 2.3, 2.2, 0.0, 0.0, 2.1, 2.0, 0.0);
-        ForwardDB forward5 = new ForwardDB(105, "Forward 2 1/2 Somersault", 0.0, 2.6, 2.4, 0.0, 0.0, 2.4, 2.2, 0.0);
-        ForwardDB forward6 = new ForwardDB(106, "Forward Triple Somersault", 0.0, 0.0, 2.9, 0.0, 0.0, 2.8, 2.5, 0.0);
-        ForwardDB forward7 = new ForwardDB(107, "Forward 3 1/2 Somersault", 0.0, 0.0, 3.0, 0.0, 0.0, 3.1, 2.8, 0.0);
-        ForwardDB forward8 = new ForwardDB(109, "Forward 4 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.5, 0.0);
-        ForwardDB forward9 = new ForwardDB(112, "Forward Flying Somersault", 0.0, 1.7, 1.6, 0.0, 0.0, 1.8, 1.7, 0.0);
-        ForwardDB forward10 = new ForwardDB(113, "Forward Flying 1 1/2 Somersault", 0.0, 1.9, 1.8, 0.0, 0.0, 1.8, 1.7, 0.0);
-        ForwardDB forward11 = new ForwardDB(115, "Forward Flying 2 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.5, 0.0);
+        ForwardDB forward1 = new ForwardDB(101, 1, 1, "Forward Dive", 1.4, 1.3, 1.2, 0.0, 1.6, 1.5, 1.4, 0.0);
+        ForwardDB forward2 = new ForwardDB(102, 1, 1, "Forward Somersault", 1.6, 1.5, 1.4, 0.0, 1.7, 1.6, 1.5, 0.0);
+        ForwardDB forward3 = new ForwardDB(103, 1, 1, "Forward 1 1/2 Somersault", 0.0, 1.7, 1.6, 0.0, 1.9, 1.6, 1.5, 0.0);
+        ForwardDB forward4 = new ForwardDB(104, 1, 1, "Forward Double Somersault", 0.0, 2.3, 2.2, 0.0, 0.0, 2.1, 2.0, 0.0);
+        ForwardDB forward5 = new ForwardDB(105, 1, 1, "Forward 2 1/2 Somersault", 0.0, 2.6, 2.4, 0.0, 0.0, 2.4, 2.2, 0.0);
+        ForwardDB forward6 = new ForwardDB(106, 1, 1, "Forward Triple Somersault", 0.0, 0.0, 2.9, 0.0, 0.0, 2.8, 2.5, 0.0);
+        ForwardDB forward7 = new ForwardDB(107, 1, 1, "Forward 3 1/2 Somersault", 0.0, 0.0, 3.0, 0.0, 0.0, 3.1, 2.8, 0.0);
+        ForwardDB forward8 = new ForwardDB(109, 0, 1, "Forward 4 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.5, 0.0);
+        ForwardDB forward9 = new ForwardDB(112, 1, 1, "Forward Flying Somersault", 0.0, 1.7, 1.6, 0.0, 0.0, 1.8, 1.7, 0.0);
+        ForwardDB forward10 = new ForwardDB(113, 1, 1, "Forward Flying 1 1/2 Somersault", 0.0, 1.9, 1.8, 0.0, 0.0, 1.8, 1.7, 0.0);
+        ForwardDB forward11 = new ForwardDB(115, 0, 1, "Forward Flying 2 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.5, 0.0);
 
         createForward(forward1, db);
         createForward(forward2, db);
@@ -607,14 +653,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	private void fillBackDives(SQLiteDatabase db) {
 		
-		BackDB back1 = new BackDB(201, "Back Dive", 1.7, 1.6, 1.5, 0.0, 1.9, 1.8, 1.7, 0.0);
-		BackDB back2 = new BackDB(202, "Back Somersault", 1.7, 1.6, 1.5, 0.0, 1.8, 1.7, 1.6, 0.0);
-		BackDB back3 = new BackDB(203, "Back 1 1/2 Somersault", 2.5, 2.3, 2.0, 0.0, 2.4, 2.2, 1.9, 0.0);
-		BackDB back4 = new BackDB(204, "Back Double Somersault", 0.0, 2.5, 2.2, 0.0, 2.5, 2.3, 2.0, 0.0);
-		BackDB back5 = new BackDB(205, "Back 2 1/2 Somersault", 0.0, 3.2, 3.0, 0.0, 0.0, 3.0, 2.8, 0.0);
-		BackDB back6 = new BackDB(207, "Back 3 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.4, 0.0);
-		BackDB back7 = new BackDB(212, "Back Flying Somersault", 0.0, 1.7, 1.6, 0.0, 0.0, 1.8, 1.7, 0.0);
-		BackDB back8 = new BackDB(213, "Back Flying 1 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.1, 0.0);
+		BackDB back1 = new BackDB(201, 1, 1, "Back Dive", 1.7, 1.6, 1.5, 0.0, 1.9, 1.8, 1.7, 0.0);
+		BackDB back2 = new BackDB(202, 1, 1, "Back Somersault", 1.7, 1.6, 1.5, 0.0, 1.8, 1.7, 1.6, 0.0);
+		BackDB back3 = new BackDB(203, 1, 1, "Back 1 1/2 Somersault", 2.5, 2.3, 2.0, 0.0, 2.4, 2.2, 1.9, 0.0);
+		BackDB back4 = new BackDB(204, 1, 1, "Back Double Somersault", 0.0, 2.5, 2.2, 0.0, 2.5, 2.3, 2.0, 0.0);
+		BackDB back5 = new BackDB(205, 1, 1, "Back 2 1/2 Somersault", 0.0, 3.2, 3.0, 0.0, 0.0, 3.0, 2.8, 0.0);
+		BackDB back6 = new BackDB(207, 0, 1, "Back 3 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.4, 0.0);
+		BackDB back7 = new BackDB(212, 1, 1, "Back Flying Somersault", 0.0, 1.7, 1.6, 0.0, 0.0, 1.8, 1.7, 0.0);
+		BackDB back8 = new BackDB(213, 0, 1, "Back Flying 1 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.1, 0.0);
 			
 		createBack(back1, db);
 		createBack(back2, db);
@@ -628,14 +674,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		private void fillReverseDives(SQLiteDatabase db) {
 			
-		ReverseDB reverse1 = new ReverseDB(301, "Reverse Dive", 1.8, 1.7, 1.6, 0.0, 2.0, 1.9, 1.8, 0.0);
-		ReverseDB reverse2 = new ReverseDB(302, "Reverse Somersault", 1.8, 1.7, 1.6, 0.0, 1.9, 1.8, 1.7, 0.0);
-		ReverseDB reverse3 = new ReverseDB(303, "Reverse 1 1/2 Somersault", 2.7, 2.4, 2.1, 0.0, 2.6, 2.3, 2.0, 0.0);
-		ReverseDB reverse4 = new ReverseDB(304, "Reverse Double Somersault", 0.0, 2.6, 2.3, 0.0, 0.0, 3.0, 2.8, 0.0);
-		ReverseDB reverse5 = new ReverseDB(305, "Reverse 2 1/2 Somersault", 0.0, 3.2, 3.0, 0.0, 0.0, 3.0, 2.8, 0.0);
-		ReverseDB reverse6 = new ReverseDB(307, "Reverse 3 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.5, 0.0);
-		ReverseDB reverse7 = new ReverseDB(312, "Reverse Flying Somersault", 0.0, 1.8, 1.7, 0.0, 0.0, 0.0, 1.8, 0.0);
-		ReverseDB reverse8 = new ReverseDB(313, "Reverse Flying 1 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.2, 0.0);
+		ReverseDB reverse1 = new ReverseDB(301, 1, 1, "Reverse Dive", 1.8, 1.7, 1.6, 0.0, 2.0, 1.9, 1.8, 0.0);
+		ReverseDB reverse2 = new ReverseDB(302, 1, 1, "Reverse Somersault", 1.8, 1.7, 1.6, 0.0, 1.9, 1.8, 1.7, 0.0);
+		ReverseDB reverse3 = new ReverseDB(303, 1, 1, "Reverse 1 1/2 Somersault", 2.7, 2.4, 2.1, 0.0, 2.6, 2.3, 2.0, 0.0);
+		ReverseDB reverse4 = new ReverseDB(304, 1, 1, "Reverse Double Somersault", 0.0, 2.6, 2.3, 0.0, 0.0, 3.0, 2.8, 0.0);
+		ReverseDB reverse5 = new ReverseDB(305, 1, 1, "Reverse 2 1/2 Somersault", 0.0, 3.2, 3.0, 0.0, 0.0, 3.0, 2.8, 0.0);
+		ReverseDB reverse6 = new ReverseDB(307, 0, 1, "Reverse 3 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.5, 0.0);
+		ReverseDB reverse7 = new ReverseDB(312, 1, 1,"Reverse Flying Somersault", 0.0, 1.8, 1.7, 0.0, 0.0, 0.0, 1.8, 0.0);
+		ReverseDB reverse8 = new ReverseDB(313, 0, 1, "Reverse Flying 1 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.2, 0.0);
 		
 		createReverse(reverse1, db);
 		createReverse(reverse2, db);
@@ -649,14 +695,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 		private void fillInwardDives(SQLiteDatabase db) {
 			
-		InwardDB inward1 = new InwardDB(401, "Inward Dive", 1.8, 1.5, 1.4, 0.0, 1.7, 1.4, 1.3, 0.0);
-		InwardDB inward2 = new InwardDB(402, "Inward Somersault", 0.0, 1.7, 1.6, 0.0, 0.0, 1.5, 1.4, 0.0);
-		InwardDB inward3 = new InwardDB(403, "Inward 1 1/2 Somersault", 0.0, 2.4, 2.2, 0.0, 0.0, 2.1, 1.9, 0.0);
-		InwardDB inward4 = new InwardDB(404, "Inward Double Somersault", 0.0, 0.0, 2.8, 0.0, 0.0, 2.6, 2.4, 0.0);
-		InwardDB inward5 = new InwardDB(405, "Inward 2 1/2 Somersault", 0.0, 3.4, 3.1, 0.0, 0.0, 3.0, 2.7, 0.0);
-		InwardDB inward6 = new InwardDB(407, "Inward 3 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.4, 0.0);
-		InwardDB inward7 = new InwardDB(412, "Inward Flying Somersault", 0.0, 2.1, 2.0, 0.0, 0.0, 1.9, 1.8, 0.0);
-		InwardDB inward8 = new InwardDB(413, "Inward Flying 1 1/2 Somersault", 0.0, 0.0, 2.7, 0.0, 0.0, 0.0, 2.4, 0.0);
+		InwardDB inward1 = new InwardDB(401, 1, 1, "Inward Dive", 1.8, 1.5, 1.4, 0.0, 1.7, 1.4, 1.3, 0.0);
+		InwardDB inward2 = new InwardDB(402, 1, 1, "Inward Somersault", 0.0, 1.7, 1.6, 0.0, 0.0, 1.5, 1.4, 0.0);
+		InwardDB inward3 = new InwardDB(403, 1, 1, "Inward 1 1/2 Somersault", 0.0, 2.4, 2.2, 0.0, 0.0, 2.1, 1.9, 0.0);
+		InwardDB inward4 = new InwardDB(404, 1, 1, "Inward Double Somersault", 0.0, 0.0, 2.8, 0.0, 0.0, 2.6, 2.4, 0.0);
+		InwardDB inward5 = new InwardDB(405, 1, 1, "Inward 2 1/2 Somersault", 0.0, 3.4, 3.1, 0.0, 0.0, 3.0, 2.7, 0.0);
+		InwardDB inward6 = new InwardDB(407, 0, 1, "Inward 3 1/2 Somersault", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.4, 0.0);
+		InwardDB inward7 = new InwardDB(412, 1, 1, "Inward Flying Somersault", 0.0, 2.1, 2.0, 0.0, 0.0, 1.9, 1.8, 0.0);
+		InwardDB inward8 = new InwardDB(413, 1, 1, "Inward Flying 1 1/2 Somersault", 0.0, 0.0, 2.7, 0.0, 0.0, 0.0, 2.4, 0.0);
 		
 		createInward(inward1, db);
 		createInward(inward2, db);
@@ -670,52 +716,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		private void fillTwistDives(SQLiteDatabase db) {
 			
-		TwistDB twist1 = new TwistDB(5111, "Forward Dive 1/2 Twist", 1.8, 1.7, 0.0, 0.0, 2.0, 1.9, 0.0, 0.0);
-		TwistDB twist2 = new TwistDB(5112, "Forward Dive 1 Twist", 2.0, 1.9, 0.0, 0.0, 2.2, 2.1, 0.0, 0.0);
-		TwistDB twist3 = new TwistDB(5121, "Forward Somersault 1/2 Twist", 1.9, 1.8, 0.0, 1.7, 2.0, 1.9, 0.0, 0.0);
-		TwistDB twist4 = new TwistDB(5122, "Forward Somersault 1 Twist", 0.0, 0.0, 0.0, 1.9, 0.0, 0.0, 0.0, 2.0);
-		TwistDB twist5 = new TwistDB(5124, "Forward Somersault 2 Twists", 0.0, 0.0, 0.0, 2.3, 0.0, 0.0, 0.0, 0.0);
-		TwistDB twist6 = new TwistDB(5126, "Forward Somersault 3 Twists", 0.0, 0.0, 0.0, 2.7, 0.0, 0.0, 0.0, 0.0);
-		TwistDB twist7 = new TwistDB(5131, "Forward 1 1/2 Somersault 1/2 Twist", 0.0, 2.1, 2.0, 0.0, 0.0, 2.0, 1.9, 0.0);
-		TwistDB twist8 = new TwistDB(5132, "Forward 1 1/2 Somersault 1 Twist", 0.0, 0.0, 0.0, 2.2, 0.0, 0.0, 0.0, 2.1);
-		TwistDB twist9 = new TwistDB(5134, "Forward 1 1/2 Somersault 2 Twists", 0.0, 0.0, 0.0, 2.6, 0.0, 0.0, 0.0, 2.5);
-		TwistDB twist10 = new TwistDB(5136, "Forward 1 1/2 Somersault 3 Twists", 0.0, 0.0, 0.0, 3.0, 0.0, 0.0, 0.0, 2.9);
-		TwistDB twist11 = new TwistDB(5138, "Forward 1 1/2 Somersault 4 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.3);
-		TwistDB twist12 = new TwistDB(5152, "Forward 2 1/2 Somersault 1 Twists", 0.0, 3.2, 3.0, 0.0, 0.0, 3.0, 2.8, 2.8);
-		TwistDB twist13 = new TwistDB(5154, "Forward 2 1/2 Somersault 2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 3.4, 3.2, 3.2);
-		TwistDB twist14 = new TwistDB(5211, "Back Dive 1/2 Twist", 1.8, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0);
-		TwistDB twist15 = new TwistDB(5212, "Back Dive 1 Twist", 2.0, 0.0, 0.0, 0.0, 2.2, 0.0, 0.0, 0.0);
-		TwistDB twist16 = new TwistDB(5221, "Back Somersault 1/2 Twist", 0.0, 0.0, 0.0, 0.0, 1.7, 0.0, 0.0, 0.0);
-		TwistDB twist17 = new TwistDB(5222, "Back Somersault 1 Twist", 0.0, 0.0, 0.0, 0.0, 1.9, 0.0, 0.0, 0.0);
-		TwistDB twist18 = new TwistDB(5223, "Back Somersault 1 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 2.3, 0.0, 0.0, 0.0);
-		TwistDB twist19 = new TwistDB(5225, "Back Somersault 2 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 2.7, 0.0, 0.0, 0.0);
-		TwistDB twist20 = new TwistDB(5227, "Back Somersault 3 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.2);
-		TwistDB twist21 = new TwistDB(5231, "Back 1 1/2 Somersault 1/2 Twist", 0.0, 0.0, 0.0, 2.1, 0.0, 0.0, 0.0, 2.0);
-		TwistDB twist22 = new TwistDB(5233, "Back 1 1/2 Somersault 1 1/2 Twists", 0.0, 0.0, 0.0, 2.5, 0.0, 0.0, 0.0, 2.4);
-		TwistDB twist23 = new TwistDB(5235, "Back 1 1/2 Somersault 2 1/2 Twists", 0.0, 0.0, 0.0, 2.9, 0.0, 0.0, 0.0, 2.8);
-		TwistDB twist24 = new TwistDB(5237, "Back 1 1/2 Somersault 3 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.2);
-		TwistDB twist25 = new TwistDB(5239, "Back 1 1/2 Somersault 4 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.6);
-		TwistDB twist26 = new TwistDB(5251, "Back 2 1/2 Somersault 1/2 Twist", 0.0, 0.0, 0.0, 0.0, 0.0, 3.1, 2.9, 2.7);
-		TwistDB twist27 = new TwistDB(5253, "Back 2 1/2 Somersault 1 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 3.5, 3.3, 3.1);
-		TwistDB twist28 = new TwistDB(5311, "Reverse Dive 1/2 Twist", 1.9, 0.0, 0.0, 0.0, 2.1, 0.0, 0.0, 0.0);
-		TwistDB twist29 = new TwistDB(5312, "Reverse Dive 1 Twist", 2.1, 0.0, 0.0, 0.0, 2.3, 0.0, 0.0, 0.0);
-		TwistDB twist30 = new TwistDB(5321, "Reverse Somersault 1/2 Twist", 0.0, 0.0, 0.0, 1.8, 0.0, 0.0, 0.0, 0.0);
-		TwistDB twist31 = new TwistDB(5322, "Reverse Somersault 1 Twist", 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0);
-		TwistDB twist32 = new TwistDB(5323, "Reverse Somersault 1 1/2 Twists", 0.0, 0.0, 0.0, 2.4, 0.0, 0.0, 0.0, 0.0);
-		TwistDB twist33 = new TwistDB(5325, "Reverse Somersault 2 1/2 Twists", 0.0, 0.0, 0.0, 2.8, 0.0, 0.0, 0.0, 0.0);
-		TwistDB twist34 = new TwistDB(5331, "Reverse 1 1/2 Somersault 1/2 Twist", 0.0, 0.0, 0.0, 2.2, 0.0, 0.0, 0.0, 2.1);
-		TwistDB twist35 = new TwistDB(5333, "Reverse 1 1/2 Somersault 1 1/2 Twists", 0.0, 0.0, 0.0, 2.6, 0.0, 0.0, 0.0, 2.5);
-		TwistDB twist36 = new TwistDB(5335, "Reverse 1 1/2 Somersault 2 1/2 Twist", 0.0, 0.0, 0.0, 3.0, 0.0, 0.0, 0.0, 2.9);
-		TwistDB twist37 = new TwistDB(5337, "Reverse 1 1/2 Somersault 3 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.3);
-		TwistDB twist38 = new TwistDB(5351, "Reverse 2 1/2 Somersault 1/2 Twist", 0.0, 0.0, 0.0, 0.0, 0.0, 3.1, 2.9, 2.7);
-		TwistDB twist39 = new TwistDB(5353, "Reverse 2 1/2 Somersault 1 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 3.5, 3.3, 3.1);
-		TwistDB twist40 = new TwistDB(5371, "Reverse 3 1/2 Somersault 1/2 Twist", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.5, 3.6);
-		TwistDB twist41 = new TwistDB(5411, "Inward Dive 1/2 Twist", 2.0, 1.7, 0.0, 0.0, 1.9, 1.6, 0.0, 0.0);
-		TwistDB twist42 = new TwistDB(5412, "Inward Dive 1 Twist", 2.2, 1.9, 0.0, 0.0, 2.1, 1.8, 0.0, 0.0);
-		TwistDB twist43 = new TwistDB(5421, "Inward Somersault 1/2 Twist", 0.0, 1.8, 1.7, 0.0, 0.0, 1.6, 1.5, 0.0);
-		TwistDB twist44 = new TwistDB(5422, "Inward Somersault 1 Twist", 0.0, 0.0, 0.0, 2.1, 0.0, 0.0, 0.0, 0.0);
-		TwistDB twist45 = new TwistDB(5432, "Inward 1 1/2 Somersault 1 Twist", 0.0, 0.0, 0.0, 2.7, 0.0, 0.0, 0.0, 2.4);
-		TwistDB twist46 = new TwistDB(5434, "Inward 1 1/2 Somersault 2 Twists", 0.0, 0.0, 0.0, 3.1, 0.0, 0.0, 0.0, 2.8);
+		TwistDB twist1 = new TwistDB(5111, 1, 1, "Forward Dive 1/2 Twist", 1.8, 1.7, 0.0, 0.0, 2.0, 1.9, 0.0, 0.0);
+		TwistDB twist2 = new TwistDB(5112, 1, 1, "Forward Dive 1 Twist", 2.0, 1.9, 0.0, 0.0, 2.2, 2.1, 0.0, 0.0);
+		TwistDB twist3 = new TwistDB(5121, 1, 1, "Forward Somersault 1/2 Twist", 1.9, 1.8, 0.0, 1.7, 2.0, 1.9, 0.0, 0.0);
+		TwistDB twist4 = new TwistDB(5122, 1, 1, "Forward Somersault 1 Twist", 0.0, 0.0, 0.0, 1.9, 0.0, 0.0, 0.0, 2.0);
+		TwistDB twist5 = new TwistDB(5124, 1, 0, "Forward Somersault 2 Twists", 0.0, 0.0, 0.0, 2.3, 0.0, 0.0, 0.0, 0.0);
+		TwistDB twist6 = new TwistDB(5126, 1, 0, "Forward Somersault 3 Twists", 0.0, 0.0, 0.0, 2.7, 0.0, 0.0, 0.0, 0.0);
+		TwistDB twist7 = new TwistDB(5131, 1, 1, "Forward 1 1/2 Somersault 1/2 Twist", 0.0, 2.1, 2.0, 0.0, 0.0, 2.0, 1.9, 0.0);
+		TwistDB twist8 = new TwistDB(5132, 1, 1, "Forward 1 1/2 Somersault 1 Twist", 0.0, 0.0, 0.0, 2.2, 0.0, 0.0, 0.0, 2.1);
+		TwistDB twist9 = new TwistDB(5134, 1, 1, "Forward 1 1/2 Somersault 2 Twists", 0.0, 0.0, 0.0, 2.6, 0.0, 0.0, 0.0, 2.5);
+		TwistDB twist10 = new TwistDB(5136, 1, 1, "Forward 1 1/2 Somersault 3 Twists", 0.0, 0.0, 0.0, 3.0, 0.0, 0.0, 0.0, 2.9);
+		TwistDB twist11 = new TwistDB(5138, 0, 1, "Forward 1 1/2 Somersault 4 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.3);
+		TwistDB twist12 = new TwistDB(5152, 1, 1, "Forward 2 1/2 Somersault 1 Twists", 0.0, 3.2, 3.0, 0.0, 0.0, 3.0, 2.8, 2.8);
+		TwistDB twist13 = new TwistDB(5154, 0, 1, "Forward 2 1/2 Somersault 2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 3.4, 3.2, 3.2);
+		TwistDB twist14 = new TwistDB(5211, 1, 1, "Back Dive 1/2 Twist", 1.8, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0);
+		TwistDB twist15 = new TwistDB(5212, 1, 1, "Back Dive 1 Twist", 2.0, 0.0, 0.0, 0.0, 2.2, 0.0, 0.0, 0.0);
+		TwistDB twist16 = new TwistDB(5221, 1, 0, "Back Somersault 1/2 Twist", 0.0, 0.0, 0.0, 1.7, 0.0, 0.0, 0.0, 0.0);
+		TwistDB twist17 = new TwistDB(5222, 1, 0, "Back Somersault 1 Twist", 0.0, 0.0, 0.0, 1.9, 0.0, 0.0, 0.0, 0.0);
+		TwistDB twist18 = new TwistDB(5223, 1, 0, "Back Somersault 1 1/2 Twists", 0.0, 0.0, 0.0, 2.3, 0.0, 0.0, 0.0, 0.0);
+		TwistDB twist19 = new TwistDB(5225, 1, 0, "Back Somersault 2 1/2 Twists", 0.0, 0.0, 0.0, 2.7, 0.0, 0.0, 0.0, 0.0);
+		TwistDB twist20 = new TwistDB(5227, 0, 1, "Back Somersault 3 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.2);
+		TwistDB twist21 = new TwistDB(5231, 1, 1, "Back 1 1/2 Somersault 1/2 Twist", 0.0, 0.0, 0.0, 2.1, 0.0, 0.0, 0.0, 2.0);
+		TwistDB twist22 = new TwistDB(5233, 1, 1, "Back 1 1/2 Somersault 1 1/2 Twists", 0.0, 0.0, 0.0, 2.5, 0.0, 0.0, 0.0, 2.4);
+		TwistDB twist23 = new TwistDB(5235, 1, 1, "Back 1 1/2 Somersault 2 1/2 Twists", 0.0, 0.0, 0.0, 2.9, 0.0, 0.0, 0.0, 2.8);
+		TwistDB twist24 = new TwistDB(5237, 0, 1, "Back 1 1/2 Somersault 3 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.2);
+		TwistDB twist25 = new TwistDB(5239, 0, 1, "Back 1 1/2 Somersault 4 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.6);
+		TwistDB twist26 = new TwistDB(5251, 0, 1, "Back 2 1/2 Somersault 1/2 Twist", 0.0, 0.0, 0.0, 0.0, 0.0, 3.1, 2.9, 2.7);
+		TwistDB twist27 = new TwistDB(5253, 0, 1, "Back 2 1/2 Somersault 1 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 3.5, 3.3, 3.1);
+		TwistDB twist28 = new TwistDB(5311, 1, 1, "Reverse Dive 1/2 Twist", 1.9, 0.0, 0.0, 0.0, 2.1, 0.0, 0.0, 0.0);
+		TwistDB twist29 = new TwistDB(5312, 1, 1, "Reverse Dive 1 Twist", 2.1, 0.0, 0.0, 0.0, 2.3, 0.0, 0.0, 0.0);
+		TwistDB twist30 = new TwistDB(5321, 1, 0, "Reverse Somersault 1/2 Twist", 0.0, 0.0, 0.0, 1.8, 0.0, 0.0, 0.0, 0.0);
+		TwistDB twist31 = new TwistDB(5322, 1, 0, "Reverse Somersault 1 Twist", 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0);
+		TwistDB twist32 = new TwistDB(5323, 1, 0, "Reverse Somersault 1 1/2 Twists", 0.0, 0.0, 0.0, 2.4, 0.0, 0.0, 0.0, 0.0);
+		TwistDB twist33 = new TwistDB(5325, 1, 0, "Reverse Somersault 2 1/2 Twists", 0.0, 0.0, 0.0, 2.8, 0.0, 0.0, 0.0, 0.0);
+		TwistDB twist34 = new TwistDB(5331, 1, 1, "Reverse 1 1/2 Somersault 1/2 Twist", 0.0, 0.0, 0.0, 2.2, 0.0, 0.0, 0.0, 2.1);
+		TwistDB twist35 = new TwistDB(5333, 1, 1, "Reverse 1 1/2 Somersault 1 1/2 Twists", 0.0, 0.0, 0.0, 2.6, 0.0, 0.0, 0.0, 2.5);
+		TwistDB twist36 = new TwistDB(5335, 1, 1, "Reverse 1 1/2 Somersault 2 1/2 Twist", 0.0, 0.0, 0.0, 3.0, 0.0, 0.0, 0.0, 2.9);
+		TwistDB twist37 = new TwistDB(5337, 0, 1, "Reverse 1 1/2 Somersault 3 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.3);
+		TwistDB twist38 = new TwistDB(5351, 0, 1, "Reverse 2 1/2 Somersault 1/2 Twist", 0.0, 0.0, 0.0, 0.0, 0.0, 3.1, 2.9, 2.7);
+		TwistDB twist39 = new TwistDB(5353, 0, 1, "Reverse 2 1/2 Somersault 1 1/2 Twists", 0.0, 0.0, 0.0, 0.0, 0.0, 3.5, 3.3, 3.1);
+		TwistDB twist40 = new TwistDB(5371, 0, 1, "Reverse 3 1/2 Somersault 1/2 Twist", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.5, 3.6);
+		TwistDB twist41 = new TwistDB(5411, 1, 1, "Inward Dive 1/2 Twist", 2.0, 1.7, 0.0, 0.0, 1.9, 1.6, 0.0, 0.0);
+		TwistDB twist42 = new TwistDB(5412, 1, 1, "Inward Dive 1 Twist", 2.2, 1.9, 0.0, 0.0, 2.1, 1.8, 0.0, 0.0);
+		TwistDB twist43 = new TwistDB(5421, 1, 1, "Inward Somersault 1/2 Twist", 0.0, 1.8, 1.7, 0.0, 0.0, 1.6, 1.5, 0.0);
+		TwistDB twist44 = new TwistDB(5422, 1, 0, "Inward Somersault 1 Twist", 0.0, 0.0, 0.0, 2.1, 0.0, 0.0, 0.0, 0.0);
+		TwistDB twist45 = new TwistDB(5432, 1, 1, "Inward 1 1/2 Somersault 1 Twist", 0.0, 0.0, 0.0, 2.7, 0.0, 0.0, 0.0, 2.4);
+		TwistDB twist46 = new TwistDB(5434, 1, 1, "Inward 1 1/2 Somersault 2 Twists", 0.0, 0.0, 0.0, 3.1, 0.0, 0.0, 0.0, 2.8);
 		
 		createTwist(twist1, db);
 		createTwist(twist2, db);

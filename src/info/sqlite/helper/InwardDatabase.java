@@ -17,10 +17,11 @@ public class InwardDatabase extends DatabaseHelper {
 
     public InwardDatabase(Context context) { super(context); }
 
-    public List<String> getInwardNames(){
+    public List<String> getInwardOneNames(){
         List<String> diveNames = new ArrayList<>();
 
-        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_INWARD;
+        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_INWARD
+                + " WHERE one_meter= 1";
 
         Log.e(getLog(), selectQuery);
 
@@ -34,6 +35,29 @@ public class InwardDatabase extends DatabaseHelper {
             }while (c.moveToNext());
         }
         c.close();
+        db.close();
+        return diveNames;
+    }
+
+    public List<String> getInwardThreeNames(){
+        List<String> diveNames = new ArrayList<>();
+
+        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_INWARD
+                + " WHERE three_meter= 1";
+
+        Log.e(getLog(), selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()){
+            do{
+                InwardDB i = new InwardDB();
+                diveNames.add(i.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
+            }while (c.moveToNext());
+        }
+        c.close();
+        db.close();
         return diveNames;
     }
 
@@ -54,6 +78,7 @@ public class InwardDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return id;
     }
 
@@ -112,6 +137,7 @@ public class InwardDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return  dod;
     }
 }

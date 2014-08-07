@@ -20,6 +20,7 @@ public class TypeDatabase extends DatabaseHelper {
                 + "(meet_id, diver_id, type) VALUES ("
                 + meetid + ", " + diverid + ", " + divetype + " )";
         db.execSQL(selectQuery);
+        db.close();
     }
 
     //-----------------check table to see if a diveType exists yet-------------//
@@ -30,8 +31,12 @@ public class TypeDatabase extends DatabaseHelper {
                 + " AND diver_id = " + diverid;
         Cursor c = db.rawQuery(selectQuery, null);
         if(c.getCount() <= 0){
+            c.close();
+            db.close();
             return false;
         }
+        c.close();
+        db.close();
         return true;
     }
 
@@ -52,6 +57,7 @@ public class TypeDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return id;
     }
 
@@ -73,6 +79,7 @@ public class TypeDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return type;
     }
 

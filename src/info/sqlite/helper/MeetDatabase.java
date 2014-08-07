@@ -22,6 +22,7 @@ public class MeetDatabase extends DatabaseHelper {
 		
 		MeetDB meet = new MeetDB(name, school, city, state, date, judges);
 		createMeet(meet, db);
+        db.close();
 	}
 	
 	//--------------insert a row into the diver and meet tables------------------------------//		
@@ -55,6 +56,7 @@ public class MeetDatabase extends DatabaseHelper {
 			}while (c.moveToNext());
 		}
 		c.close();
+        db.close();
 		return meetNames;		
 	}
 	
@@ -75,6 +77,7 @@ public class MeetDatabase extends DatabaseHelper {
             if (c != null) {
                 c.close();
             }
+            db.close();
             return id;
 		}
 
@@ -96,6 +99,7 @@ public class MeetDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return id;
     }
 		
@@ -117,6 +121,8 @@ public class MeetDatabase extends DatabaseHelper {
 				meetInfo.add(c.getString(6));
 			}while(c.moveToNext());
 		}
+        c.close();
+        db.close();
 		return meetInfo;
 	}	
 	
@@ -136,8 +142,47 @@ public class MeetDatabase extends DatabaseHelper {
 					
 				}while(c.moveToNext());
 			}
+            c.close();
+            db.close();
 			return meetInfo;
 		}
+
+    //---------------gets the meet info for the history pages-------------------------------//
+    public ArrayList<String> getMeetNameForRank(){
+        ArrayList<String> meetInfo = new ArrayList<>();
+        String selectQuery = "SELECT name FROM meet";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            do{
+                meetInfo.add(c.getString(0));
+
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+        return meetInfo;
+    }
+
+    //--------------get meet name for the rankings pages-------------------------------------//
+    public String getMeetName(int meetid){
+        String name = "";
+        String selectQuery = "SELECT name FROM meet"
+                + " WHERE id= " + meetid;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.rawQuery(selectQuery, null);
+        if(c.moveToFirst()){
+            do{
+                name = c.getString(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+        return name;
+    }
 
     //--------------checks to see if there is a diver in the database------------------------//
     public boolean checkMeet(){
@@ -145,8 +190,12 @@ public class MeetDatabase extends DatabaseHelper {
         String selectQuery = "SELECT * FROM meet";
         Cursor c = db.rawQuery(selectQuery, null);
         if(c.getCount() <= 0){
+            c.close();
+            db.close();
             return false;
         }
+        c.close();
+        db.close();
         return true;
     }
 	
@@ -156,6 +205,7 @@ public class MeetDatabase extends DatabaseHelper {
 				+ " WHERE id = " + id;
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL(selectQuery);
+        db.close();
 	}
 	
 	// -------------edit rows in the meet tables ----------------------------------------//
@@ -165,6 +215,7 @@ public class MeetDatabase extends DatabaseHelper {
 				+ id;
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL(selectQuery);
+        db.close();
 	}
 					
 	public void editMeetSchool(int id, String school){
@@ -173,6 +224,7 @@ public class MeetDatabase extends DatabaseHelper {
 				+ id;
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL(selectQuery);
+        db.close();
 	}
 					
 	public void editMeetCity(int id, String city){
@@ -181,6 +233,7 @@ public class MeetDatabase extends DatabaseHelper {
 				+ id;
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL(selectQuery);
+        db.close();
 	}
 					
 	public void editMeetState(int id, String state){
@@ -189,6 +242,7 @@ public class MeetDatabase extends DatabaseHelper {
 				+ id;
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL(selectQuery);
+        db.close();
 	}
 					
 	public void editMeetDate(int id, String date){
@@ -197,6 +251,7 @@ public class MeetDatabase extends DatabaseHelper {
 				+ id;
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL(selectQuery);
+        db.close();
 	}	
 	
 	public void editMeetJudges(int id, int judges){
@@ -205,5 +260,6 @@ public class MeetDatabase extends DatabaseHelper {
 				+ id;
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL(selectQuery);
+        db.close();
 	}
 }

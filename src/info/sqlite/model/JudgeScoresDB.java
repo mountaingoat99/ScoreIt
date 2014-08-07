@@ -5,48 +5,60 @@ public class JudgeScoresDB {
     private int meetId;
     private int diverId;
     private int diveNumber;
-    private double score1, score2, score3, score4, score5, score6, score7;
-
-    public JudgeScoresDB(int i, int i1, int i2, int i3, double v, double v1, double v2, double v3, double v4, double v5, double v6) {
-    }
+    public String diveCategory, diveTypeName, divePosition, failed;
+    private double score1, score2, score3, score4, score5, score6, score7, multiplier;
 
     public JudgeScoresDB(){
-        this(1, 2, 3, 4, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0);
+        this(2, 3, 4, "s1", "s2", "s3", "f", 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 0.0);
     }
 
-    public JudgeScoresDB(int id, int meetId, int diverId){
-        this.id = id;
+    public JudgeScoresDB(int meetId, int diverId){
         this.meetId = meetId;
         this.diverId = diverId;
     }
 
-    public JudgeScoresDB(int id, int meetId, int diverId, double score1, double score2,
-                         double score3){
-        this.id = id;
+    public JudgeScoresDB(int meetId, int diverId, int diveNumber, String category, String typeName, String divePosition,
+                         String failed, double score1, double score2, double score3, double multiplier){
         this.meetId = meetId;
         this.diverId = diverId;
+        this.diveNumber = diveNumber;
+        this.diveCategory = category;
+        this.diveTypeName = typeName;
+        this.divePosition = divePosition;
+        this.failed = failed;
         this.score1 = score1;
         this.score2 = score2;
         this.score3 = score3;
+        this.multiplier = multiplier;
     }
 
-    public JudgeScoresDB(int id, int meetId, int diverId, double score1, double score2,
-                         double score3, double score4, double score5){
-        this.id = id;
+    public JudgeScoresDB(int meetId, int diverId, int diveNumber, String category, String typeName, String divePosition,
+                         String failed, double score1, double score2, double score3, double score4, double score5, double multiplier){
         this.meetId = meetId;
         this.diverId = diverId;
+        this.diveNumber = diveNumber;
+        this.diveCategory = category;
+        this.diveTypeName = typeName;
+        this.divePosition = divePosition;
+        this.failed = failed;
         this.score1 = score1;
         this.score2 = score2;
         this.score3 = score3;
         this.score4 = score4;
         this.score5 = score5;
+        this.multiplier = multiplier;
     }
 
-    public JudgeScoresDB(int id, int meetId, int diverId, double score1, double score2,
-                         double score3, double score4, double score5, double score6, double score7){
-        this.id = id;
+    public JudgeScoresDB(int meetId, int diverId, int diveNumber, String category, String typeName, String divePosition,
+                         String failed, double score1, double score2, double score3, double score4,
+                         double score5, double score6, double score7, double multiplier){
         this.meetId = meetId;
         this.diverId = diverId;
+        this.diveNumber = diveNumber;
+        this.diveCategory = category;
+        this.diveTypeName = typeName;
+        this.divePosition = divePosition;
+        this.failed = failed;
         this.score1 = score1;
         this.score2 = score2;
         this.score3 = score3;
@@ -54,19 +66,7 @@ public class JudgeScoresDB {
         this.score5 = score5;
         this.score6 = score6;
         this.score7 = score7;
-    }
-
-    public JudgeScoresDB(int meetId, int diverId, double score1, double score2,
-                         double score3, double score4, double score5, double score6, double score7){
-        this.meetId = meetId;
-        this.diverId = diverId;
-        this.score1 = score1;
-        this.score2 = score2;
-        this.score3 = score3;
-        this.score4 = score4;
-        this.score5 = score5;
-        this.score6 = score6;
-        this.score7 = score7;
+        this.multiplier = multiplier;
     }
 
     public int getId() {
@@ -77,9 +77,7 @@ public class JudgeScoresDB {
         this.id = id;
     }
 
-    public int getMeetId() {
-        return meetId;
-    }
+    public int getMeetId() { return meetId; }
 
     public void setMeetId(int meetId) {
         this.meetId = meetId;
@@ -156,4 +154,25 @@ public class JudgeScoresDB {
     public void setScore7(double score7) {
         this.score7 = score7;
     }
+
+    public double getMultiplier() { return multiplier; }
+
+    public void setMultiplier(double multiplier) { this.multiplier = multiplier; }
+
+    public String getDiveCategory() { return diveCategory; }
+
+    public String setDiveCategory(String diveCategory) {  return this.diveCategory = diveCategory; }
+
+    public String getDiveTypeName() { return diveTypeName; }
+
+    public String setDiveTypeName(String diveTypeName) { return this.diveTypeName = diveTypeName; }
+
+    public String getFailed() { return failed; }
+
+    public String setFailed(String failed) { return this.failed = failed; }
+
+    public String getDivePosition() { return divePosition; }
+
+    public String setDivePosition(String divePosition) { return this.divePosition = divePosition; }
+
 }

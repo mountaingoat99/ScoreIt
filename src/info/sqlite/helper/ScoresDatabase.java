@@ -29,6 +29,7 @@ public class ScoresDatabase extends DatabaseHelper {
             }while (c.moveToNext());
         }
         c.close();
+        db.close();
         return scores;
     }
 
@@ -49,6 +50,7 @@ public class ScoresDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return id;
     }
 }

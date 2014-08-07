@@ -16,10 +16,11 @@ public class ForwardDatabase extends DatabaseHelper{
 
     public ForwardDatabase(Context context) { super(context); }
 
-    public List<String> getForwardNames(){
+    public List<String> getForwardOneNames(){
         List<String> diveNames = new ArrayList<>();
 
-        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_FORWARD;
+        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_FORWARD
+                + " WHERE one_meter= 1";
 
         Log.e(getLog(), selectQuery);
 
@@ -33,6 +34,29 @@ public class ForwardDatabase extends DatabaseHelper{
             }while (c.moveToNext());
         }
         c.close();
+        db.close();
+        return diveNames;
+    }
+
+    public List<String> getForwardThreeNames(){
+        List<String> diveNames = new ArrayList<>();
+
+        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_FORWARD
+                + " WHERE three_meter= 1";
+
+        Log.e(getLog(), selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()){
+            do{
+                ForwardDB f = new ForwardDB();
+                diveNames.add(f.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
+            }while (c.moveToNext());
+        }
+        c.close();
+        db.close();
         return diveNames;
     }
 
@@ -53,6 +77,7 @@ public class ForwardDatabase extends DatabaseHelper{
         if (c != null) {
             c.close();
         }
+        db.close();
         return id;
     }
 
@@ -111,8 +136,7 @@ public class ForwardDatabase extends DatabaseHelper{
         if (c != null) {
             c.close();
         }
+        db.close();
         return  dod;
     }
-
-
 }

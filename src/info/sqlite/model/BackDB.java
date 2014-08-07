@@ -2,11 +2,13 @@ package info.sqlite.model;
 
 public class BackDB {
 	int id;
+    int oneMeter;
+    int threeMeter;
 	String diveName;
 	double oneA;
 	double oneB;
 	double oneC;
-	double oneD;
+    double oneD;
 	double threeA;
 	double threeB;
 	double threeC;
@@ -14,10 +16,12 @@ public class BackDB {
 	
 	public BackDB(){}
 	
-	public BackDB(int id, String diveName, double oneA,
+	public BackDB(int id, int oneMeter, int threeMeter, String diveName, double oneA,
 			double oneB, double oneC, double oneD, double threeA,
 			double threeB, double threeC, double threeD){
 		this.id = id;
+        this.oneMeter = oneMeter;
+        this.threeMeter = threeMeter;
 		this.diveName = diveName;
 		this.oneA = oneA;
 		this.oneB = oneB;
@@ -109,4 +113,12 @@ public class BackDB {
 	public void setThreeD(double threeD) {
 		this.threeD = threeD;
 	}
+
+    public int getOneMeter() { return oneMeter; }
+
+    public void setOneMeter(int oneMeter) { this.oneMeter = oneMeter; }
+
+    public int getThreeMeter() { return threeMeter; }
+
+    public void setThreeMeter(int threeMeter) { this.threeMeter = threeMeter; }
 }

@@ -14,10 +14,11 @@ public class BackDatabase extends DatabaseHelper {
 
     public BackDatabase(Context context) { super(context); }
 
-    public List<String> getBackNames(){
+    public List<String> getBackOneNames(){
         List<String> diveNames = new ArrayList<>();
 
-        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_BACK;
+        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_BACK
+                + " WHERE one_meter= 1";
 
         Log.e(getLog(), selectQuery);
 
@@ -31,6 +32,29 @@ public class BackDatabase extends DatabaseHelper {
             }while (c.moveToNext());
         }
         c.close();
+        db.close();
+        return diveNames;
+    }
+
+    public List<String> getBackThreeNames(){
+        List<String> diveNames = new ArrayList<>();
+
+        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_BACK
+                + " WHERE three_meter= 1";
+
+        Log.e(getLog(), selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()){
+            do{
+                BackDB b = new BackDB();
+                diveNames.add(b.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
+            }while (c.moveToNext());
+        }
+        c.close();
+        db.close();
         return diveNames;
     }
 
@@ -51,6 +75,7 @@ public class BackDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return id;
     }
 
@@ -109,6 +134,7 @@ public class BackDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return  dod;
     }
 }

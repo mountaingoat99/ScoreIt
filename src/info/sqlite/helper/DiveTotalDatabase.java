@@ -1,16 +1,11 @@
 package info.sqlite.helper;
 
-import info.sqlite.model.DiverNameDB;
-import info.sqlite.model.DiverTotalDB;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+
+import info.sqlite.model.DiverTotalDB;
 
 public class DiveTotalDatabase extends DatabaseHelper {
 
@@ -24,6 +19,7 @@ public class DiveTotalDatabase extends DatabaseHelper {
 
         DiverTotalDB divetotal = new DiverTotalDB(diveTotal);
         createDiveTotal(meetId, diverId, divetotal, db);
+        db.close();
     }
 
     //-----------------insert a row into the diver total table-----------------//
@@ -45,8 +41,12 @@ public class DiveTotalDatabase extends DatabaseHelper {
                             + " AND diver_id = " + diverid;
         Cursor c = db.rawQuery(selectQuery, null);
         if(c.getCount() <= 0){
+            c.close();
+            db.close();
             return false;
         }
+        c.close();
+        db.close();
         return true;
     }
 
@@ -67,6 +67,7 @@ public class DiveTotalDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return id;
     }
 }
