@@ -2,9 +2,6 @@ package com.rodriguez.divingscores;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,8 +11,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.rodriguez.divingscores.R;
-
-import info.sqlite.helper.DiverDatabase;
 
 public class About extends Activity {
 
@@ -36,7 +31,7 @@ public class About extends Activity {
         addListenerOnButton();
     }
 
-    public void addListenerOnButton(){
+    void addListenerOnButton(){
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,9 +54,6 @@ public class About extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 }

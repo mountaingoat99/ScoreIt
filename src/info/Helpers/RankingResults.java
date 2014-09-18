@@ -1,4 +1,4 @@
-package com.rodriguez.divingscores;
+package info.Helpers;
 
 
 public class RankingResults {

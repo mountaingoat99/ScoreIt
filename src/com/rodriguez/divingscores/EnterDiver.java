@@ -51,13 +51,13 @@ public class EnterDiver extends Activity {
     			// write to database
     			// gets the data from the text boxes and converts
     	        name = (TextView)findViewById(R.id.editTextNameE);
-    	        nameString = name.getText().toString();
+    	        nameString = name.getText().toString().trim();
     	        age = (TextView)findViewById(R.id.editTextAgeN);
-    	        ageString = age.getText().toString();
+    	        ageString = age.getText().toString().trim();
     	        grade = (TextView)findViewById(R.id.editTextGradeN);
-    	        gradeString = grade.getText().toString();
+    	        gradeString = grade.getText().toString().trim();
     	        school = (TextView)findViewById(R.id.editTextSchoolN);
-    	        schoolString = school.getText().toString();
+    	        schoolString = school.getText().toString().trim();
     	        if(nameString.isEmpty() || ageString.isEmpty()
     	        		|| gradeString.isEmpty() || schoolString.isEmpty())
     	        {

@@ -5,6 +5,7 @@ public class DiveNumberDB {
     int _meetId;
     int _diverId;
     int _diveNumber;
+    double _dive_type;
 
     public DiveNumberDB(){}
 
@@ -12,10 +13,11 @@ public class DiveNumberDB {
         this._diveNumber = _diveNumber;
     }
 
-    public DiveNumberDB(int _meetId, int _diverId, int _diveNumber){
+    public DiveNumberDB(int _meetId, int _diverId, int _diveNumber, double _dive_type){
         this._meetId = _meetId;
         this._diverId = _diverId;
         this._diveNumber = _diveNumber;
+        this._dive_type = _dive_type;
     }
 
     public int get_id() {
@@ -48,5 +50,13 @@ public class DiveNumberDB {
 
     public void set_diveNumber(int _diveNumber) {
         this._diveNumber = _diveNumber;
+    }
+
+    public double get_dive_type() {
+        return _dive_type;
+    }
+
+    public void set_dive_type(double _dive_type) {
+        this._dive_type = _dive_type;
     }
 }

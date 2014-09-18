@@ -2,18 +2,18 @@ package info.sqlite.model;
 
 public class ReverseDB {
 	
-	int id;
-    int oneMeter;
-    int threeMeter;
-	String diveName;
-	double oneA;
-	double oneB;
-	double oneC;
-	double oneD;
-	double threeA;
-	double threeB;
-	double threeC;
-	double threeD;
+	private int id;
+    private int oneMeter;
+    private int threeMeter;
+	private String diveName;
+	private double oneA;
+	private double oneB;
+	private double oneC;
+	private double oneD;
+	private double threeA;
+	private double threeB;
+	private double threeC;
+	private double threeD;
 	
 	public ReverseDB(){}
 	

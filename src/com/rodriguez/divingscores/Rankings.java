@@ -3,21 +3,21 @@ package com.rodriguez.divingscores;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rodriguez.divingscores.R;
 
 import java.util.ArrayList;
 
+import info.controls.RankingMeetBaseAdapter;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.MeetDatabase;
 
@@ -46,27 +46,29 @@ public class Rankings extends Activity {
 
     private void populateListViewFromDB() {
         MeetDatabase db = new MeetDatabase(getApplicationContext());
-        ArrayList<String> meetInfo;
-        meetInfo = db.getMeetNameForRank();
+        ArrayList<RankingsMeet> meetInfo;
+        meetInfo = db.getNameForMeetRank();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this, R.layout.list_item, meetInfo);
-        myList.setAdapter(adapter);
+        myList.setAdapter(new RankingMeetBaseAdapter(this, meetInfo));
         myList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                String stringId;
+                TextView meetName = (TextView) view.findViewById(R.id.meetName);
+                TextView board = (TextView) view.findViewById(R.id.board);
+                String stringId = meetName.getText().toString();
+                Double Board = Double.parseDouble(board.getText().toString());
                 MeetDatabase db = new MeetDatabase(getApplicationContext());
-                stringId = myList.getItemAtPosition(position).toString();
                 meetId = db.getId(stringId);
                 DiverDatabase ddb = new DiverDatabase(getApplicationContext());
-                Boolean noScores = ddb.checkDiverForRankings(meetId);
+                Boolean noScores = ddb.checkDiverForRankings(meetId, Board);
                 if(noScores) {
                     Intent intent = new Intent(getBaseContext(), RankingsByMeet.class);
+                    //TODO send the board to the RankByMeet
                     Bundle b = new Bundle();
                     b.putInt("keyMeet", meetId);
+                    b.putDouble("keyBoard", Board);
                     intent.putExtras(b);
                     startActivity(intent);
                 } else {
@@ -91,9 +93,6 @@ public class Rankings extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 }

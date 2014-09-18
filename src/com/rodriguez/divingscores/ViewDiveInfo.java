@@ -2,31 +2,30 @@ package com.rodriguez.divingscores;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.v4.app.NavUtils;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rodriguez.divingscores.R;
 
-import org.w3c.dom.Text;
-
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
-import info.sqlite.helper.DiveNumberDatabase;
-import info.sqlite.helper.DiveTotalDatabase;
+import info.Helpers.DiverMeetResults;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.JudgeScoreDatabase;
 import info.sqlite.helper.MeetDatabase;
@@ -62,6 +61,14 @@ public class ViewDiveInfo extends Activity {
     String s5String = "0.00";
     String s6String = "0.00";
     String s7String = "0.00";
+    String nameString = "";
+    String totalScore = "";
+    String diveStyleString = "";
+    String meetNameString = "";
+    private String failedString = "";
+    private String diveTypeString = "";
+    private String divePositionString = "";
+    Bitmap myBitmap;
     final Context context = this;
 
     @Override
@@ -88,12 +95,11 @@ public class ViewDiveInfo extends Activity {
 
     private void showDiveScores(){
         ResultDatabase rdb = new ResultDatabase(getApplicationContext());
-        String totalScore = Double.toString(rdb.getDiveScore(meetId, diverId, diveNumber));
+        totalScore = Double.toString(rdb.getDiveScore(meetId, diverId, diveNumber));
         total.setText(totalScore);
 
         JudgeScoreDatabase jdb = new JudgeScoreDatabase(getApplicationContext());
         Boolean failed = jdb.checkFailed(meetId, diverId, diveNumber);
-        String failedString;
         if(failed){
             failedString = "F";
         } else {
@@ -143,22 +149,24 @@ public class ViewDiveInfo extends Activity {
         ArrayList<String> diverInfo;
         diverInfo = db.getDiverInfo(diverId);
 
-        String nameString = diverInfo.get(0);
+        nameString = diverInfo.get(0);
         name.setText(nameString);
 
         MeetDatabase mdb = new MeetDatabase(getApplicationContext());
         ArrayList<String> meetInfo;
         meetInfo = mdb.getMeetInfo(meetId);
 
-        String meetNameString = meetInfo.get(0);
+        meetNameString = meetInfo.get(0);
         meetName.setText(meetNameString);
 
         JudgeScoreDatabase jdb = new JudgeScoreDatabase(getApplicationContext());
         ArrayList<String> diveInfo;
         diveInfo = jdb.getCatAndName(meetId, diverId, diveNumber);
-        String diveTypeString = diveInfo.get(0);     //TODO breaks here
-        String diveStyleString = diveInfo.get(1);
-        String divePositionString = diveInfo.get(2);
+        diveTypeString = diveInfo.get(0);
+        diveStyleString = diveInfo.get(1);
+        divePositionString = diveInfo.get(2);
+
+
         diveType.setText(diveTypeString);
         diveStyle.setText(diveStyleString);
         divePosition.setText(divePositionString);
@@ -187,7 +195,7 @@ public class ViewDiveInfo extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.view_dive_info, menu);
+        getMenuInflater().inflate(R.menu.view_dive_info, menu);
         return true;
     }
 
@@ -196,11 +204,144 @@ public class ViewDiveInfo extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            case R.id.action_email:
+                emailFile();
+                break;
+            case R.id.action_share:
+                View v1 = getWindow().getDecorView().getRootView();
+                v1.setDrawingCacheEnabled(true);
+                myBitmap = v1.getDrawingCache();
+                saveBitmap(myBitmap);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void emailFile(){
+        String diver, meetname = "", divenumber, divename, position,
+                total, passfailed, judges, score1, score2, score3,
+                score4, score5, score6, score7, combinedString;
+
+        StringBuilder r = new StringBuilder();
+
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        ArrayList<DiverMeetResults> results = db.getDiverMeetResults(meetId, diverId);
+
+        String columnString =   "\"Diver\",\"Meet Name\",\"Dive Number\",\"Dive Name\",\"Position\"," +
+                "\"Total\",\"Pass/Failed\",\"Judges\",\"Score 1\",\"Score 2\",\"Score 3\"," +
+                "\"Score 4\",\"Score 5\",\"Score 6\",\"Score 7\",";
+
+        for (DiverMeetResults result : results) {
+            diver = result.getName();
+            meetname = result.getMeetName();
+            divenumber = result.getDiveNumber();
+            divename = result.getDiveName();
+            position = result.getPosition();
+            total = result.getTotal();
+            passfailed = result.getPassFailed();
+            judges = result.getJudges();
+            score1 = result.getScore1();
+            score2 = result.getScore2();
+            score3 = result.getScore3();
+            score4 = result.getScore4();
+            score5 = result.getScore5();
+            score6 = result.getScore6();
+            score7 = result.getScore7();
+
+            String dataString = "\"" + diver + "\",\"" + meetname+ "\",\"" + divenumber + "\",\"" + divename + "\",\"" + position
+                    + "\",\"" + total + "\",\"" + passfailed + "\",\"" + judges + "\",\"" + score1
+                    + "\",\"" + score2 + "\",\"" + score3+ "\",\"" + score4 + "\",\"" + score5
+                    + "\",\"" + score6 + "\",\"" + score7 + "\"";
+
+            r.append("\n").append(dataString);
+
+        }
+        combinedString = columnString + "\n" + r;
+
+        File file   = null;
+        File root   = Environment.getExternalStorageDirectory();
+        if (root.canWrite()){
+            File dir    =   new File (root.getAbsolutePath() + "/PersonData");
+            dir.mkdirs();
+            file   =   new File(dir, nameString + " " + meetname + " Scores.csv");
+            FileOutputStream out   =   null;
+            try {
+                out = new FileOutputStream(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (out != null) {
+                    out.write(combinedString.getBytes());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Uri u1;
+        u1 = Uri.fromFile(file);
+
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.setData(Uri.parse("mailto:"));
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT,  nameString + " " + meetname + " Results" );
+        sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+        sendIntent.setType("text/html");
+        startActivity(Intent.createChooser(sendIntent, "Save Dive Results"));
+    }
+
+    // create a screen shot to share on Facebook
+    public void saveBitmap(Bitmap bitmap) {
+        String filePath = Environment.getExternalStorageDirectory()
+                + File.separator + "DCIM/Camera/screenshot.png";
+        File imagePath = new File(filePath);
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(imagePath);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+            shareStatus(filePath);
+        } catch (IOException e) {
+            Log.e("GREC", e.getMessage(), e);
+        }
+    }
+
+    public void shareStatus(String path) {
+        Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+        String st = buildShareText();
+        sendIntent.setType("*/*");
+
+        sendIntent.setType("image/png");
+        Uri myUri = Uri.parse("file://" + path);
+        sendIntent.putExtra(Intent.EXTRA_STREAM, myUri);
+
+        //test
+        sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Dive Scores");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, st);
+
+        startActivity(Intent.createChooser(sendIntent, "Share your Scores!"));
+    }
+
+    public String buildShareText(){
+
+        String dive =  diveStyleString.substring(diveStyleString.lastIndexOf("-") + 1);
+
+        return "On dive " + diveNumber + " -" + dive + ", "
+                + nameString + " scored "
+                + totalScore + " at the  " + meetNameString + "." + "\n"
+                + "Sent from ScoreIt.";
     }
 
     private void setUpView(){

@@ -6,10 +6,10 @@ public class JudgeScoresDB {
     private int diverId;
     private int diveNumber;
     public String diveCategory, diveTypeName, divePosition, failed;
-    private double score1, score2, score3, score4, score5, score6, score7, multiplier;
+    private double totalScore, score1, score2, score3, score4, score5, score6, score7, multiplier;
 
     public JudgeScoresDB(){
-        this(2, 3, 4, "s1", "s2", "s3", "f", 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 0.0);
+        this(2, 3, 4, "s1", "s2", "s3", "f", 6.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 0.0);
     }
 
     public JudgeScoresDB(int meetId, int diverId){
@@ -18,7 +18,7 @@ public class JudgeScoresDB {
     }
 
     public JudgeScoresDB(int meetId, int diverId, int diveNumber, String category, String typeName, String divePosition,
-                         String failed, double score1, double score2, double score3, double multiplier){
+                         String failed, double totalScore, double score1, double score2, double score3, double multiplier){
         this.meetId = meetId;
         this.diverId = diverId;
         this.diveNumber = diveNumber;
@@ -26,6 +26,7 @@ public class JudgeScoresDB {
         this.diveTypeName = typeName;
         this.divePosition = divePosition;
         this.failed = failed;
+        this.totalScore = totalScore;
         this.score1 = score1;
         this.score2 = score2;
         this.score3 = score3;
@@ -33,7 +34,7 @@ public class JudgeScoresDB {
     }
 
     public JudgeScoresDB(int meetId, int diverId, int diveNumber, String category, String typeName, String divePosition,
-                         String failed, double score1, double score2, double score3, double score4, double score5, double multiplier){
+                         String failed, double totalScore, double score1, double score2, double score3, double score4, double score5, double multiplier){
         this.meetId = meetId;
         this.diverId = diverId;
         this.diveNumber = diveNumber;
@@ -41,6 +42,7 @@ public class JudgeScoresDB {
         this.diveTypeName = typeName;
         this.divePosition = divePosition;
         this.failed = failed;
+        this.totalScore = totalScore;
         this.score1 = score1;
         this.score2 = score2;
         this.score3 = score3;
@@ -50,7 +52,7 @@ public class JudgeScoresDB {
     }
 
     public JudgeScoresDB(int meetId, int diverId, int diveNumber, String category, String typeName, String divePosition,
-                         String failed, double score1, double score2, double score3, double score4,
+                         String failed, double totalScore, double score1, double score2, double score3, double score4,
                          double score5, double score6, double score7, double multiplier){
         this.meetId = meetId;
         this.diverId = diverId;
@@ -59,6 +61,7 @@ public class JudgeScoresDB {
         this.diveTypeName = typeName;
         this.divePosition = divePosition;
         this.failed = failed;
+        this.totalScore = totalScore;
         this.score1 = score1;
         this.score2 = score2;
         this.score3 = score3;
@@ -97,6 +100,14 @@ public class JudgeScoresDB {
 
     public void setDiveNumber(int diveNumber) {
         this.diveNumber = diveNumber;
+    }
+
+    public double getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(double totalScore) {
+        this.totalScore = totalScore;
     }
 
     public double getScore1() {

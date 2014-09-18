@@ -1,26 +1,22 @@
 package info.sqlite.helper;
 
-import info.sqlite.model.DiverNameDB;
-import info.sqlite.model.InwardDB;
-
 import java.util.ArrayList;
-import java.util.List;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.ContactsContract;
 import android.util.Log;
+
+import info.Helpers.DiveStyleSpinner;
 
 public class InwardDatabase extends DatabaseHelper {
 
     public InwardDatabase(Context context) { super(context); }
 
-    public List<String> getInwardOneNames(){
-        List<String> diveNames = new ArrayList<>();
-
-        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_INWARD
+    public ArrayList<DiveStyleSpinner> getInwardOneNames(){
+        ArrayList<DiveStyleSpinner> diveNames = new ArrayList<>();
+        DiveStyleSpinner r;
+        String selectQuery = "SELECT id, " + DIVE_NAME + " FROM " + TABLE_INWARD
                 + " WHERE one_meter= 1";
 
         Log.e(getLog(), selectQuery);
@@ -28,21 +24,28 @@ public class InwardDatabase extends DatabaseHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
-        if (c.moveToFirst()){
-            do{
-                InwardDB i = new InwardDB();
-                diveNames.add(i.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
-            }while (c.moveToNext());
+        while(c.moveToNext()){
+            r = new DiveStyleSpinner();
+            r.setId(c.getString(0));
+            r.setDiveStyle(c.getString(1));
+            diveNames.add(r);
         }
+
+//        if (c.moveToFirst()){
+//            do{
+//                InwardDB i = new InwardDB();
+//                diveNames.add(i.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
+//            }while (c.moveToNext());
+//        }
         c.close();
         db.close();
         return diveNames;
     }
 
-    public List<String> getInwardThreeNames(){
-        List<String> diveNames = new ArrayList<>();
-
-        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_INWARD
+    public ArrayList<DiveStyleSpinner> getInwardThreeNames(){
+        ArrayList<DiveStyleSpinner> diveNames = new ArrayList<>();
+        DiveStyleSpinner r;
+        String selectQuery = "SELECT id, " + DIVE_NAME + " FROM " + TABLE_INWARD
                 + " WHERE three_meter= 1";
 
         Log.e(getLog(), selectQuery);
@@ -50,12 +53,19 @@ public class InwardDatabase extends DatabaseHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
-        if (c.moveToFirst()){
-            do{
-                InwardDB i = new InwardDB();
-                diveNames.add(i.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
-            }while (c.moveToNext());
+        while(c.moveToNext()){
+            r = new DiveStyleSpinner();
+            r.setId(c.getString(0));
+            r.setDiveStyle(c.getString(1));
+            diveNames.add(r);
         }
+
+//        if (c.moveToFirst()){
+//            do{
+//                InwardDB i = new InwardDB();
+//                diveNames.add(i.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
+//            }while (c.moveToNext());
+//        }
         c.close();
         db.close();
         return diveNames;
@@ -83,7 +93,7 @@ public class InwardDatabase extends DatabaseHelper {
     }
 
     //----------------gets the DOD for the dive type-------------------------------------------//
-    public double getDOD(int diveid, int diveposition, int boardtype){
+    public double getDOD(int diveid, int diveposition, double boardtype){
         double dod = 0.0;
         String selectQuery = null;
         if(boardtype == 1) {

@@ -10,18 +10,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.AdapterView.OnItemSelectedListener;
 
-import com.rodriguez.divingscores.R;
+
 
 import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.JudgeScoreDatabase;
 
-public class FailedDive extends Activity {
+public class FailedDive extends Activity implements OnItemSelectedListener {
 
     private Button failButton;
     private Button returnButton;
-    private int diverId, meetId, diveNumber, diveType = 0, boardType = 0, divePosition = 0;
+    private int diverId, meetId, diveNumber, diveType = 0, divePosition = 0;
+    private double boardType = 0.0;
     private String diveTypeName;
 
     @Override
@@ -44,7 +47,7 @@ public class FailedDive extends Activity {
             diveType = b.getInt("keyDiveType");
             diveTypeName = b.getString("keyDiveTypeName");
             divePosition = b.getInt("keyDivePosition");
-            boardType = b.getInt("boardType");
+            boardType = b.getDouble("boardType");
         }
 
         getDiveNumber();
@@ -80,7 +83,7 @@ public class FailedDive extends Activity {
                 b.putInt("keyDiver", diverId);
                 b.putInt("keyMeet", meetId);
                 b.putInt("diveType", diveType);
-                b.putInt("boardType", boardType);
+                b.putDouble("boardType", boardType);
                 Intent intent = new Intent(context, Dives.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtras(b);
@@ -98,7 +101,7 @@ public class FailedDive extends Activity {
     public void updateJudgeScore(){
         JudgeScoreDatabase db = new JudgeScoreDatabase(getApplicationContext());
         String failedDive = "F";
-        double sc1 = 0.0, sc2 = 0.0, sc3 = 0.0, sc4 = 0.0, sc5 = 0.0, sc6 = 0.0, sc7 = 0.0;
+        double total = 0.0, sc1 = 0.0, sc2 = 0.0, sc3 = 0.0, sc4 = 0.0, sc5 = 0.0, sc6 = 0.0, sc7 = 0.0;
         String diveCategory = null;
         switch (diveType){
             case 1:
@@ -135,7 +138,7 @@ public class FailedDive extends Activity {
         }
 
         db.fillNewJudgeScores(meetId, diverId, diveNumber, diveCategory, diveTypeName, DivePosition,
-                failedDive, sc1, sc2, sc3, sc4, sc5, sc6, sc7, 0.0);
+                failedDive, total, sc1, sc2, sc3, sc4, sc5, sc6, sc7, 0.0);
     }
 
 
@@ -152,9 +155,16 @@ public class FailedDive extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

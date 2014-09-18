@@ -7,6 +7,7 @@ import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.DivesDatabase;
 import info.sqlite.helper.JudgeScoreDatabase;
 import info.sqlite.helper.MeetDatabase;
+import info.sqlite.helper.PlatformDivesDatabase;
 import info.sqlite.helper.ResultDatabase;
 import info.sqlite.helper.TypeDatabase;
 import info.sqlite.model.ResultsDB;
@@ -37,15 +38,16 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
 
 	private TextView name, meetName, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11,
 					s1v, s2v, s3v, s4v, s5v, s6v, s7v, s8v, s9v, s10v, s11v, total,
-                    totalView, diveTypeText, diveTypeShow;
+                    totalView, diveTypeText, diveTypeShow, header;
     private Spinner spinner;
     private Button judgeButton, totalbutton;
-	private int diverId, meetId, diveTotal, diveType, type, diverSpinnerPosition, diveNumber;
-    String s1String, s2String, s3String, s4String, s5String, s6String, s7String,
+	private int diverId, meetId, diveTotal, diveType,diverSpinnerPosition, diveNumber;
+    private double boardType;
+    private String s1String, s2String, s3String, s4String, s5String, s6String, s7String,
             s8String, s9String, s10String, s11String;
-    String typeString, noDive = "There are no scores entered yet.";
-    Boolean failed, dive6 = false, dive11 = false;
-    Double totalScore;
+    private String typeString, noDive = "There are no scores entered yet.";
+    private Boolean failed, dive6 = false, dive11 = false;
+    private Double totalScore;
 
     @Override
 		public void onCreate(Bundle savedInstanceState)
@@ -59,19 +61,23 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setUpView();
         spinner.setOnItemSelectedListener(this);
-        loadSpinnerData();
 
 		Bundle b = getIntent().getExtras();
 		diverId = b.getInt("keyDiver");
 		meetId = b.getInt("keyMeet");
         diverSpinnerPosition = b.getInt("keySpin");
-
+        fillType();
+        loadSpinnerData();
         getDiveTotals();
         getDiveNumber();
 		fillText();
-        fillType();
         fillScores();
         addListenerOnButton();
+        if(boardType == 1.0 || boardType == 3.0){
+            header.setText("SpringBoard Dives");
+        } else {
+            header.setText("Platform Dives");
+        }
 	}
 
     @Override
@@ -97,7 +103,7 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
                     b.putInt("keyDiver", diverId);
                     b.putInt("keyMeet", meetId);
                     b.putInt("diveType", diveType);
-                    b.putInt("boardType", type);
+                    b.putDouble("boardType", boardType);
                     Intent intent = new Intent(context, Dives.class);
                     intent.putExtras(b);
                     startActivity(intent);
@@ -117,7 +123,7 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
                     b.putInt("keyDiver", diverId);
                     b.putInt("keyMeet", meetId);
                     b.putInt("diveType", diveType);
-                    b.putInt("boardType", type);
+                    b.putDouble("boardType", boardType);
                     Intent intent = new Intent(context, EnterFinalDiveScore.class);
                     intent.putExtras(b);
                     startActivity(intent);
@@ -133,11 +139,9 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position,
                                long id) {
-        if(id == -1){
-            return;
-        }
-        else{
-            switch(position){
+
+        if(boardType == 1 || boardType == 3) {
+            switch (position) {
                 case 1:
                     diveType = 1;
                     break;
@@ -152,6 +156,27 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
                     break;
                 case 5:
                     diveType = 5;
+                    break;
+            }
+        } else {
+            switch (position) {
+                case 1:
+                    diveType = 6;
+                    break;
+                case 2:
+                    diveType = 7;
+                    break;
+                case 3:
+                    diveType = 8;
+                    break;
+                case 4:
+                    diveType = 9;
+                    break;
+                case 5:
+                    diveType = 10;
+                    break;
+                case 6:
+                    diveType = 11;
                     break;
             }
         }
@@ -404,28 +429,44 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
     }
 	
 	private void loadSpinnerData(){
-		DivesDatabase db = new DivesDatabase(getApplicationContext());
-		
-		List<String> diveName = db.getDiveNames();
-		
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
-                R.layout.spinner_item, diveName);
-		
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-   		spinner.setPrompt("Choose a Dive Category");
-   		spinner.setAdapter(
-   				new NothingSelectedSpinnerAdapter(
-   						dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this));
+        if(boardType == 1 || boardType == 3) {
+            DivesDatabase db = new DivesDatabase(getApplicationContext());
+
+            List<String> diveName = db.getDiveNames();
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
+                    R.layout.spinner_item, diveName);
+
+            dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
+            spinner.setAdapter(
+                    new NothingSelectedSpinnerAdapter(
+                            dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this)
+            );
+        } else {
+            PlatformDivesDatabase db = new PlatformDivesDatabase(getApplicationContext());
+            List<String> diveName = db.getPlatformDiveNames();
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
+                    R.layout.spinner_item, diveName);
+
+            dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
+            spinner.setAdapter(
+                    new NothingSelectedSpinnerAdapter(
+                            dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this)
+            );
+        }
 		
 	}
 
     private void fillType(){
         TypeDatabase db = new TypeDatabase(getApplicationContext());
-        type = db.getType(meetId, diverId);
-        typeString = type + " Meters";
+        boardType = db.getType(meetId, diverId);
+        int b = (int) boardType;
+        typeString = b + " Meters";
     }
 
     private void setUpView(){
+        header = (TextView)findViewById(R.id.TextViewChooseC);
         name = (TextView)findViewById(R.id.divername);
         meetName = (TextView)findViewById(R.id.meetname);
         s1 = (TextView)findViewById(R.id.score1);

@@ -29,7 +29,7 @@ public class DivesDatabase extends DatabaseHelper {
         if (c.moveToFirst()){
             do{
                 DivesDB d = new DivesDB();
-                diveNames.add(d.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
+                diveNames.add("  " + d.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
             }while (c.moveToNext());
         }
         c.close();

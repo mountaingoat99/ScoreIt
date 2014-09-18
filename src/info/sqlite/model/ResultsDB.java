@@ -195,9 +195,7 @@ public class ResultsDB {
                                  Double s5, Double s6, Double s7, Double s8, Double s9,
                                  Double s10, Double s11){
 
-        double ts = s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8 + s9 + s10 + s11;
-
-		return ts;
+        return s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8 + s9 + s10 + s11;
 	}
 }
 

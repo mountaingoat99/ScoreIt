@@ -2,7 +2,6 @@ package info.sqlite.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -160,11 +159,9 @@ public class JudgeScoreDatabase extends DatabaseHelper {
     }
 
     //----------------checks the db to see if a judgeScore is attached to a meet and a diver yet----------//
-    public Boolean checkJudgesScores(int meetid, int diverid){
+    public Boolean checkJudgesScores(){
         SQLiteDatabase db = this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + getTableJudgeScores()
-                + " WHERE meet_id = " + meetid
-                + " AND diver_id = " + diverid;
+        String selectQuery = "SELECT * FROM " + getTableJudgeScores();
         Cursor c = db.rawQuery(selectQuery, null);
         if(c.getCount() <= 0){
             c.close();
@@ -179,19 +176,19 @@ public class JudgeScoreDatabase extends DatabaseHelper {
     //------------------create an empty score row attached to a meet and diver----------------------------//
     public void createEmptyJudgeScore(int meetid, int diverid){
         SQLiteDatabase db = this.getWritableDatabase();
-        JudgeScoresDB scores = new JudgeScoresDB(meetid, diverid, 1, "", "", "", "", 0.0, 0.0,
+        JudgeScoresDB scores = new JudgeScoresDB(meetid, diverid, 1, "", "", "", "", 0.0, 0.0, 0.0,
                                                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         createJudgeScores(scores, db);
     }
 
     //------------------fills a new record----------------------------------------------------------------//
     public void fillNewJudgeScores(int meetid, int diverid, int divenumber, String diveCategory, String diveTypeName,
-                                   String divePosition, String failed, double score1, double score2,
+                                   String divePosition, String failed, double totalScore, double score1, double score2,
                                    double score3, double score4, double score5, double score6, double score7, double multiplier){
 
         SQLiteDatabase db = this.getWritableDatabase();
         JudgeScoresDB scores = new JudgeScoresDB(meetid, diverid, divenumber, diveCategory, diveTypeName, divePosition,
-                failed, score1, score2, score3, score4, score5, score6, score7, multiplier);
+                failed, totalScore, score1, score2, score3, score4, score5, score6, score7, multiplier);
 
         createJudgeScores(scores, db);
         db.close();
@@ -207,6 +204,7 @@ public class JudgeScoreDatabase extends DatabaseHelper {
         values.put(DIVE_TYPE_NAME, scores.getDiveTypeName());
         values.put(DIVE_POSITION, scores.getDivePosition());
         values.put(FAILED_DIVE, scores.getFailed());
+        values.put(TOTAL_SCORE, scores.getTotalScore());
         values.put(SCORE_1, scores.getScore1());
         values.put(SCORE_2, scores.getScore2());
         values.put(SCORE_3, scores.getScore3());
@@ -241,11 +239,12 @@ public class JudgeScoreDatabase extends DatabaseHelper {
     }
 
     //-------------------updates a score in the database with a score------------------------------------//
-    public void updateJudgeScoreFailed(int meetid, int diverid, int divenumber, String failed, double score1, double score2,
+    public void updateJudgeScoreFailed(int meetid, int diverid, int divenumber, String failed, double totalscore, double score1, double score2,
                                 double score3, double score4, double score5, double score6, double score7){
         SQLiteDatabase db = this.getWritableDatabase();
         String selectQuery = "UPDATE " + getTableJudgeScores() + " SET "
                 + getFailedDive() + "='" + failed + "', "
+                + getTotalScore() + "=" + totalscore + ", "
                 + getScore1() + "=" + score1 + ", " + getScore2() + "=" + score2 + ", "
                 + getScore3() + "=" + score3 + ", " + getScore4() + "=" + score4 + ", "
                 + getScore5() + "=" + score5 + ", " + getScore6() + "=" + score6 + ", "
@@ -258,10 +257,11 @@ public class JudgeScoreDatabase extends DatabaseHelper {
         db.close();
     }
 
-    public void updateJudgeFailed(int meetid, int diverid, int divenumber, String failed){
+    public void updateJudgeFailed(int meetid, int diverid, int divenumber, String failed, double totalscore){
         SQLiteDatabase db = this.getWritableDatabase();
         String selectQuery = "UPDATE " + getTableJudgeScores() + " SET "
-                + getFailedDive() + "='" + failed + "' "
+                + getFailedDive() + "='" + failed + "', "
+                + getTotalScore() + "=" + totalscore
                 + " WHERE meet_id = " + meetid
                 + " AND diver_id = " + diverid
                 + " AND dive_number = " + divenumber;
@@ -270,13 +270,14 @@ public class JudgeScoreDatabase extends DatabaseHelper {
         db.close();
     }
 
-    public void updateJudgeScore(int meetid, int diverid, int divenumber, double score1, double score2,
+    public void updateJudgeScore(int meetid, int diverid, int divenumber, double totalscore, double score1, double score2,
                                        double score3, double score4, double score5, double score6, double score7){
         SQLiteDatabase db = this.getWritableDatabase();
         String selectQuery = "UPDATE " + getTableJudgeScores() + " SET "
-                + getScore1() + "=" + score1 + "' " + getScore2() + "=" + score2 + ", "
+                + getTotalScore() + "=" + totalscore + ", "
+                + getScore1() + "=" + score1 + ", " + getScore2() + "=" + score2 + ", "
                 + getScore3() + "=" + score3 + ", " + getScore4() + "=" + score4 + ", "
-                + getScore5() + "=" + score5 + "' " + getScore6() + "=" + score6 + ", "
+                + getScore5() + "=" + score5 + ", " + getScore6() + "=" + score6 + ", "
                 + getScore7() + "=" + score7
                 + " WHERE meet_id = " + meetid
                 + " AND diver_id = " + diverid

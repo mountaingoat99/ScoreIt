@@ -41,7 +41,7 @@ public class HowTo extends Activity {
         link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=tnoJ2p3AqIU&list=UUmOmSbB5YzaLx86a2rVr7aw")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=6sHgaUIN7Zk&list=UUmOmSbB5YzaLx86a2rVr7aw")));
                 Log.i("Video", "Video Playing App Tutorial");
             }
         });
@@ -67,9 +67,6 @@ public class HowTo extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 }

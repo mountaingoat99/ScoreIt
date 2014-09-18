@@ -25,7 +25,7 @@ public class ScoresDatabase extends DatabaseHelper {
         if (c.moveToFirst()){
             do{
                 ScoresDB s = new ScoresDB();
-                scores.add(s.setDigits(c.getString(c.getColumnIndex(DIGITS))));
+                scores.add(" " + s.setDigits(c.getString(c.getColumnIndex(DIGITS))));
             }while (c.moveToNext());
         }
         c.close();

@@ -90,15 +90,15 @@ OnClickListener {
     	btnEnterMeet.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
                 name = (TextView) findViewById(R.id.editTextName);
-                nameString = name.getText().toString();
+                nameString = name.getText().toString().trim();
                 school = (TextView) findViewById(R.id.editTextSchool);
-                schoolString = school.getText().toString();
+                schoolString = school.getText().toString().trim();
                 city = (TextView) findViewById(R.id.editTextCity);
-                cityString = city.getText().toString();
+                cityString = city.getText().toString().trim();
                 state = (TextView) findViewById(R.id.editTextState);
-                stateString = state.getText().toString();
+                stateString = state.getText().toString().trim();
                 txtDate = (EditText) findViewById(R.id.editTextDate);
-                dateString = txtDate.getText().toString();
+                dateString = txtDate.getText().toString().trim();
                 judgeChecked = radioJudgesGroup.getCheckedRadioButtonId();
                 if (judgeChecked == R.id.radio3J)
                     judges = 3;

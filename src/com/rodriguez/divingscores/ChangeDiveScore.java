@@ -4,27 +4,20 @@ import info.controls.NothingSelectedSpinnerAdapter;
 import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiveTotalDatabase;
 import info.sqlite.helper.DiverDatabase;
-import info.sqlite.helper.DivesDatabase;
 import info.sqlite.helper.JudgeScoreDatabase;
 import info.sqlite.helper.MeetDatabase;
 import info.sqlite.helper.ResultDatabase;
-import info.sqlite.helper.TypeDatabase;
-import info.sqlite.model.ResultsDB;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +43,7 @@ public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
     private TableLayout table;
     private Button updateScoreButton, returnButton;
     private int diverId, meetId, showDiveNumber,  diveTotal, type, diveNumber, judgeTotal;
-    private String  totalScore, s1String, s2String, s3String, s4String, s5String, s6String, s7String, failedString;
+    private String  totalScore, s1String, s2String, s3String, s4String, s5String, s6String, s7String, failedString, testNumber;
     private String editTotal = "0.0", edit1 = "0.0", edit2 = "0.0", edit3 = "0.0", edit4 = "0.0",
             edit5 = "0.0", edit6 = "0.0", edit7 = "0.0", editFailed;
     private Double e1 = 0.0, e2 = 0.0, e3 = 0.0, e4 = 0.0, e5 = 0.0, e6 = 0.0, e7 = 0.0, newOverAllScore, allScoreTotal, multiplier = 0.0;
@@ -83,14 +76,13 @@ public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
     private void loadSpinnerData(){
         List<String> diveNum = new ArrayList<>();
         for(int i = 0; i < diveNumber; ++i){
-            diveNum.add("Dive " + (i + 1));
+            diveNum.add("  Dive " + (i + 1));
         }
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, diveNum);
 
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setPrompt("Choose Dive Number");
+        dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
         spinner.setAdapter(
                 new NothingSelectedSpinnerAdapter(
                         dataAdapter, R.layout.diver_number_spinner_row_nothing_selected, this));
@@ -221,14 +213,20 @@ public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
             public void onClick(View v) {
                 if (noSpinChoice) {
                     getNewScores();
-                    updateScores();
-                    Bundle b = new Bundle();
-                    b.putInt("keyDiver", diverId);
-                    b.putInt("keyMeet", meetId);
-                    Intent intent = new Intent(context, ChooseSummary.class);
-                    intent.putExtras(b);
-                    startActivity(intent);
-                } else {
+                    if (!testNumber.equals("")) {
+                        updateScores();
+                        Bundle b = new Bundle();
+                        b.putInt("keyDiver", diverId);
+                        b.putInt("keyMeet", meetId);
+                        Intent intent = new Intent(context, ChooseSummary.class);
+                        intent.putExtras(b);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "Please enter a number",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }else {
                     Toast.makeText(getApplicationContext(),
                             "Please Choose a Dive Number",
                             Toast.LENGTH_LONG).show();
@@ -249,28 +247,32 @@ public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
     }
 
     public void getNewScores(){
-        editTotal = total.getText().toString();
-        //editFailed = failedText.getText().toString();
+        testNumber = total.getText().toString();
+        if(testNumber.equals("")){
+            return;
+        }
+
+        editTotal = testNumber;
 
         if(multiplier != 0.0) {
             if (judgeTotal >= 3) {
-                edit1 = s1.getText().toString();
+                edit1 = s1.getText().toString().trim();
                 e1 = Double.parseDouble(edit1);
-                edit2 = s2.getText().toString();
+                edit2 = s2.getText().toString().trim();
                 e2 = Double.parseDouble(edit2);
-                edit3 = s3.getText().toString();
+                edit3 = s3.getText().toString().trim();
                 e3 = Double.parseDouble(edit3);
             }
             if (judgeTotal >= 5) {
-                edit4 = s4.getText().toString();
+                edit4 = s4.getText().toString().trim();
                 e4 = Double.parseDouble(edit4);
-                edit5 = s5.getText().toString();
+                edit5 = s5.getText().toString().trim();
                 e5 = Double.parseDouble(edit5);
             }
             if (judgeTotal == 7) {
-                edit6 = s6.getText().toString();
+                edit6 = s6.getText().toString().trim();
                 e6 = Double.parseDouble(edit6);
-                edit7 = s7.getText().toString();
+                edit7 = s7.getText().toString().trim();
                 e7 = Double.parseDouble(edit7);
             }
         }
@@ -288,7 +290,7 @@ public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
     public void updateScores() {
         ResultDatabase rdb = new ResultDatabase(getApplicationContext());
         JudgeScoreDatabase jdb = new JudgeScoreDatabase(getApplicationContext());
-        double newTotal;
+        double newTotal, roundedNumber;
         int index = 0;
         switch (showDiveNumber) {
             case 1:
@@ -329,19 +331,22 @@ public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
             if (editTotal.equals("0") || editTotal.equals("0.0") || editTotal.equals("00.0")
                     || editTotal.equals("00.00") || editTotal.equals("0.00") || editTotal.equals("000.00")) {
                 editFailed = "F";
-                jdb.updateJudgeScoreFailed(meetId, diverId, showDiveNumber, editFailed, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+                jdb.updateJudgeScoreFailed(meetId, diverId, showDiveNumber, editFailed, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
                 newTotal = 0.0;
             } else {
                 editFailed = "P";
-                jdb.updateJudgeScoreFailed(meetId, diverId, showDiveNumber, editFailed, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-                newTotal = Double.parseDouble(editTotal);
+                roundedNumber = Double.parseDouble(editTotal);
+                newTotal = .5 * Math.round(roundedNumber * 2);
+                jdb.updateJudgeScoreFailed(meetId, diverId, showDiveNumber, editFailed, newTotal, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
             }
             allScoreTotal = calcNewOverall(newTotal);
             rdb.writeDiveScore(meetId, diverId, index, newTotal, allScoreTotal);
             return;
         } else {
-            jdb.updateJudgeScoreFailed(meetId, diverId, showDiveNumber, editFailed, e1, e2, e3, e4, e5, e6, e7);
-            newTotal = getMultiplerScore();
+            roundedNumber = getMultiplerScore();
+            newTotal = .5 * Math.round(roundedNumber * 2);
+            jdb.updateJudgeScoreFailed(meetId, diverId, showDiveNumber, editFailed, newTotal, e1, e2, e3, e4, e5, e6, e7);
         }
         allScoreTotal = calcNewOverall(newTotal);
         rdb.writeDiveScore(meetId, diverId, index, newTotal, allScoreTotal);
@@ -353,8 +358,6 @@ public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_change_score_warning);
-        //TextView text = (TextView) dialog.findViewById(R.id.textView);
-        //text.setText(R.string.sure_remove_diver);
         Button okButton = (Button) dialog.findViewById(R.id.buttonOkay);
 
         okButton.setOnClickListener(new View.OnClickListener() {
@@ -490,10 +493,7 @@ public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     @Override

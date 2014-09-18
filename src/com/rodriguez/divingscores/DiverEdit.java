@@ -100,10 +100,10 @@ public class DiverEdit extends Activity {
     	btnEditDiver.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                nameEdit = name.getText().toString();
-                ageEdit = age.getText().toString();
-                gradeEdit = grade.getText().toString();
-                schoolEdit = school.getText().toString();
+                nameEdit = name.getText().toString().trim();
+                ageEdit = age.getText().toString().trim();
+                gradeEdit = grade.getText().toString().trim();
+                schoolEdit = school.getText().toString().trim();
                 if (nameEdit.isEmpty() || ageEdit.isEmpty()
                         || gradeEdit.isEmpty() || schoolEdit.isEmpty()) {
                     Toast.makeText(getApplicationContext(),

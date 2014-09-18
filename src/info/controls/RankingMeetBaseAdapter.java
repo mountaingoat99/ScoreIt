@@ -1,24 +1,23 @@
 package info.controls;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.rodriguez.divingscores.R;
-import info.Helpers.RankingResults;
+import com.rodriguez.divingscores.RankingsMeet;
 
+import java.util.ArrayList;
 
-public class MyCustomBaseAdapter extends BaseAdapter {
-    private static ArrayList<RankingResults> searchArrayList;
+public class RankingMeetBaseAdapter extends BaseAdapter {
+
+    private static ArrayList<RankingsMeet> searchArrayList;
 
     private LayoutInflater mInflater;
 
-    public MyCustomBaseAdapter(Context context, ArrayList<RankingResults> results) {
+    public RankingMeetBaseAdapter(Context context, ArrayList<RankingsMeet> results){
         searchArrayList = results;
         mInflater = LayoutInflater.from(context);
     }
@@ -42,27 +41,24 @@ public class MyCustomBaseAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if(convertView == null) {
-            convertView = mInflater.inflate(R.layout.list_rankings, null);
+            convertView = mInflater.inflate(R.layout.list_rank_meters, null);
             holder = new ViewHolder();
-            holder.txtName = (TextView) convertView.findViewById(R.id.name);
-            holder.txtScore = (TextView) convertView.findViewById(R.id.score);
-            holder.txtDiveNumber = (TextView) convertView.findViewById(R.id.diveNumber);
+            holder.txtMeetName = (TextView) convertView.findViewById(R.id.meetName);
+            holder.txtBoard = (TextView) convertView.findViewById(R.id.board);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        holder.txtName.setText(searchArrayList.get(position).getName());
-        holder.txtScore.setText(searchArrayList.get(position).getScore());
-        holder.txtDiveNumber.setText(searchArrayList.get(position).getDiveNumber());
+        holder.txtMeetName.setText(searchArrayList.get(position).getMeetName());
+        holder.txtBoard.setText(searchArrayList.get(position).getBoardSize());
 
         return convertView;
     }
-    static class ViewHolder {
-        TextView txtName;
-        TextView txtScore;
-        TextView txtDiveNumber;
-    }
 
+    static class ViewHolder{
+        TextView txtMeetName;
+        TextView txtBoard;
+    }
 }

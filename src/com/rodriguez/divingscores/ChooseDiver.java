@@ -1,7 +1,6 @@
 package com.rodriguez.divingscores;
 
 import info.controls.NothingSelectedSpinnerAdapter;
-import info.sqlite.helper.DatabaseHelper;
 import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiveTotalDatabase;
 import info.sqlite.helper.DiverDatabase;
@@ -14,20 +13,14 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -39,17 +32,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 public class ChooseDiver extends Activity implements OnItemSelectedListener {
 
     private Spinner spinnerName;
-    private RadioButton rbd6, rbd11, rbd1, rbd3;
-    private RadioGroup radioGroupTotal, radioGroupType;
-    private TextView MeetName, DiveTotal, DiveType;
+    private RadioButton rbd6, rbd11, rbd1, rbd3, rbd10, rbd75, rbd5;
+    private RadioGroup radioGroupTotal;
+    private TextView MeetName, DiveTotal, BoardType;
+    private View layout1, layout2;
     private int  meetSpinPosition, diverSpinnerPosition, diverId = 0,
-                meetId = 0, diveTotal = 6, diveType = 1;
-    private boolean checkResult, checkTotals, checkType, checkDiveNumber;
+                meetId = 0, diveTotal = 6;
+    private double boardType = 1;
+    private boolean checkResult, checkTotals, checkBoardType, checkDiveNumber;
     String showDiveTotal;
     final Context context = this;
 
@@ -80,13 +73,18 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
     private void setUpView() {
         MeetName = (TextView)findViewById(R.id.EnterMeetM);
         DiveTotal = (TextView)findViewById(R.id.TextViewDiveTotals);
-        DiveType = (TextView)findViewById(R.id.TextViewDiveType);
+        BoardType = (TextView)findViewById(R.id.TextViewDiveType);
         radioGroupTotal = (RadioGroup)findViewById(R.id.radioGroupDives);
-        radioGroupType = (RadioGroup)findViewById(R.id.radioGroupDiveTypes);
+        layout1 = findViewById(R.id.layout1);
+        layout2 = findViewById(R.id.layout2);
         rbd6 = (RadioButton)findViewById(R.id.radioDives6);
         rbd11 = (RadioButton)findViewById(R.id.radioDives11);
         rbd1 = (RadioButton)findViewById(R.id.radioType1);
         rbd3 = (RadioButton)findViewById(R.id.radioType3);
+        rbd10 = (RadioButton)findViewById(R.id.radioType10);
+        rbd75 = (RadioButton)findViewById(R.id.radioType75);
+        rbd5 = (RadioButton)findViewById(R.id.radioType5);
+
         spinnerName = (Spinner)findViewById(R.id.spinnerDiverName);
     }
 
@@ -124,8 +122,7 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, diverName);
 
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerName.setPrompt("Choose Diver");
+        dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
         spinnerName.setAdapter(
                 new NothingSelectedSpinnerAdapter(
                         dataAdapter, R.layout.diver_name_spinner_row_nothing_selected, this));
@@ -151,11 +148,11 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
                     DiveNumberDatabase dbn = new DiveNumberDatabase(getApplicationContext());
                     checkDiveNumber = dbn.checkNumber(meetId, diverId);
                     if(!checkDiveNumber){
-                        dbn.createNewDiveNumber(meetId, diverId);
+                        dbn.createNewDiveNumber(meetId, diverId, boardType); // TODO add board type
                     }
 
                     enterDiveTotal();
-                    enterDiveType();
+                    enterBoardDiveType();
                     Intent intent = new Intent(context, ChooseSummary.class);
                     Bundle b = new Bundle();
                     b.putInt("keyDiver", diverId);
@@ -180,7 +177,7 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
         }
         diverSpinnerPosition = position;
         checkDiveTotal();
-        checkDiveType();
+        checkBoardType();
     }
 
     private void checkDiveTotal(){
@@ -198,18 +195,20 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
         }
     }
 
-    private void checkDiveType(){
+    private void checkBoardType(){
         TypeDatabase db = new TypeDatabase(getApplicationContext());
-        checkType = db.checkType(meetId, diverId);
-        if(checkType){
-            radioGroupType.setVisibility(View.GONE);
+        checkBoardType = db.checkType(meetId, diverId);
+        if(checkBoardType){
+            layout1.setVisibility(View.GONE);
+            layout2.setVisibility(View.GONE);
             int typeOfDive = db.searchTypes(meetId, diverId);
             showDiveTotal = showDiveTotal + " - " + typeOfDive + " Meter" ;
             DiveTotal.setText(showDiveTotal);
-            DiveType.setVisibility(View.GONE);
+            BoardType.setVisibility(View.GONE);
         }else {
-            radioGroupType.setVisibility(View.VISIBLE);
-            DiveType.setVisibility(View.VISIBLE);
+            layout1.setVisibility(View.VISIBLE);
+            layout2.setVisibility(View.VISIBLE);
+            BoardType.setVisibility(View.VISIBLE);
         }
     }
 
@@ -221,14 +220,15 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
         }
     }
 
-    private void enterDiveType(){
+    private void enterBoardDiveType(){
         TypeDatabase db = new TypeDatabase(getApplicationContext());
-        checkType = db.checkType(meetId, diverId);
-        if(!checkType){
-            db.createType(meetId, diverId, diveType);
+        checkBoardType = db.checkType(meetId, diverId);
+        if(!checkBoardType){
+            db.createType(meetId, diverId, boardType);
         }
     }
 
+    // radio buttons for dive totals
     public void onrbd6Click(View v) {
         rbd6.setChecked(true);
         rbd11.setChecked(false);
@@ -241,22 +241,56 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
         diveTotal = 11;
     }
 
+    // radio buttons for the board sizes
     public void onrbd1Click(View v){
         rbd1.setChecked(true);
         rbd3.setChecked(false);
-        diveType = 1;
+        rbd10.setChecked(false);
+        rbd75.setChecked(false);
+        rbd5.setChecked(false);
+        boardType = 1;
     }
 
     public void onrbd3Click(View v){
         rbd1.setChecked(false);
         rbd3.setChecked(true);
-        diveType = 3;
+        rbd10.setChecked(false);
+        rbd75.setChecked(false);
+        rbd5.setChecked(false);
+        boardType = 3;
+    }
+
+    public void onrbd10Click(View v){
+        rbd1.setChecked(false);
+        rbd3.setChecked(false);
+        rbd10.setChecked(true);
+        rbd75.setChecked(false);
+        rbd5.setChecked(false);
+        boardType = 10;
+    }
+
+    public void onrbd75Click(View v){
+        rbd1.setChecked(false);
+        rbd3.setChecked(false);
+        rbd10.setChecked(false);
+        rbd75.setChecked(true);
+        rbd5.setChecked(false);
+        boardType = 7.5;
+    }
+
+    public void onrbd5Click(View v){
+        rbd1.setChecked(false);
+        rbd3.setChecked(false);
+        rbd10.setChecked(false);
+        rbd75.setChecked(false);
+        rbd5.setChecked(true);
+        boardType = 5;
     }
 
     public int getId(){
         String stringId;
         int id;
-        stringId = spinnerName.getSelectedItem().toString();
+        stringId = spinnerName.getSelectedItem().toString().trim();
         DiverDatabase db = new DiverDatabase(getApplicationContext());
         id = db.getId(stringId);
         return id;

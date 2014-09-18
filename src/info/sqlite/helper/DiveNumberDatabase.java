@@ -12,9 +12,9 @@ public class DiveNumberDatabase extends DatabaseHelper{
 
     public DiveNumberDatabase(Context context) { super(context); }
 
-    public void createNewDiveNumber(int meetId, int diverId){
+    public void createNewDiveNumber(int meetId, int diverId, double type){
         SQLiteDatabase db = this.getWritableDatabase();
-        DiveNumberDB diveNumber = new DiveNumberDB(meetId, diverId, 0);
+        DiveNumberDB diveNumber = new DiveNumberDB(meetId, diverId, 0, type);
 
         createDiveNumber(diveNumber, db);
         db.close();
@@ -36,11 +36,12 @@ public class DiveNumberDatabase extends DatabaseHelper{
         return true;
     }
 
-    public void createDiveNumber(DiveNumberDB numbers, SQLiteDatabase db){
+    void createDiveNumber(DiveNumberDB numbers, SQLiteDatabase db){
         ContentValues values = new ContentValues();
         values.put(MEET_ID, numbers.get_meetId());
         values.put(DIVER_ID, numbers.get_diverId());
         values.put(DIVE_NUMBER, numbers.get_diveNumber());
+        values.put(DIVE_TYPE, numbers.get_dive_type() );
 
         db.insert(TABLE_DIVE_NUMBER, null, values);
     }

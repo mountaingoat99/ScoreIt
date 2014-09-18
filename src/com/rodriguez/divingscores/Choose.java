@@ -67,8 +67,7 @@ public class Choose extends Activity implements OnItemSelectedListener {
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, meetName);
 		
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
- 		spinnerMeet.setPrompt("Choose Meet");
+		dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
  		spinnerMeet.setAdapter(
  				new NothingSelectedSpinnerAdapter(
  						dataAdapter, R.layout.meet_name_spinner_row_nothing_selected, this));
@@ -109,7 +108,7 @@ public class Choose extends Activity implements OnItemSelectedListener {
    public int getId(){
 	   String stringId;
        int id;
-	   stringId = spinnerMeet.getSelectedItem().toString();
+	   stringId = spinnerMeet.getSelectedItem().toString().trim();
 	   MeetDatabase db = new MeetDatabase(getApplicationContext());
 	   id = db.getId(stringId);
 	   return id;

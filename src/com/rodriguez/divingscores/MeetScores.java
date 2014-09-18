@@ -1,12 +1,16 @@
 package com.rodriguez.divingscores;
 
 import info.sqlite.helper.DiveNumberDatabase;
-import info.sqlite.helper.DiveTotalDatabase;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.JudgeScoreDatabase;
 import info.sqlite.helper.ResultDatabase;
 import info.sqlite.helper.TypeDatabase;
 import info.sqlite.model.ResultsDB;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,11 +24,14 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -38,15 +45,20 @@ public class MeetScores extends Activity {
                         score6, score7, score8, score9, score10, score11, s1, s2, s3, s4,
                         s5, s6, s7, s8, s9, s10, s11;
     private int diverId, meetId, diveCount, diveNumberFromDB, diveNumber = 0;
-    String score1String, score2String, score3String, score4String, score5String, score6String,
-                        score7String, score8String, score9String, score10String, score11String;
-    Boolean failed, dialogShown = true;
+    private String score1String, score2String, score3String, score4String, score5String, score6String,
+                        score7String, score8String, score9String, score10String, score11String, totalString;
+    private String meetNameString, meetDateString, nameString, schoolString;
+    private Boolean failed, dialogShown = true;
+    private double boardType = 0.0;
+    Bitmap myBitmap;
     final Context context = this;
-	
-	@Override
+
+    @Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        //facebook
+
         setContentView(R.layout.activity_meet_scores);
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -82,7 +94,7 @@ public class MeetScores extends Activity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle savedState){
+    protected void onSaveInstanceState(@SuppressWarnings("NullableProblems") Bundle savedState){
         super.onSaveInstanceState(savedState);
         savedState.putBoolean("keyBool", dialogShown);
 
@@ -157,6 +169,7 @@ public class MeetScores extends Activity {
                 b.putInt("keyDiveNumber", diveNumber);
                 Intent intent = new Intent(context, ViewDiveInfo.class);
                 intent.putExtras(b);
+                startActivity(intent);
             }
         });
 
@@ -409,10 +422,10 @@ public class MeetScores extends Activity {
 		ArrayList<String> diverInfo;
 		diverInfo = db.getDiverInfo(diverId);
 
-        String nameString = diverInfo.get(0);
+        nameString = diverInfo.get(0);
         String ageString = diverInfo.get(1);
         String gradeString = diverInfo.get(2);
-        String schoolString = diverInfo.get(3);
+        schoolString = diverInfo.get(3);
 		
 		name.setText(nameString);		
 		age.setText(ageString);		
@@ -425,11 +438,11 @@ public class MeetScores extends Activity {
 		ArrayList<String> meet;
 		meet = db.getScores(meetId, diverId);
 
-        String meetNameString = meet.get(0);
+        meetNameString = meet.get(0);
         String schoolNameString = meet.get(1);
         String schoolCityString = meet.get(2);
         String schoolStateString = meet.get(3);
-        String meetDateString = meet.get(4);
+        meetDateString = meet.get(4);
 		
 		// formats the date
 		SimpleDateFormat indate = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
@@ -542,7 +555,7 @@ public class MeetScores extends Activity {
         DecimalFormat d = new DecimalFormat("0.00");
         Double totalScore2 = Double.parseDouble(d.format(totalScore));
 
-        String totalString = Double.toString(totalScore2);
+        totalString = Double.toString(totalScore2);
 
         if(diveNumberFromDB >= 1) {
             total.setText(totalString);
@@ -613,8 +626,9 @@ public class MeetScores extends Activity {
 
     private void fillType(){
         TypeDatabase db = new TypeDatabase(getApplicationContext());
-        int type = db.getType(meetId, diverId);
-        String typeString = type + " Meters";
+        boardType = db.getType(meetId, diverId);
+        //double b = (double) boardType;
+        String typeString = boardType + " Meters";
         Type.setText(typeString);
     }
 
@@ -657,28 +671,137 @@ public class MeetScores extends Activity {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) 
     {
-        //getMenuInflater().inflate(R.menu.activity_meet_scores, menu);
+        getMenuInflater().inflate(R.menu.activity_meet_scores, menu);
         return true;
     }
 	
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
-        final Context context = this;
         switch (item.getItemId())
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
-            case R.id.menu_how_to:
-                Intent intent3 = new Intent(context, HowTo.class);
-                startActivity(intent3);
+            case R.id.action_email:
+                emailFile();
                 break;
-            case R.id.menu_rankings:
-                Intent intent2 = new Intent(context, Rankings.class);
-                startActivity(intent2);
+            case R.id.action_share:
+                View v1 = getWindow().getDecorView().getRootView();
+                v1.setDrawingCacheEnabled(true);
+                myBitmap = v1.getDrawingCache();
+                saveBitmap(myBitmap);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void emailFile(){
+
+        String columnString =   "\"Diver\",\"School\",\"MeetName\",\"Date\",\"TotalScore\"," +
+                                "\"Dive1\",\"Dive2\",\"Dive3\",\"Dive4\",\"Dive5\",\"Dive6\"," +
+                                "\"Dive7\",\"Dive8\",\"Dive9\",\"Dive10\",\"Dive11\",";
+        String dataString   =   "\"" + nameString + "\",\"" + schoolString + "\",\"" + meetNameString + "\",\"" + meetDateString + "\",\"" + totalString
+                                 + "\",\"" + score1String + "\",\"" + score2String + "\",\"" + score3String + "\",\"" + score4String
+                                 + "\",\"" + score5String + "\",\"" + score6String + "\",\"" + score7String + "\",\"" + score8String
+                                 + "\",\"" + score9String + "\",\"" + score10String + "\",\"" + score11String + "\"";
+
+        String combinedString = columnString + "\n" + dataString;
+
+        File file   = null;
+        File root   = Environment.getExternalStorageDirectory();
+        if (root.canWrite()){
+            File dir    =   new File (root.getAbsolutePath() + "/PersonData");
+            dir.mkdirs();
+            file   =   new File(dir, nameString + " Scores.csv");
+            FileOutputStream out   =   null;
+            try {
+                out = new FileOutputStream(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (out != null) {
+                    out.write(combinedString.getBytes());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    Uri u1;
+    u1 = Uri.fromFile(file);
+
+    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+    sendIntent.setData(Uri.parse("mailto:"));
+    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Diver Results");
+    sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+    sendIntent.setType("text/html");
+    startActivity(Intent.createChooser(sendIntent, "Save Results"));
+    }
+
+    // create a screen shot to share on Facebook
+    public void saveBitmap(Bitmap bitmap) {
+        String filePath = Environment.getExternalStorageDirectory()
+                + File.separator + "DCIM/Camera/screenshot.png";
+        File imagePath = new File(filePath);
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(imagePath);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+            shareStatus(filePath);
+        } catch (IOException e) {
+            Log.e("GREC", e.getMessage(), e);
+        }
+    }
+
+    public void shareStatus(String path) {
+        Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+        String st = buildShareText();
+        sendIntent.setType("*/*");
+
+        sendIntent.setType("image/png");
+        Uri myUri = Uri.parse("file://" + path);
+        sendIntent.putExtra(Intent.EXTRA_STREAM, myUri);
+
+        //test
+        sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Dive Scores");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, st);
+
+        startActivity(Intent.createChooser(sendIntent, "Share your Scores!"));
+    }
+
+    public String buildShareText(){
+        String boards, dates = null;
+        if (boardType == 1.0 || boardType == 3.0){
+            int b = (int)boardType;
+            boards = b + " Meter Springboard";
+        } else {
+            int b = (int)boardType;
+            boards = b + " Meter Platform";
+        }
+
+        // formats the date
+        SimpleDateFormat indate = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        SimpleDateFormat outdate = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+        try{
+            Date DateString = indate.parse(meetDateString);
+            dates = outdate.format(DateString);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return nameString + " scored " +  totalString + " points"
+                + " on the " +  boards + " at the " + meetNameString
+                + " on " + dates + "." + "\n"
+                + "Sent from ScoreIt.";
     }
 }

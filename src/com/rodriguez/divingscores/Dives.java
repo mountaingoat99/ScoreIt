@@ -19,21 +19,29 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import info.controls.NothingSelectedSpinnerAdapter;
+
+import info.Helpers.DiveStyleSpinner;
+import info.controls.SpinnerDiveStyleCustomBaseAdpater;
+import info.sqlite.helper.ArmstandPlatformDatabase;
 import info.sqlite.helper.BackDatabase;
+import info.sqlite.helper.BackPlatformDatabase;
 import info.sqlite.helper.DiveNumberDatabase;
-import info.sqlite.helper.DiveTotalDatabase;
 import info.sqlite.helper.ForwardDatabase;
+import info.sqlite.helper.ForwardPlatformDatabase;
 import info.sqlite.helper.InwardDatabase;
+import info.sqlite.helper.InwardPlatformDatabase;
 import info.sqlite.helper.JudgeScoreDatabase;
 import info.sqlite.helper.MeetDatabase;
 import info.sqlite.helper.ResultDatabase;
 import info.sqlite.helper.ReverseDatabase;
+import info.sqlite.helper.ReversePlatformDatabase;
 import info.sqlite.helper.ScoresDatabase;
 import info.sqlite.helper.TwistDatabase;
+import info.sqlite.helper.TwistPlatformDatabase;
 
 public class Dives extends Activity implements OnItemSelectedListener
 {
@@ -41,12 +49,13 @@ public class Dives extends Activity implements OnItemSelectedListener
     private RadioButton radioTuck, radioPike, radioFree, radioStraight;
     private TextView view4, view5, view6, view7;
     private Spinner score1, score2, score3, score4, score5, score6, score7;
-    private int judges, diverId, meetId, diveType, diveNumber, divePosition = 1, boardType = 0;
-    private double sc1, sc2, sc3, sc4, sc5, sc6, sc7, diveScoreTotal = 0.0, multiplier = 0.0;
-    private List<String> diveName;
+    private int judges, diverId, meetId, diveType, diveNumber, divePosition = 1;
+    private double boardType = 0.0;
+    private double sc1, sc2, sc3, sc4, sc5, sc6, sc7, diveScoreTotal = 0.0, multiplier = 0.0, roundedDiveTotal = 0.0;
+    private ArrayList<DiveStyleSpinner> searchDives;
     private ArrayList<Double> Scores = new ArrayList<>();
-    boolean hidebutton, ifZeroTotal = true;
-    String stringId = null, failedDive = "P";
+    private boolean ifZeroTotal = true;
+    private String failedDive = "P";
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +72,7 @@ public class Dives extends Activity implements OnItemSelectedListener
         diverId = b.getInt("keyDiver");
         meetId = b.getInt("keyMeet");
         diveType = b.getInt("diveType");
-        boardType = b.getInt("boardType");
+        boardType = b.getDouble("boardType");
 
         score1.setOnItemSelectedListener(this);
         score2.setOnItemSelectedListener(this);
@@ -85,10 +94,6 @@ public class Dives extends Activity implements OnItemSelectedListener
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position,
                                long id) {
-        if(spinner.getSelectedItemPosition() == 0)
-            hidebutton = false;
-        else
-            hidebutton = true;
     }
 
     private void getDiveNumber(){
@@ -144,65 +149,154 @@ public class Dives extends Activity implements OnItemSelectedListener
     private void loadSpinnerData(){
 
         switch (diveType){
+            // Springboard Dives
             case 1:
                 if(boardType == 1) {
                     ForwardDatabase fdb = new ForwardDatabase(getApplicationContext());
-                    diveName = fdb.getForwardOneNames();
+                    searchDives = fdb.getForwardOneNames();
                     break;
                 } else {
                     ForwardDatabase fdb = new ForwardDatabase(getApplicationContext());
-                    diveName = fdb.getForwardThreeNames();
+                    searchDives = fdb.getForwardThreeNames();
                     break;
                 }
             case 2:
                 if(boardType == 1) {
                     BackDatabase bdb = new BackDatabase(getApplicationContext());
-                    diveName = bdb.getBackOneNames();
+                    searchDives = bdb.getBackOneNames();
                     break;
                 } else {
                     BackDatabase bdb = new BackDatabase(getApplicationContext());
-                    diveName = bdb.getBackThreeNames();
+                    searchDives = bdb.getBackThreeNames();
                     break;
                 }
             case 3:
                 if(boardType == 1){
                     ReverseDatabase rdb = new ReverseDatabase(getApplicationContext());
-                    diveName = rdb.getReverseOneNames();
+                    searchDives = rdb.getReverseOneNames();
                     break;
                 } else {
                     ReverseDatabase rdb = new ReverseDatabase(getApplicationContext());
-                    diveName = rdb.getReverseThreeNames();
+                    searchDives = rdb.getReverseThreeNames();
                     break;
                 }
             case 4:
                 if(boardType == 1) {
                     InwardDatabase idb = new InwardDatabase(getApplicationContext());
-                    diveName = idb.getInwardOneNames();
+                    searchDives = idb.getInwardOneNames();
                     break;
                 } else {
                     InwardDatabase idb = new InwardDatabase(getApplicationContext());
-                    diveName = idb.getInwardThreeNames();
+                    searchDives = idb.getInwardThreeNames();
                     break;
                 }
             case 5:
                 if(boardType == 1) {
                     TwistDatabase tdb = new TwistDatabase(getApplicationContext());
-                    diveName = tdb.getTwistOneNames();
+                    searchDives = tdb.getTwistOneNames();
                     break;
                 } else {
                     TwistDatabase tdb = new TwistDatabase(getApplicationContext());
-                    diveName = tdb.getTwistThreeNames();
+                    searchDives = tdb.getTwistThreeNames();
+                    break;
+                }
+            //platform dives
+            case 6:
+                if(boardType == 10) {
+                    ForwardPlatformDatabase fpd = new ForwardPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getFrontPlatformTenNames();
+                    break;
+                } else if (boardType == 7.5) {
+                    ForwardPlatformDatabase fpd = new ForwardPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getFrontPlatformSevenFiveNames();
+                    break;
+                } else {
+                    ForwardPlatformDatabase fpd = new ForwardPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getFrontPlatformFiveNames();
+                    break;
+                }
+            case 7:
+                if(boardType == 10) {
+                    BackPlatformDatabase fpd = new BackPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getBackPlatformTenNames();
+                    break;
+                } else if (boardType == 7.5) {
+                    BackPlatformDatabase fpd = new BackPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getBackPlatformSevenFiveNames();
+                    break;
+                } else {
+                    BackPlatformDatabase fpd = new BackPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getBackPlatformFiveNames();
+                    break;
+                }
+            case 8:
+                if(boardType == 10) {
+                    ReversePlatformDatabase fpd = new ReversePlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getReversePlatformTenNames();
+                    break;
+                } else if (boardType == 7.5) {
+                    ReversePlatformDatabase fpd = new ReversePlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getReversePlatformSevenFiveNames();
+                    break;
+                } else {
+                    ReversePlatformDatabase fpd = new ReversePlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getReversePlatformFiveNames();
+                    break;
+                }
+            case 9:
+                if(boardType == 10) {
+                    InwardPlatformDatabase fpd = new InwardPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getInwardPlatformTenNames();
+                    break;
+                } else if (boardType == 7.5) {
+                    InwardPlatformDatabase fpd = new InwardPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getInwardPlatformSevenFiveNames();
+                    break;
+                } else {
+                    InwardPlatformDatabase fpd = new InwardPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getInwardPlatformFiveNames();
+                    break;
+                }
+            case 10:
+                if(boardType == 10) {
+                    TwistPlatformDatabase fpd = new TwistPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getTwistPlatformTenNames();
+                    break;
+                } else if (boardType == 7.5) {
+                    TwistPlatformDatabase fpd = new TwistPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getTwistPlatformSevenFiveNames();
+                    break;
+                } else {
+                    TwistPlatformDatabase fpd = new TwistPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getTwistPlatformFiveNames();
+                    break;
+                }
+            case 11:
+                if(boardType == 10) {
+                    ArmstandPlatformDatabase fpd = new ArmstandPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getArmstandTenNames();
+                    break;
+                } else if (boardType == 7.5) {
+                    ArmstandPlatformDatabase fpd = new ArmstandPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getArmstandSevenFiveNames();
+                    break;
+                } else {
+                    ArmstandPlatformDatabase fpd = new ArmstandPlatformDatabase(getApplicationContext());
+                    searchDives = fpd.getArmstandFiveNames();
                     break;
                 }
         }
-    	ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
-                R.layout.spinner_item, diveName);
-    	
-    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    	spinner.setPrompt("Choose Dive:");
-    	spinner.setAdapter(
-    			new NothingSelectedSpinnerAdapter(
-    					dataAdapter, R.layout.dive_style_spinner_row_nothing_selected, this));
+
+
+        spinner.setAdapter(new SpinnerDiveStyleCustomBaseAdpater(this, searchDives));
+        //spinner.setPrompt("Choose Dive:");
+//    	ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
+//                R.layout.spinner_item, diveName);
+//
+//    	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//    	spinner.setAdapter(
+//    			new NothingSelectedSpinnerAdapter(
+//    					dataAdapter, R.layout.dive_style_spinner_row_nothing_selected, this));
     
     }
 
@@ -213,7 +307,7 @@ public class Dives extends Activity implements OnItemSelectedListener
 
         ArrayAdapter<String> da = new ArrayAdapter<>(this,
                 R.layout.spinner_item, scoreNames);
-        da.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        da.setDropDownViewResource(R.layout.spinner_layout);
         score1.setAdapter(da);
         score2.setAdapter(da);
         score3.setAdapter(da);
@@ -230,35 +324,28 @@ public class Dives extends Activity implements OnItemSelectedListener
 
     	btnTotal.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
-                if (hidebutton) {
-                    getMultiplier();
-                    if(multiplier != 0.0) {
-                        getScoreText();
-                        incrementDiveNumber();
-                        calcScores();
-                        if(ifZeroTotal) {
-                            updateJudgeScores();
-                            Bundle b = new Bundle();
-                            b.putInt("keyDiver", diverId);
-                            b.putInt("keyMeet", meetId);
-                            Intent intent = new Intent(context, ChooseSummary.class);
-                            intent.putExtras(b);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    "Please enter at least one judge score," +
-                                            " or fail the dive using the menu button.",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }else{
+                getMultiplier();
+                if(multiplier != 0.0) {
+                    getScoreText();
+                    calcScores();
+                    if(ifZeroTotal) {
+                        updateJudgeScores();
+                        Bundle b = new Bundle();
+                        b.putInt("keyDiver", diverId);
+                        b.putInt("keyMeet", meetId);
+                        Intent intent = new Intent(context, ChooseSummary.class);
+                        intent.putExtras(b);
+                        startActivity(intent);
+                    } else {
                         Toast.makeText(getApplicationContext(),
-                                "Dive and Position is not valid, " +
-                                        "Please Choose a Valid Combination.",
+                                "Scores entered will be 0. Please enter accurate score" +
+                                        " or fail the dive using the menu button.",
                                 Toast.LENGTH_LONG).show();
                     }
-                } else {
+                }else{
                     Toast.makeText(getApplicationContext(),
-                            "Please Choose a Dive Category",
+                            "Dive and Position is not valid, " +
+                                    "Please Choose a Valid Combination.",
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -272,6 +359,7 @@ public class Dives extends Activity implements OnItemSelectedListener
     }
 
     private void calcScores() {
+        ifZeroTotal = true;
         ResultDatabase db = new ResultDatabase(getApplicationContext());
         double diveTotal;
         double total = db.getTotalScore(meetId, diverId);
@@ -308,67 +396,72 @@ public class Dives extends Activity implements OnItemSelectedListener
         }else{
             diveTotal = diveScoreTotal;
         }
-        total = total + diveTotal;
 
-        if(diveTotal < .5){
+        roundedDiveTotal = .5 * Math.round(diveTotal * 2);
+
+        total = total + roundedDiveTotal;
+
+        if(roundedDiveTotal < .5){
             ifZeroTotal = false;
             return;
         }
 
+        incrementDiveNumber();
+
         int resultIndex;
         if(diveNumber == 1){
             resultIndex = 3;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
             return;
         }
         if(diveNumber == 2){
             resultIndex = 4;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
             return;
         }
         if(diveNumber == 3){
             resultIndex = 5;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
             return;
         }
         if(diveNumber == 4){
             resultIndex = 6;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
             return;
         }
         if(diveNumber == 5){
             resultIndex = 7;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
             return;
         }
         if(diveNumber == 6){
             resultIndex = 8;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
             return;
         }
         if(diveNumber == 7){
             resultIndex = 9;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
             return;
         }
         if(diveNumber == 8){
             resultIndex = 10;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
             return;
         }
         if(diveNumber == 9){
             resultIndex = 11;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
             return;
         }
         if(diveNumber == 10){
             resultIndex = 12;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
             return;
         }
         if(diveNumber == 11){
             resultIndex = 13;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
         }
     }
 
@@ -391,37 +484,58 @@ public class Dives extends Activity implements OnItemSelectedListener
             case 5:
                 diveCategory = "Twist Dive";
                 break;
+            case 6:
+                diveCategory = "Front Platform Dives";
+                break;
+            case 7:
+                diveCategory = "Back Platform Dives";
+                break;
+            case 8:
+                diveCategory = "Reverse Platform Dives";
+                break;
+            case 9:
+                diveCategory = "Inward Platform Dives";
+                break;
+            case 10:
+                diveCategory = "Twist Platform Dives";
+                break;
+            case 11:
+                diveCategory = "Armstand Platform Dives";
+                break;
         }
 
         String DivePosition = null;
         switch (divePosition){
             case 1:
-                DivePosition = "Straight";
+                DivePosition = "A - Straight";
                 break;
             case 2:
-                DivePosition = "Pike";
+                DivePosition = "B - Pike";
                 break;
             case 3:
-                DivePosition = "Tuck";
+                DivePosition = "C - Tuck";
                 break;
             case 4:
-                DivePosition = "Free";
+                DivePosition = "D - Free";
                 break;
         }
 
-        String diveTypeName = spinner.getSelectedItem().toString();
+        TextView name = (TextView) findViewById(R.id.diveStyle);
+        TextView id = (TextView) findViewById(R.id.diveId);
+        String i = id.getText().toString();
+        String diveTypeName = i + " - " + name.getText().toString();
 
         db.fillNewJudgeScores(meetId, diverId, diveNumber, diveCategory, diveTypeName, DivePosition,
-                             failedDive, sc1, sc2, sc3, sc4, sc5, sc6, sc7, multiplier);
+                             failedDive, roundedDiveTotal,  sc1, sc2, sc3, sc4, sc5, sc6, sc7, multiplier);
     }
 
     private void getScoreText(){
         Scores.clear();
-        sc1 = Double.parseDouble(score1.getSelectedItem().toString());
+        sc1 = Double.parseDouble(score1.getSelectedItem().toString().trim());
         Scores.add(sc1);
-        sc2 = Double.parseDouble(score2.getSelectedItem().toString());
+        sc2 = Double.parseDouble(score2.getSelectedItem().toString().trim());
         Scores.add(sc2);
-        sc3 = Double.parseDouble(score3.getSelectedItem().toString());
+        sc3 = Double.parseDouble(score3.getSelectedItem().toString().trim());
         Scores.add(sc3);
         sc4 = 0.0;
         sc5 = 0.0;
@@ -429,29 +543,31 @@ public class Dives extends Activity implements OnItemSelectedListener
         sc7 = 0.0;
 
         if(judges == 5){
-            sc4 = Double.parseDouble(score4.getSelectedItem().toString());
+            sc4 = Double.parseDouble(score4.getSelectedItem().toString().trim());
             Scores.add(sc4);
-            sc5 = Double.parseDouble(score5.getSelectedItem().toString());
+            sc5 = Double.parseDouble(score5.getSelectedItem().toString().trim());
             Scores.add(sc5);
             sc6 = 0.0;
             sc7 = 0.0;
 
         }
         if(judges == 7){
-            sc4 = Double.parseDouble(score4.getSelectedItem().toString());
+            sc4 = Double.parseDouble(score4.getSelectedItem().toString().trim());
             Scores.add(sc4);
-            sc5 = Double.parseDouble(score5.getSelectedItem().toString());
+            sc5 = Double.parseDouble(score5.getSelectedItem().toString().trim());
             Scores.add(sc5);
-            sc6 = Double.parseDouble(score6.getSelectedItem().toString());
+            sc6 = Double.parseDouble(score6.getSelectedItem().toString().trim());
             Scores.add(sc6);
-            sc7 = Double.parseDouble(score7.getSelectedItem().toString());
+            sc7 = Double.parseDouble(score7.getSelectedItem().toString().trim());
             Scores.add(sc7);
         }
     }
 
     private void getMultiplier(){
         int diveId;
-        stringId = spinner.getSelectedItem().toString();
+        TextView name = (TextView) findViewById(R.id.diveStyle);
+        String stringId = name.getText().toString();
+        //stringId = spinner.getSelectedItem().toString();
         switch (diveType){
             case 1:
                 ForwardDatabase fdb = new ForwardDatabase(getApplicationContext());
@@ -478,6 +594,36 @@ public class Dives extends Activity implements OnItemSelectedListener
                 diveId = tdb.getDiveId(stringId);
                 multiplier = tdb.getDOD(diveId, divePosition, boardType);
                 break;
+            case 6:
+                ForwardPlatformDatabase fpdb = new ForwardPlatformDatabase(getApplicationContext());
+                diveId = fpdb.getDiveId(stringId);
+                multiplier = fpdb.getDOD(diveId, divePosition, boardType);
+                break;
+            case 7:
+                BackPlatformDatabase bpdb = new BackPlatformDatabase(getApplicationContext());
+                diveId = bpdb.getDiveId(stringId);
+                multiplier = bpdb.getDOD(diveId, divePosition, boardType);
+                break;
+            case 8:
+                ReversePlatformDatabase rpdb = new ReversePlatformDatabase(getApplicationContext());
+                diveId = rpdb.getDiveId(stringId);
+                multiplier = rpdb.getDOD(diveId, divePosition, boardType);
+                break;
+            case 9:
+                InwardPlatformDatabase ipdb = new InwardPlatformDatabase(getApplicationContext());
+                diveId = ipdb.getDiveId(stringId);
+                multiplier = ipdb.getDOD(diveId, divePosition, boardType);
+                break;
+            case 10:
+                TwistPlatformDatabase tpdb = new TwistPlatformDatabase(getApplicationContext());
+                diveId = tpdb.getDiveId(stringId);
+                multiplier = tpdb.getDOD(diveId, divePosition, boardType);
+                break;
+            case 11:
+                ArmstandPlatformDatabase apdb = new ArmstandPlatformDatabase(getApplicationContext());
+                diveId = apdb.getDiveId(stringId);
+                multiplier = apdb.getDOD(diveId, divePosition, boardType);
+                break;
         }
     }
 
@@ -497,6 +643,24 @@ public class Dives extends Activity implements OnItemSelectedListener
                 break;
             case 5:
                 setTitle("Twist Dives");
+                break;
+            case 6:
+                setTitle("Front Platform Dives");
+                break;
+            case 7:
+                setTitle("Back Platform Dives");
+                break;
+            case 8:
+                setTitle("Reverse Platform Dives");
+                break;
+            case 9:
+                setTitle("Inward Platform Dives");
+                break;
+            case 10:
+                setTitle("Twist Platform Dives");
+                break;
+            case 11:
+                setTitle("Armstand Platform Dives");
                 break;
         }
     }
@@ -556,31 +720,27 @@ public class Dives extends Activity implements OnItemSelectedListener
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.menu_failed_dive:
-                if (hidebutton) {
-                    getMultiplier();
-                    if (multiplier != 0.0) {
-                        String diveTypeName = spinner.getSelectedItem().toString();
-                        Intent intent = new Intent(context, FailedDive.class);
-                        Bundle b = new Bundle();
-                        b.putInt("keyDiver", diverId);
-                        b.putInt("keyMeet", meetId);
-                        b.putInt("keyDiveType", diveType);
-                        b.putString("keyDiveTypeName", diveTypeName);
-                        b.putInt("keyDivePosition", divePosition);
-                        b.putInt("boardType", boardType);
-                        intent.putExtras(b);
-                        startActivity(intent);
-                        break;
-                    } else {
-                        Toast.makeText(getApplicationContext(),
-                                "Dive and Position is not valid, " +
-                                        "Please Choose a Valid Combination.",
-                                Toast.LENGTH_LONG).show();
-                        break;
-                    }
+                getMultiplier();
+                if (multiplier != 0.0) {
+                    TextView name = (TextView) findViewById(R.id.diveStyle);
+                    TextView id = (TextView) findViewById(R.id.diveId);
+                    String i = id.getText().toString();
+                    String diveTypeName = i + " - " + name.getText().toString();
+                    Intent intent = new Intent(context, FailedDive.class);
+                    Bundle b = new Bundle();
+                    b.putInt("keyDiver", diverId);
+                    b.putInt("keyMeet", meetId);
+                    b.putInt("keyDiveType", diveType);
+                    b.putString("keyDiveTypeName", diveTypeName);
+                    b.putInt("keyDivePosition", divePosition);
+                    b.putDouble("boardType", boardType);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                    break;
                 } else {
                     Toast.makeText(getApplicationContext(),
-                            "Please Choose a Dive Category",
+                            "Dive and Position is not valid, " +
+                                    "Please Choose a Valid Combination.",
                             Toast.LENGTH_LONG).show();
                     break;
                 }

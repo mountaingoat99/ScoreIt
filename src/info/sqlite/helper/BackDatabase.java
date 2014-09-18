@@ -5,19 +5,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
+import info.Helpers.DiveStyleSpinner;
 
-import info.sqlite.model.BackDB;
+import java.util.ArrayList;
 
 public class BackDatabase extends DatabaseHelper {
 
     public BackDatabase(Context context) { super(context); }
 
-    public List<String> getBackOneNames(){
-        List<String> diveNames = new ArrayList<>();
-
-        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_BACK
+    public ArrayList<DiveStyleSpinner> getBackOneNames(){
+        ArrayList<DiveStyleSpinner> diveNames = new ArrayList<>();
+        DiveStyleSpinner r;
+        String selectQuery = "SELECT id, " + DIVE_NAME + " FROM " + TABLE_BACK
                 + " WHERE one_meter= 1";
 
         Log.e(getLog(), selectQuery);
@@ -25,21 +24,28 @@ public class BackDatabase extends DatabaseHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
-        if (c.moveToFirst()){
-            do{
-                BackDB b = new BackDB();
-                diveNames.add(b.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
-            }while (c.moveToNext());
+        while(c.moveToNext()){
+            r = new DiveStyleSpinner();
+            r.setId(c.getString(0));
+            r.setDiveStyle(c.getString(1));
+            diveNames.add(r);
         }
+
+//        if (c.moveToFirst()){
+//            do{
+//                BackDB b = new BackDB();
+//                diveNames.add(b.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
+//            }while (c.moveToNext());
+//        }
         c.close();
         db.close();
         return diveNames;
     }
 
-    public List<String> getBackThreeNames(){
-        List<String> diveNames = new ArrayList<>();
-
-        String selectQuery = "SELECT " + DIVE_NAME + " FROM " + TABLE_BACK
+    public ArrayList<DiveStyleSpinner> getBackThreeNames(){
+        ArrayList<DiveStyleSpinner> diveNames = new ArrayList<>();
+        DiveStyleSpinner r;
+        String selectQuery = "SELECT id, " + DIVE_NAME + " FROM " + TABLE_BACK
                 + " WHERE three_meter= 1";
 
         Log.e(getLog(), selectQuery);
@@ -47,12 +53,19 @@ public class BackDatabase extends DatabaseHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
-        if (c.moveToFirst()){
-            do{
-                BackDB b = new BackDB();
-                diveNames.add(b.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
-            }while (c.moveToNext());
+        while(c.moveToNext()){
+            r = new DiveStyleSpinner();
+            r.setId(c.getString(0));
+            r.setDiveStyle(c.getString(1));
+            diveNames.add(r);
         }
+
+//        if (c.moveToFirst()){
+//            do{
+//                BackDB b = new BackDB();
+//                diveNames.add(b.setDiveName(c.getString(c.getColumnIndex(DIVE_NAME))));
+//            }while (c.moveToNext());
+//        }
         c.close();
         db.close();
         return diveNames;
@@ -80,7 +93,7 @@ public class BackDatabase extends DatabaseHelper {
     }
 
     //----------------gets the DOD for the dive type-------------------------------------------//
-    public double getDOD(int diveid, int diveposition, int boardtype){
+    public double getDOD(int diveid, int diveposition, double boardtype){
         double dod = 0.0;
         String selectQuery = null;
         if(boardtype == 1) {

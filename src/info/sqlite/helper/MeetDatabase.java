@@ -10,6 +10,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.rodriguez.divingscores.RankingsMeet;
+
 public class MeetDatabase extends DatabaseHelper {
 
 	public MeetDatabase(Context context) {
@@ -52,7 +54,7 @@ public class MeetDatabase extends DatabaseHelper {
 		if (c.moveToFirst()){
 			do{
 				MeetDB t = new MeetDB();
-				meetNames.add(t.setMeetName(c.getString(c.getColumnIndex(getMeetName()))));				
+				meetNames.add("  " +  t.setMeetName(c.getString(c.getColumnIndex(getMeetName()))));
 			}while (c.moveToNext());
 		}
 		c.close();
@@ -161,6 +163,36 @@ public class MeetDatabase extends DatabaseHelper {
 
             }while(c.moveToNext());
         }
+        c.close();
+        db.close();
+        return meetInfo;
+    }
+
+    //---------------gets the meet info for the history pages-------------------------------//
+    public ArrayList<RankingsMeet> getNameForMeetRank(){
+        ArrayList<RankingsMeet> meetInfo = new ArrayList<>();
+        RankingsMeet r;
+        String selectQuery = "SELECT DISTINCT m.name, d.type  FROM meet m " +
+                "INNER JOIN dive_type d on d.meet_id = m.id " +
+                "WHERE d.type > 0 " +
+                "ORDER BY m.name asc, d.type asc";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.rawQuery(selectQuery, null);
+        while(c.moveToNext()){
+            r = new RankingsMeet();
+            r.setMeetName(c.getString(0));
+            r.setBoardSize(c.getString(1));
+            //r.setDiveTotal(c.getString(2));
+            meetInfo.add(r);
+        }
+
+//        if(c.moveToFirst()){
+//            do{
+//                meetInfo.add(c.getString(0));
+//
+//            }while(c.moveToNext());
+//        }
         c.close();
         db.close();
         return meetInfo;

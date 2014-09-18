@@ -1,9 +1,5 @@
 package info.sqlite.helper;
 
-import info.sqlite.model.ResultsDB;
-
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,7 +10,7 @@ public class TypeDatabase extends DatabaseHelper {
     public TypeDatabase(Context context) { super(context);}
 
     //--------------------------write a new record to the table------------------------------------------//
-    public void createType(int meetid, int diverid, int divetype){
+    public void createType(int meetid, int diverid, double divetype){
         SQLiteDatabase db = this.getWritableDatabase();
         String selectQuery = "INSERT INTO dive_type "
                 + "(meet_id, diver_id, type) VALUES ("
@@ -62,8 +58,8 @@ public class TypeDatabase extends DatabaseHelper {
     }
 
     //--------------get the type---------------------------------------------------------------------//
-    public int getType(int meetid, int diverid){
-        int type = 0;
+    public double getType(int meetid, int diverid){
+        double type = 0.0;
         String selectQuery = "SELECT type FROM dive_type"
                 + " WHERE meet_id= " + meetid + " AND "
                 + " diver_id= " + diverid;
@@ -73,7 +69,7 @@ public class TypeDatabase extends DatabaseHelper {
 
         if (c != null && c.getCount()>0 && c.moveToFirst()){
             do{
-                type = c.getInt(0);
+                type = c.getDouble(0);
             }while (c.moveToNext());
         }
         if (c != null) {

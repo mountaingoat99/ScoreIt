@@ -1,8 +1,9 @@
 package info.sqlite.helper;
 
+import info.Helpers.DiverMeetResults;
+import info.Helpers.DiverScoreTotals;
 import info.sqlite.model.DiverNameDB;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.rodriguez.divingscores.RankingResults;
+import info.Helpers.PrintedResults;
+import info.Helpers.RankingResults;
 
 public class DiverDatabase extends DatabaseHelper {
 
@@ -51,7 +53,7 @@ public class DiverDatabase extends DatabaseHelper {
 		if (c.moveToFirst()){
 			do{
 				DiverNameDB t = new DiverNameDB();
-				diverNames.add(t.setName(c.getString(c.getColumnIndex(getDiverName()))));				
+				diverNames.add("  " +  t.setName(c.getString(c.getColumnIndex(getDiverName()))));
 			}while (c.moveToNext());
 		}
 		c.close();
@@ -104,13 +106,15 @@ public class DiverDatabase extends DatabaseHelper {
 	}
 
     //-------------gets the diver and scores for the rankings by meet page-------------------//
-    public ArrayList<RankingResults> getRankings(int meetid){
+    public ArrayList<RankingResults> getRankings(int meetid, double board){
         ArrayList<RankingResults> diverInfo = new ArrayList<>();
         RankingResults r;
         String selectQuery = "SELECT DISTINCT d.name, r.total_score, n.dive_number FROM diver d"
                 + " INNER JOIN results r on r.diver_id = d.id"
-                + " INNER JOIN dive_number n on n.diver_id = d.id"
-                + " WHERE r.meet_id= " + meetid
+                + " INNER JOIN dive_number n on n.meet_id = " + meetid + " AND n.diver_id = d.id"
+                + " INNER JOIN dive_type t on t.diver_id = r.diver_id"
+                + " WHERE r.meet_id= " + meetid + " AND t.type= " + board
+                + " AND n.type= " + board
                 + " ORDER by r.total_score desc, n.dive_number desc";
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -126,6 +130,135 @@ public class DiverDatabase extends DatabaseHelper {
         c.close();
         db.close();
         return diverInfo;
+    }
+
+    //---------------gets the diver info for for the printed meet results------------------//
+    public ArrayList<PrintedResults> getPrintedResults(int meetid, double boardType){
+        ArrayList<PrintedResults> results = new ArrayList<>();
+        PrintedResults r;
+        String selectQuery = "SELECT DISTINCT d.name, d.school, m.name, m.date, m.judges, dt.dive_count, dtt.type, r.total_score, r.dive_1, r.dive_2, r.dive_3, r.dive_4, r.dive_5, "
+                + "r.dive_6, r.dive_7, r.dive_8, r.dive_9, r.dive_10, r.dive_11, js.dive_number, js.dive_type_name, js.dive_position, js.failed, "
+                + "js.score_1, js.score_2, js.score_3, js.score_4, js.score_5, js.score_6, js.score_7 "
+                + "FROM diver d "
+                + "INNER JOIN results r on r.diver_id = d.id "
+                + "INNER JOIN meet m on m.id = r.meet_id "
+                + "INNER JOIN dive_total dt on dt.diver_id = d.id AND dt.meet_id= " + meetid
+                + " INNER JOIN dive_type dtt on dtt.diver_id = d.id AND dtt.meet_id= " + meetid
+                + " INNER JOIN judge_scores js on js.diver_id = d.id AND js.meet_id= " + meetid
+                + " WHERE m.id= " + meetid + " AND dtt.type= " + boardType;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        while(c.moveToNext()){
+            r = new PrintedResults();
+            r.setName(c.getString(0));
+            r.setSchool(c.getString(1));
+            r.setMeetName(c.getString(2));
+            r.setDate(c.getString(3));
+            r.setJudges(c.getString(4));
+            r.setDiveCount(c.getString(5));
+            r.setDiveType(c.getString(6));
+            r.setTotalScore(c.getString(7));
+            r.setDive1(c.getString(8));
+            r.setDive2(c.getString(9));
+            r.setDive3(c.getString(10));
+            r.setDive4(c.getString(11));
+            r.setDive5(c.getString(12));
+            r.setDive6(c.getString(13));
+            r.setDive7(c.getString(14));
+            r.setDive8(c.getString(15));
+            r.setDive9(c.getString(16));
+            r.setDive10(c.getString(17));
+            r.setDive11(c.getString(18));
+            r.setDiveNumber(c.getString(19));
+            r.setDiveStyle(c.getString(20));
+            r.setDivePostion(c.getString(21));
+            r.setFailed(c.getString(22));
+            r.setScore1(c.getString(23));
+            r.setScore2(c.getString(24));
+            r.setScore3(c.getString(25));
+            r.setScore4(c.getString(26));
+            r.setScore5(c.getString(27));
+            r.setScore6(c.getString(28));
+            r.setScore7(c.getString(29));
+            results.add(r);
+        }
+        c.close();
+        db.close();
+        return results;
+    }
+
+    //---------------gets the dive scores by meet for individual diver to create spreadsheet--//
+    public ArrayList<DiverMeetResults> getDiverMeetResults(int meetid, int diverid){
+        ArrayList<DiverMeetResults> results = new ArrayList<>();
+        DiverMeetResults r;
+        String selectQuery = "SELECT d.name, m.name, js.dive_number, js.dive_type_name, js.dive_position, " +
+                "js.total_score, js.failed, m.judges, js.score_1, js.score_2, js.score_3, js.score_4, js.score_5, js.score_6, js.score_7 " +
+                "from results r " +
+                "INNER JOIN diver d ON d.id = r.diver_id " +
+                "INNER JOIN meet m ON m.id = r.meet_id " +
+                "INNER JOIN judge_scores js ON js.diver_id = r.diver_id AND js.meet_id = r.meet_id " +
+                "WHERE js.meet_id=" + meetid + " AND js.diver_id= " + diverid;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        while(c.moveToNext()){
+            r = new DiverMeetResults();
+            r.setName(c.getString(0));
+            r.setMeetName(c.getString(1));
+            r.setDiveNumber(c.getString(2));
+            r.setDiveName(c.getString(3));
+            r.setPosition(c.getString(4));
+            r.setTotal(c.getString(5));
+            r.setPassFailed(c.getString(6));
+            r.setJudges(c.getString(7));
+            r.setScore1(c.getString(8));
+            r.setScore2(c.getString(9));
+            r.setScore3(c.getString(10));
+            r.setScore4(c.getString(11));
+            r.setScore5(c.getString(12));
+            r.setScore6(c.getString(13));
+            r.setScore7(c.getString(14));
+            results.add(r);
+        }
+        c.close();
+        db.close();
+        return results;
+    }
+
+    //---------------gets the dive score totals by diver by meet to create spreadsheet--//
+    public ArrayList<DiverScoreTotals> getDiverMeetScoreTotals(int meetid, int diverid) {
+        ArrayList<DiverScoreTotals> results = new ArrayList<>();
+        DiverScoreTotals r;
+        String selectQuery = "SELECT d.name, d.school, m.name, m.date, r.total_score, r.dive_1, r.dive_2, " +
+                "r.dive_3, r.dive_4, r.dive_5, r.dive_6, r.dive_7, r.dive_8, r.dive_9, r.dive_10, r.dive_11 " +
+                " FROM results r " +
+                "INNER JOIN diver d ON d.id = r.diver_id " +
+                "INNER JOIN meet m ON m.id = r.meet_id " +
+                "WHERE r.meet_id= " + meetid + " and r.diver_id= " + diverid;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        while (c.moveToNext()) {
+            r = new DiverScoreTotals();
+            r.setName(c.getString(0));
+            r.setSchool(c.getString(1));
+            r.setMeetName(c.getString(2));
+            r.setDate(c.getString(3));
+            r.setTotal(c.getString(4));
+            r.setScore1(c.getString(5));
+            r.setScore2(c.getString(6));
+            r.setScore3(c.getString(7));
+            r.setScore4(c.getString(8));
+            r.setScore5(c.getString(9));
+            r.setScore6(c.getString(10));
+            r.setScore7(c.getString(11));
+            r.setScore8(c.getString(12));
+            r.setScore9(c.getString(13));
+            r.setScore10(c.getString(14));
+            r.setScore11(c.getString(15));
+            results.add(r);
+        }
+        c.close();
+        db.close();
+        return results;
     }
 	
 	//---------------gets the diver info for the history pages-------------------------------//
@@ -165,11 +298,14 @@ public class DiverDatabase extends DatabaseHelper {
     }
 
     //--------------checks to see if a diver is attached for rankings yet--------------------//
-    public boolean checkDiverForRankings(int meetid){
+    public boolean checkDiverForRankings(int meetid, double board){
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT d.name, r.total_score FROM diver d"
                 + " INNER JOIN results r on r.diver_id = d.id"
-                + " WHERE r.meet_id= " + meetid;
+                + " INNER JOIN dive_type t on t.diver_id = r.diver_id"
+                + " WHERE r.meet_id= " + meetid
+                + " AND r.total_score > 0"
+                + " AND t.type= " + board;
 
         Cursor c = db.rawQuery(selectQuery, null);
         if(c.getCount() <= 0){

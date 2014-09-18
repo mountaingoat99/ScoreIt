@@ -149,11 +149,11 @@ public class MeetEdit extends Activity implements
     	btnEditMeet.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                nameEdit = name.getText().toString();
-                schoolEdit = school.getText().toString();
-                cityEdit = city.getText().toString();
-                stateEdit = state.getText().toString();
-                dateEdit = date.getText().toString();
+                nameEdit = name.getText().toString().trim();
+                schoolEdit = school.getText().toString().trim();
+                cityEdit = city.getText().toString().trim();
+                stateEdit = state.getText().toString().trim();
+                dateEdit = date.getText().toString().trim();
                 judgeChecked = radioJudgesGroup.getCheckedRadioButtonId();
                 if (judgeChecked == R.id.radio3J)
                     judges = 3;
