@@ -1,12 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/menu_how_to"
-        android:title="@string/how_to_string"
-        android:orderInCategory="200"
-        android:showAsAction="collapseActionView" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.rodriguez.divingscores.MeetScores">
 
-    <item android:id="@+id/menu_about"
-        android:title="@string/about_string"
-        android:orderInCategory="200"
-        android:showAsAction="collapseActionView" />
+    <item android:id="@+id/action_email"
+        android:icon="@drawable/ic_action_email"
+        android:title="@string/email_results"
+        android:showAsAction="always"/>
+
+    <item android:id="@+id/action_share"
+        android:icon="@drawable/ic_action_share"
+        android:title="@string/share"
+        android:showAsAction="always"/>
+
 </menu>

@@ -76,9 +76,8 @@
             android:layout_marginRight="8dp"
             android:layout_below="@+id/View"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/youtube"
-            android:contentDescription="@string/youtubelink"
-            android:onClick="youTubeClick" />
+            android:src="@drawable/youtubeplayappy"
+            android:contentDescription="@string/youtubelink"/>
 
         <LinearLayout
             android:id="@+id/layout1"
@@ -93,7 +92,7 @@
             <Button
                 android:id="@+id/buttonOkay"
                 style="@android:style/Widget.Holo.Button"
-                android:layout_width="1000dp"
+                android:layout_width="2000dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/ok"

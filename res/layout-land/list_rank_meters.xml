@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="120dp"
+    android:padding="4dp">
+
+    <TextView android:id="@+id/meetName"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/random_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <TextView android:id="@+id/board"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/meetName"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="6dp"
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="@color/random_text"
+        android:text=""/>
+
+    <TextView android:id="@+id/boardSize"
+        android:textSize="@dimen/text_size_medium"
+        android:layout_below="@id/meetName"
+        android:layout_toRightOf="@id/board"
+        android:layout_alignBaseline="@id/board"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="30dp"
+        android:textColor="@color/random_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/meter"/>
+
+</RelativeLayout>

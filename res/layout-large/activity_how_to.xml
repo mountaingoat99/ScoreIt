@@ -76,9 +76,8 @@
             android:layout_marginRight="8dp"
             android:layout_below="@+id/View"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/youtube"
-            android:contentDescription="@string/youtubelink"
-            android:onClick="youTubeClick" />
+            android:src="@drawable/youtubeplayappy"
+            android:contentDescription="@string/youtubelink"/>
 
         <LinearLayout
             android:id="@+id/layout1"

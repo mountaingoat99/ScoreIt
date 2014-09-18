@@ -1,0 +1,64 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.rodriguez.divingscores.FailedDive">
+
+    <TextView
+        android:id="@+id/FailedDive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/header"
+        android:gravity="center"
+        android:text="@string/failed_dive"
+        android:textSize="@dimen/text_size_medium"
+        android:textColor="@color/header_text" />
+
+    <TextView
+        android:id="@+id/sureFailed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/FailedDive"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/sure_failed_dive"
+        android:textSize="16sp"
+        android:textColor="@color/header_text"
+        android:gravity="center" />
+
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sureFailed"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <Button
+            android:id="@+id/buttonFailDive"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/yes"
+            android:textSize="16sp"
+            android:textColor="@color/button_text"/>
+
+        <Button
+            android:id="@+id/buttonFailReturn"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/return_button"
+            android:textSize="16sp"
+            android:textColor="@color/button_text"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

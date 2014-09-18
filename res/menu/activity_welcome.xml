@@ -1,5 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:id="@+id/menu_rankings"
+        android:title="@string/rankings_menu"
+        android:orderInCategory="200"
+        android:showAsAction="collapseActionView" />
+
     <item android:id="@+id/menu_how_to"
         android:title="@string/how_to_string"
         android:orderInCategory="200"

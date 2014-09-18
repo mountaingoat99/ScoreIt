@@ -132,6 +132,7 @@
         android:ems="10"
         android:text="@string/initial_total_score"
         android:inputType="numberDecimal"
+        android:maxLength="5"
         android:layout_marginRight="8dp"
         android:layout_alignParentEnd="true"
         android:textSize="@dimen/text_size_small"

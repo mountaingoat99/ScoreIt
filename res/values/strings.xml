@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ScoreIt</string>
+    <string name="app_name">Score My Dive</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_about">About</string>
-    <string name="title_activity_welcome">Score It</string>
+    <string name="title_activity_welcome">Score My Dive</string>
     <string name="title_activity_choose_diver">Choose Diver</string>
 
     <string-array name="dive_array">
@@ -19,78 +19,78 @@
     <string-array name="forward_dives">
         <item>101 FORWARD DIVE</item>
         <item>102 FORWARD 1 SS</item>
-        <item>103 FORWARD 1 1/2 SS</item>
+        <item>103 FORWARD 1 \u00bd SS</item>
         <item>104 FORWARD 2 SS</item>
-        <item>105 FORWARD 2 1/2 SS</item>
+        <item>105 FORWARD 2 \u00bd SS</item>
         <item>106 FORWARD 3 SS</item>
-        <item>107 FORWARD 3 1/2 SS</item>
+        <item>107 FORWARD 3 \u00bd SS</item>
         <item>112 FORWARD FLYING 1 SS</item>
-        <item>113 FORWARD FLYING 1 1/2 SS</item>
+        <item>113 FORWARD FLYING 1 \u00bd SS</item>
     </string-array>
     <string-array name="back_dives">
         <item>201 BACK DIVE</item>
         <item>202 BACK 1 SS</item>
-        <item>203 BACK 1 1/2 SS</item>
+        <item>203 BACK 1 \u00bd SS</item>
         <item>204 BACK 2 SS</item>
-        <item>205 BACK 2 1/2 SS</item>
+        <item>205 BACK 2 \u00bd SS</item>
         <item>212 FLYING BACK 1 SS</item>
     </string-array>
     <string-array name="reverse_dives">
         <item>301 REVERSE DIVE</item>
         <item>302 REVERSE 1 SS</item>
-        <item>303 REVERSE 1 1/2 SS</item>
+        <item>303 REVERSE 1 \u00bd SS</item>
         <item>304 REVERSE 2 SS</item>
-        <item>305 REVERSE 2 1/2 SS</item>
+        <item>305 REVERSE 2 \u00bd SS</item>
         <item>312 FLYING REVERSE SS</item>
     </string-array>
     <string-array name="inward_dives">
         <item>401 INWARD DIVE</item>
         <item>402 INWARD 1 SS</item>
-        <item>403 INWARD 1 1/2 SS</item>
+        <item>403 INWARD 1 \u00bd SS</item>
         <item>404 INWARD 2 SS</item>
-        <item>405 INWARD 2 1/2 SS</item>
+        <item>405 INWARD 2 \u00bd SS</item>
         <item>412 INWARD FLYING SS</item>
-        <item>413 INWARD FLYING 1 1/2 SS</item>
+        <item>413 INWARD FLYING 1 \u00bd SS</item>
     </string-array>
     <string-array name="twist_dives">
-        <item>5111 FORWARD DIVE 1/2 TWIST</item>
+        <item>5111 FORWARD DIVE \u00bd TWIST</item>
         <item>5112 FORWARD 1 TWIST</item>
-        <item>5121 FORWARD 1 SS 1/2 TWIST</item>
+        <item>5121 FORWARD 1 SS \u00bd TWIST</item>
         <item>5122 FORWARD 1 SS 1 TWIST</item>
         <item>5124 FORWARD 1 SS 2 TWISTS</item>
         <item>5126 FORWARD 1 SS 3 TWISTS</item>
-        <item>5131 FORWARD 1 1/2 SS 1/2 TWIST</item>
-        <item>5132 FORWARD 1 1/2 SS 1 TWIST</item>
-        <item>5134 FORWARD 1 1/2 SS 2 TWISTS</item>
-        <item>5136 FORWARD 1 1/2 SS 3 TWISTS</item>
-        <item>5152 FORWARD 2 1/2 SS 1 TWIST</item>
-        <item>5211 BACK DIVE 1/2 TWIST</item>
+        <item>5131 FORWARD 1 \u00bd SS \u00bd TWIST</item>
+        <item>5132 FORWARD 1 \u00bd SS 1 TWIST</item>
+        <item>5134 FORWARD 1 \u00bd SS 2 TWISTS</item>
+        <item>5136 FORWARD 1 \u00bd SS 3 TWISTS</item>
+        <item>5152 FORWARD 2 \u00bd SS 1 TWIST</item>
+        <item>5211 BACK DIVE \u00bd TWIST</item>
         <item>5212 BACK DIVE 1 TWIST</item>
-        <item>5221 BACK 1 SS 1/2 TWIST</item>
+        <item>5221 BACK 1 SS \u00bd TWIST</item>
         <item>5222 BACK 1 SS 1 TWIST</item>
         <item>5223 BACK 1 SS 1 TWIST</item>
-        <item>5225 BACK 1 SS 2 1/2 TWISTS</item>
-        <item>5227 BACK 1 SS 3 1/2 TWISTS</item>
-        <item>5231 BACK 1 1/2 SS 1/2 TWIST</item>
-        <item>5233 BACK 1 1/2 SS 1 1/2 TWISTS</item>
-        <item>5235 BACK 1 1/2 SS 2 1/2 TWISTS</item>
-        <item>5251 BACK 2 1/2 SS 1/2 TWIST</item>
-        <item>5311 REVERSE DIVE 1/2 TWIST</item>
+        <item>5225 BACK 1 SS 2 \u00bd TWISTS</item>
+        <item>5227 BACK 1 SS 3 \u00bd TWISTS</item>
+        <item>5231 BACK 1 \u00bd SS \u00bd TWIST</item>
+        <item>5233 BACK 1 \u00bd SS 1 \u00bd TWISTS</item>
+        <item>5235 BACK 1 \u00bd SS 2 \u00bd TWISTS</item>
+        <item>5251 BACK 2 \u00bd SS \u00bd TWIST</item>
+        <item>5311 REVERSE DIVE \u00bd TWIST</item>
         <item>5312 REVERSE DIVE 1 TWIST</item>
-        <item>5321 REVERSE 1 SS 1/2 TWIST</item>
+        <item>5321 REVERSE 1 SS \u00bd TWIST</item>
         <item>5322 REVERSE 1 SS 1 TWIST</item>
-        <item>5323 REVERSE 1 SS 1 1/2 TWISTS</item>
-        <item>5325 REVERSE 1 SS 2 1/2 TWISTS</item>
-        <item>5331 REVERSE 1 1/2 SS 1/2 TWIST</item>
-        <item>5333 REVERSE 1 1/2 SS 1 1/2 TWISTS</item>
-        <item>5335 REVERSE 1 1/2 SS 2 1/2 TWISTS</item>
-        <item>5351 REVERSE 2 1/2 SS 1/2 TWISTS</item>
-        <item>5411 INWARD DIVE 1/2 TWIST</item>
+        <item>5323 REVERSE 1 SS 1 \u00bd TWISTS</item>
+        <item>5325 REVERSE 1 SS 2 \u00bd TWISTS</item>
+        <item>5331 REVERSE 1 \u00bd SS \u00bd TWIST</item>
+        <item>5333 REVERSE 1 \u00bd SS 1 \u00bd TWISTS</item>
+        <item>5335 REVERSE 1 \u00bd SS 2 \u00bd TWISTS</item>
+        <item>5351 REVERSE 2 \u00bd SS \u00bd TWISTS</item>
+        <item>5411 INWARD DIVE \u00bd TWIST</item>
         <item>5412 INWARD DIVE 1 TWIST</item>
-        <item>5421 INWARD 1 SS 1/2 TWIST</item>
+        <item>5421 INWARD 1 SS \u00bd TWIST</item>
         <item>5422 INWARD 1 SS 1 TWIST</item>
-        <item>5432 INWARD 1 1/2 SS 1 TWIST</item>
-        <item>5434 INWARD 1 1/2 SS 2 TWISTS</item>
+        <item>5432 INWARD 1 \u00bd SS 1 TWIST</item>
+        <item>5434 INWARD 1 \u00bd SS 2 TWISTS</item>
     </string-array>
 
     <string name="title_activity_forward_dives">Forward Dives</string>
@@ -112,10 +112,10 @@
     <string name="clear">Clear</string>
     <string name="enter_seven">Enter 7 Scores</string>
     <string name="choose_position">Choose a Position</string>
-    <string name="tuck">Tuck</string>
-    <string name="pike">Pike</string>
-    <string name="straight">Straight</string>
-    <string name="free">Free</string>
+    <string name="tuck">C - Tuck</string>
+    <string name="pike">B - Pike</string>
+    <string name="straight">A - Straight</string>
+    <string name="free">D - Free</string>
     <string name="how_many_judges">How Many Judges Today?</string>
     <string name="four_judges_btn">4 Judges</string>
     <string name="seven_judges_btn">7 Judges</string>
@@ -266,5 +266,22 @@
     <string name="title_activity_rankings_by_meet">RankingsByMeet</string>
     <string name="rankings_menu">Meet Rankings</string>
     <string name="dive_number">Dive Number:</string>
+    <string name="six">6</string>
+    <string name="eleven">11</string>
+    <string name="dives">Dives:</string>
+    <string name="dash">-</string>
+    <string name="meter">Meter</string>
+    <string name="ten_meter">10 Meter</string>
+    <string name="seven_five_meter">7.5 Meter</string>
+    <string name="five_meter">5 Meter</string>
+    <string name="share">Share</string>
+    <string name="sharefacebook">Share to Facebook</string>
+    <string name="email_results">Email Results</string>
+    <string name="dive">Dives</string>
+    <string name="title_activity_reports">Reports</string>
+    <string name="reports">Reports</string>
+    <string name="report_name">Report Name</string>
+    <string name="send_report">Send Report</string>
+    <string name="choose_report">Choose a Report</string>
 
 </resources>

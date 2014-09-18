@@ -175,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="8dp"
-                android:text="200.2"
+                android:text=""
                 android:textSize="@dimen/text_size_large"
                 android:textColor="@color/random_text"
                 android:visibility="invisible"/>
@@ -203,7 +203,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
-                android:text="3 Meter"
+                android:text=""
                 android:textSize="@dimen/text_size_large"
                 android:textColor="@color/random_text"
                 android:visibility="invisible"/>

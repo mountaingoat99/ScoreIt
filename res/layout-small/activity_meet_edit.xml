@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/EditMeet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/header"
+        android:gravity="center"
+        android:text="@string/choose_meet_edit"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/header_text"/>
+
+    <EditText
+        android:id="@+id/editTextNameEM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/EditMeet"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/enterNameEM"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:layout_marginRight="8dp"
+        android:layout_alignParentEnd="true"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/random_text">
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/enterNameEM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextNameEM"
+        android:layout_marginLeft="8dp"
+        android:text="@string/name"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/static_text"/>
+
+    <EditText
+        android:id="@+id/editTextSchoolEM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/enterNameEM"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/enterNameEM"
+        android:ems="10"
+        android:inputType="text"
+        android:layout_marginRight="8dp"
+        android:layout_alignParentEnd="true"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/random_text">
+
+    </EditText>
+
+    <TextView
+        android:id="@+id/EditSchoolEM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextSchoolEM"
+        android:layout_alignLeft="@+id/enterNameEM"
+        android:text="@string/school"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/static_text"/>
+
+    <EditText
+        android:id="@+id/editTextCityEM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextSchoolEM"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/enterNameEM"
+        android:ems="10"
+        android:inputType="text"
+        android:layout_marginRight="8dp"
+        android:layout_alignParentEnd="true"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/random_text">
+
+    </EditText>
+
+    <TextView
+        android:id="@+id/editCityEM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextCityEM"
+        android:layout_marginLeft="8dp"
+        android:text="@string/city"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/static_text"/>
+
+    <EditText
+        android:id="@+id/editTextStateEM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextCityEM"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/enterNameEM"
+        android:ems="10"
+        android:inputType="text"
+        android:layout_marginRight="8dp"
+        android:layout_alignParentEnd="true"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/random_text">
+
+    </EditText>
+
+    <TextView
+        android:id="@+id/enterStateEM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextStateEM"
+        android:layout_marginLeft="8dp"
+        android:text="@string/state"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/static_text"/>
+
+    <EditText
+        android:id="@+id/editTextDateEM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextStateEM"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/enterNameEM"
+        android:ems="10"
+        android:hint="@string/date_enter_style"
+        android:focusable="false"
+        android:layout_marginRight="8dp"
+        android:layout_alignParentEnd="true"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/random_text"/>
+
+    <TextView
+        android:id="@+id/enterDateEM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextDateEM"
+        android:layout_marginLeft="8dp"
+        android:text="@string/new_date"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/static_text"/>
+
+    <TextView
+        android:id="@+id/enterJudges"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/enterDateEM"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="26dp"
+        android:gravity="center"
+        android:text="@string/enter_judges"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/static_text"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroupMeet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/editTextDateEM"
+        android:layout_alignRight="@id/editTextDateEM"
+        android:layout_below="@id/enterDateEM"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/enterJudges"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radio3J"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/radio_judge_3"
+            android:textSize="@dimen/text_size_small"
+            android:textColor="@color/button_text"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:id="@+id/radio5J"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/radio_judge_5"
+            android:textSize="@dimen/text_size_small"
+            android:textColor="@color/button_text"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:id="@+id/radio7J"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/radio_judge_7"
+            android:textSize="@dimen/text_size_small"
+            android:textColor="@color/button_text"/>
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/Divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radioGroupMeet"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/header"
+        android:gravity="center"
+        android:text=""
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/header_text"/>
+
+    <Button
+        android:id="@+id/buttonMeetE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Divider"
+        android:text="@string/edit"
+        android:textSize="@dimen/button_text"
+        android:textColor="@color/button_text"
+        style="@android:style/Widget.Holo.Button"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true" />
+
+</RelativeLayout>
+
+</ScrollView>

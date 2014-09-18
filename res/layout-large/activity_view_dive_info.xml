@@ -130,15 +130,16 @@
             android:layout_toRightOf="@+id/diveName"
             android:text=""
             android:textSize="@dimen/text_size_large"
-            android:textColor="@color/random_text" />
+            android:textColor="@color/random_text"
+            android:singleLine="false"/>
 
         <TextView
             android:id="@+id/divePosition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/diveName"
+            android:layout_below="@id/diveNameValue"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/dive_position_name"
             android:textSize="@dimen/text_size_medium"
             android:textColor="@color/static_text" />

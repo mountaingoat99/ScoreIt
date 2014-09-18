@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <item android:id="@+id/menu_rankings"
+        android:title="@string/rankings_menu"
+        android:orderInCategory="200"
+        android:showAsAction="collapseActionView" />
+
     <item android:id="@+id/menu_enter_diver"
         android:title="@string/enter_new_diver_info"
         android:orderInCategory="200"
@@ -8,21 +13,6 @@
 
     <item android:id="@+id/menu_enter_meet"
         android:title="@string/enter_new_meet_menu"
-        android:orderInCategory="200"
-        android:showAsAction="collapseActionView" />
-
-    <item android:id="@+id/menu_remove_diver_from_meet"
-        android:title="@string/remove_diver_from_meet"
-        android:orderInCategory="200"
-        android:showAsAction="collapseActionView" />
-
-    <item android:id="@+id/menu_how_to"
-        android:title="@string/how_to_string"
-        android:orderInCategory="200"
-        android:showAsAction="collapseActionView" />
-
-    <item android:id="@+id/menu_about"
-        android:title="@string/about_string"
         android:orderInCategory="200"
         android:showAsAction="collapseActionView" />
 
