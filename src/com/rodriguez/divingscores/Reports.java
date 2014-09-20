@@ -89,7 +89,7 @@ public class Reports extends Activity implements OnItemSelectedListener {
     private void printMeetResults(){
         String diver, school, meetname = "", date, judges, divecount, divetype, totalscore, dive1,
                 dive2, dive3, dive4, dive5, dive6, dive7, dive8, dive9, dive10,
-                dive11, divenumber, divestyle, diveposition, failed, score1, score2, score3, score4,
+                dive11, divenumber, divestyle, diveposition, dd, failed, score1, score2, score3, score4,
                 score5, score6, score7, combinedString;
         StringBuilder r = new StringBuilder();
 
@@ -99,7 +99,7 @@ public class Reports extends Activity implements OnItemSelectedListener {
         String columnString = "\"Diver\",\"School\",\"MeetName\",\"Date\",\"Judges\"," +
                 "\"DiveCount\",\"DiveType\",\"TotalScore\",\"Dive1\",\"Dive2\",\"Dive3\"," +
                 "\"Dive4\",\"Dive5\",\"Dive6\",\"Dive7\",\"Dive8\",\"Dive9\",\"Dive10\"," +
-                "\"Dive11\",\"DiveNumber\",\"DiveStyle\",\"DivePosition\",\"Failed\",\"Score1\"," +
+                "\"Dive11\",\"DiveNumber\",\"DiveStyle\",\"DivePosition\",\"DD\",\"Failed\",\"Score1\"," +
                 "\"Score2\",\"Score3\",\"Score4\",\"Score5\",\"Score6\",\"Score7\",";
 
         for (PrintedResults result : results) {
@@ -125,6 +125,7 @@ public class Reports extends Activity implements OnItemSelectedListener {
             divenumber = result.getDiveNumber();
             divestyle = result.getDiveStyle();
             diveposition = result.getDivePostion();
+            dd = result.getDd();
             failed = result.getFailed();
             score1 = result.getScore1();
             score2 = result.getScore2();
@@ -139,7 +140,7 @@ public class Reports extends Activity implements OnItemSelectedListener {
                     + "\",\"" + dive2 + "\",\"" + dive3 + "\",\"" + dive4 + "\",\"" + dive5
                     + "\",\"" + dive6 + "\",\"" + dive7 + "\",\"" + dive8 + "\",\"" + dive9
                     + "\",\"" + dive10 + "\",\"" + dive11 + "\",\"" + divenumber + "\",\"" + divestyle
-                    + "\",\"" + diveposition + "\",\"" + failed + "\",\"" + score1 + "\",\"" + score2
+                    + "\",\"" + diveposition + "\",\"" + dd +  "\",\"" + failed + "\",\"" + score1 + "\",\"" + score2
                     + "\",\"" + score3 + "\",\"" + score4 + "\",\"" + score5 + "\",\"" + score6
                     + "\",\"" + score7 + "\"";
 
@@ -271,7 +272,7 @@ public class Reports extends Activity implements OnItemSelectedListener {
     }
 
     private void printJudgeScoreTotalsMeet(){
-        String diver = "", meetname = "", divenumber, divename, position,
+        String diver = "", meetname = "", divenumber, divename, position, dd,
                 total, passfailed, judges, score1, score2, score3,
                 score4, score5, score6, score7, combinedString;
 
@@ -280,7 +281,7 @@ public class Reports extends Activity implements OnItemSelectedListener {
         DiverDatabase db = new DiverDatabase(getApplicationContext());
         ArrayList<DiverMeetResults> results = db.getDiverMeetResults(meetId, diverId);
 
-        String columnString =   "\"Diver\",\"Meet Name\",\"Dive Number\",\"Dive Name\",\"Position\"," +
+        String columnString =   "\"Diver\",\"Meet Name\",\"Dive Number\",\"Dive Name\",\"Position\",\"DD\"," +
                 "\"Total\",\"Pass/Failed\",\"Judges\",\"Score 1\",\"Score 2\",\"Score 3\"," +
                 "\"Score 4\",\"Score 5\",\"Score 6\",\"Score 7\",";
 
@@ -290,6 +291,7 @@ public class Reports extends Activity implements OnItemSelectedListener {
             divenumber = result.getDiveNumber();
             divename = result.getDiveName();
             position = result.getPosition();
+            dd = result.getDd();
             total = result.getTotal();
             passfailed = result.getPassFailed();
             judges = result.getJudges();
@@ -301,7 +303,7 @@ public class Reports extends Activity implements OnItemSelectedListener {
             score6 = result.getScore6();
             score7 = result.getScore7();
 
-            String dataString = "\"" + diver + "\",\"" + meetname+ "\",\"" + divenumber + "\",\"" + divename + "\",\"" + position
+            String dataString = "\"" + diver + "\",\"" + meetname+ "\",\"" + divenumber + "\",\"" + divename + "\",\"" + position + "\",\"" + dd
                     + "\",\"" + total + "\",\"" + passfailed + "\",\"" + judges + "\",\"" + score1
                     + "\",\"" + score2 + "\",\"" + score3+ "\",\"" + score4 + "\",\"" + score5
                     + "\",\"" + score6 + "\",\"" + score7 + "\"";

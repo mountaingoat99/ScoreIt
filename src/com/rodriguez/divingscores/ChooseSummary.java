@@ -38,13 +38,17 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
 
 	private TextView name, meetName, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11,
 					s1v, s2v, s3v, s4v, s5v, s6v, s7v, s8v, s9v, s10v, s11v, total,
-                    totalView, diveTypeText, diveTypeShow, header;
+                    totalView, diveTypeText, diveTypeShow, header, diveInfo1, diveInfo2,
+                    diveInfo3, diveInfo4, diveInfo5, diveInfo6, diveInfo7, diveInfo8,
+                    diveInfo9, diveInfo10, diveInfo11;
     private Spinner spinner;
     private Button judgeButton, totalbutton;
 	private int diverId, meetId, diveTotal, diveType,diverSpinnerPosition, diveNumber;
     private double boardType;
     private String s1String, s2String, s3String, s4String, s5String, s6String, s7String,
             s8String, s9String, s10String, s11String;
+    private String infoString1, infoString2, infoString3, infoString4, infoString5,
+                    infoString6, infoString7, infoString8, infoString9, infoString10, infoString11;
     private String typeString, noDive = "There are no scores entered yet.";
     private Boolean failed, dive6 = false, dive11 = false;
     private Double totalScore;
@@ -233,6 +237,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
             total.setText(noDive);
         }
         numberOfDive = 1;
+        infoString1 = getDiveInfoFromDB(1);
+        diveInfo1.setText(infoString1);
         failed = checkFailedDive(numberOfDive);
         if(failed) {
             s1v.setVisibility(View.VISIBLE);
@@ -246,6 +252,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
             }
 		}
         numberOfDive = 2;
+        infoString2 = getDiveInfoFromDB(2);
+        diveInfo2.setText(infoString2);
         failed = checkFailedDive(numberOfDive);
         if(failed) {
             s2v.setVisibility(View.VISIBLE);
@@ -259,6 +267,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
             }
         }
         numberOfDive = 3;
+        infoString3 = getDiveInfoFromDB(3);
+        diveInfo3.setText(infoString3);
         failed = checkFailedDive(numberOfDive);
         if(failed) {
             s3v.setVisibility(View.VISIBLE);
@@ -272,6 +282,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
             }
         }
         numberOfDive = 4;
+        infoString4 = getDiveInfoFromDB(4);
+        diveInfo4.setText(infoString4);
         failed = checkFailedDive(numberOfDive);
         if(failed) {
             s4v.setVisibility(View.VISIBLE);
@@ -285,6 +297,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
             }
         }
         numberOfDive = 5;
+        infoString5 = getDiveInfoFromDB(5);
+        diveInfo5.setText(infoString5);
         failed = checkFailedDive(numberOfDive);
         if(failed) {
             s5v.setVisibility(View.VISIBLE);
@@ -298,6 +312,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
             }
         }
         numberOfDive = 6;
+        infoString6 = getDiveInfoFromDB(6);
+        diveInfo6.setText(infoString6);
         failed = checkFailedDive(numberOfDive);
         if(failed) {
             s6v.setVisibility(View.VISIBLE);
@@ -323,6 +339,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
             return;
         }
         numberOfDive = 7;
+        infoString7 = getDiveInfoFromDB(7);
+        diveInfo7.setText(infoString7);
         failed = checkFailedDive(numberOfDive);
         if(failed) {
             s7v.setVisibility(View.VISIBLE);
@@ -336,6 +354,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
             }
         }
         numberOfDive = 8;
+        infoString8 = getDiveInfoFromDB(8);
+        diveInfo8.setText(infoString8);
         failed = checkFailedDive(numberOfDive);
         if(failed) {
             s8v.setVisibility(View.VISIBLE);
@@ -349,6 +369,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
             }
         }
         numberOfDive = 9;
+        infoString9 = getDiveInfoFromDB(9);
+        diveInfo9.setText(infoString9);
         failed = checkFailedDive(numberOfDive);
         if(failed) {
             s9v.setVisibility(View.VISIBLE);
@@ -362,6 +384,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
             }
         }
         numberOfDive = 10;
+        infoString10 = getDiveInfoFromDB(10);
+        diveInfo10.setText(infoString10);
         failed = checkFailedDive(numberOfDive);
         if(failed) {
             s10v.setVisibility(View.VISIBLE);
@@ -375,6 +399,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
             }
         }
         numberOfDive = 11;
+        infoString11 = getDiveInfoFromDB(11);
+        diveInfo11.setText(infoString11);
         failed = checkFailedDive(numberOfDive);
         if(failed) {
             s11v.setVisibility(View.VISIBLE);
@@ -421,6 +447,27 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
         totalScore = (result.calcScoreTotal(scores.get(0), scores.get(1), scores.get(2),
                 scores.get(3), scores.get(4), scores.get(5), scores.get(6),
                 scores.get(7), scores.get(8), scores.get(9), scores.get(10)));
+    }
+
+    public String getDiveInfoFromDB(int diveNum){
+        int dash;
+        String number, position, dd;
+        JudgeScoreDatabase db = new JudgeScoreDatabase(getApplicationContext());
+        ArrayList<String> info;
+        info = db.getCatAndName(meetId, diverId, diveNum);
+        if (info.size() > 0) {
+            number = info.get(1);
+            dash = number.indexOf("-");
+            number = number.substring((0), (dash)).trim();
+            position = info.get(2);
+            dash = position.indexOf("-");
+            position = position.substring((0), (dash)).trim();
+            dd = info.get(3);
+
+            return number + position + " - DD: " + dd;
+        }
+
+        return "";
     }
 
     public boolean checkFailedDive(int numberDive){
@@ -495,6 +542,17 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
         totalView = (TextView)findViewById(R.id.total2view);
         diveTypeText = (TextView)findViewById(R.id.diveType);
         diveTypeShow = (TextView)findViewById(R.id.theType);
+        diveInfo1 = (TextView)findViewById(R.id.diveInfo1);
+        diveInfo2 = (TextView)findViewById(R.id.diveInfo2);
+        diveInfo3 = (TextView)findViewById(R.id.diveInfo3);
+        diveInfo4 = (TextView)findViewById(R.id.diveInfo4);
+        diveInfo5 = (TextView)findViewById(R.id.diveInfo5);
+        diveInfo6 = (TextView)findViewById(R.id.diveInfo6);
+        diveInfo7 = (TextView)findViewById(R.id.diveInfo7);
+        diveInfo8 = (TextView)findViewById(R.id.diveInfo8);
+        diveInfo9 = (TextView)findViewById(R.id.diveInfo9);
+        diveInfo10 = (TextView)findViewById(R.id.diveInfo10);
+        diveInfo11 = (TextView)findViewById(R.id.diveInfo11);
         spinner = (Spinner)findViewById(R.id.spinnerDiveCatC);
         judgeButton = (Button)findViewById(R.id.buttonJudgeScore);
         totalbutton = (Button)findViewById(R.id.buttonTotalScore);

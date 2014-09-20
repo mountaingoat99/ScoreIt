@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.rodriguez.divingscores.R;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,6 +39,7 @@ public class ViewDiveInfo extends Activity {
     private TextView diveStyle;
     private TextView divePosition;
     private TextView diveNumberView;
+    private TextView diveDD;
     private TextView name;
     private TextView meetName;
     private TextView s4v;
@@ -54,17 +57,18 @@ public class ViewDiveInfo extends Activity {
     private TextView failedText;
     private Button returnButton;
     private int diverId, meetId, diveNumber, judgeTotal;
-    String s1String = "0.00";
-    String s2String = "0.00";
-    String s3String = "0.00";
-    String s4String = "0.00";
-    String s5String = "0.00";
-    String s6String = "0.00";
-    String s7String = "0.00";
-    String nameString = "";
-    String totalScore = "";
-    String diveStyleString = "";
-    String meetNameString = "";
+    private String s1String = "0.00";
+    private String s2String = "0.00";
+    private String s3String = "0.00";
+    private String s4String = "0.00";
+    private String s5String = "0.00";
+    private String s6String = "0.00";
+    private String s7String = "0.00";
+    private String nameString = "";
+    private String totalScore = "";
+    private String diveStyleString = "";
+    private String meetNameString = "";
+    private String diveDDString = "";
     private String failedString = "";
     private String diveTypeString = "";
     private String divePositionString = "";
@@ -165,11 +169,13 @@ public class ViewDiveInfo extends Activity {
         diveTypeString = diveInfo.get(0);
         diveStyleString = diveInfo.get(1);
         divePositionString = diveInfo.get(2);
+        diveDDString = diveInfo.get(3);
 
 
         diveType.setText(diveTypeString);
         diveStyle.setText(diveStyleString);
         divePosition.setText(divePositionString);
+        diveDD.setText(diveDDString);
     }
 
     public void addListenerOnButton(){
@@ -223,7 +229,7 @@ public class ViewDiveInfo extends Activity {
     }
 
     private void emailFile(){
-        String diver, meetname = "", divenumber, divename, position,
+        String diver, meetname = "", divenumber, divename, position, dd,
                 total, passfailed, judges, score1, score2, score3,
                 score4, score5, score6, score7, combinedString;
 
@@ -232,7 +238,7 @@ public class ViewDiveInfo extends Activity {
         DiverDatabase db = new DiverDatabase(getApplicationContext());
         ArrayList<DiverMeetResults> results = db.getDiverMeetResults(meetId, diverId);
 
-        String columnString =   "\"Diver\",\"Meet Name\",\"Dive Number\",\"Dive Name\",\"Position\"," +
+        String columnString =   "\"Diver\",\"Meet Name\",\"Dive Number\",\"Dive Name\",\"Position\",\"DD\"," +
                 "\"Total\",\"Pass/Failed\",\"Judges\",\"Score 1\",\"Score 2\",\"Score 3\"," +
                 "\"Score 4\",\"Score 5\",\"Score 6\",\"Score 7\",";
 
@@ -242,6 +248,7 @@ public class ViewDiveInfo extends Activity {
             divenumber = result.getDiveNumber();
             divename = result.getDiveName();
             position = result.getPosition();
+            dd = result.getDd();
             total = result.getTotal();
             passfailed = result.getPassFailed();
             judges = result.getJudges();
@@ -253,7 +260,7 @@ public class ViewDiveInfo extends Activity {
             score6 = result.getScore6();
             score7 = result.getScore7();
 
-            String dataString = "\"" + diver + "\",\"" + meetname+ "\",\"" + divenumber + "\",\"" + divename + "\",\"" + position
+            String dataString = "\"" + diver + "\",\"" + meetname+ "\",\"" + divenumber + "\",\"" + divename + "\",\"" + position + "\",\"" + dd
                     + "\",\"" + total + "\",\"" + passfailed + "\",\"" + judges + "\",\"" + score1
                     + "\",\"" + score2 + "\",\"" + score3+ "\",\"" + score4 + "\",\"" + score5
                     + "\",\"" + score6 + "\",\"" + score7 + "\"";
@@ -351,6 +358,7 @@ public class ViewDiveInfo extends Activity {
         diveType = (TextView) findViewById(R.id.diveTypeValue);
         diveStyle = (TextView) findViewById(R.id.diveNameValue);
         divePosition = (TextView) findViewById(R.id.divePositionValue);
+        diveDD = (TextView) findViewById(R.id.ddValue);
         s1 = (TextView)findViewById(R.id.score1);
         s2 = (TextView)findViewById(R.id.score2);
         s3 = (TextView)findViewById(R.id.score3);

@@ -8,6 +8,7 @@ public class DiverMeetResults {
     private String diveNumber;
     private String diveName;
     private String position;
+    private String dd;
     private String total;
     private String passFailed;
     private String judges;
@@ -57,6 +58,14 @@ public class DiverMeetResults {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public String getDd() {
+        return dd;
+    }
+
+    public void setDd(String dd) {
+        this.dd = dd;
     }
 
     public String getTotal() {

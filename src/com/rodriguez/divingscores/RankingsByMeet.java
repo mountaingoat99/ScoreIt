@@ -139,9 +139,9 @@ public class RankingsByMeet extends Activity {
     }
 
     private void emailFile(){
-        String diver, school, meetname, date, judges, divecount, divetype, totalscore, dive1,
+        String diver, school, meetname = "", date, judges, divecount, divetype, totalscore, dive1,
                 dive2, dive3, dive4, dive5, dive6, dive7, dive8, dive9, dive10,
-                dive11, divenumber, divestyle, diveposition, failed, score1, score2, score3, score4,
+                dive11, divenumber, divestyle, diveposition, dd, failed, score1, score2, score3, score4,
                 score5, score6, score7, combinedString;
         StringBuilder r = new StringBuilder();
 
@@ -151,7 +151,7 @@ public class RankingsByMeet extends Activity {
         String columnString = "\"Diver\",\"School\",\"MeetName\",\"Date\",\"Judges\"," +
                 "\"DiveCount\",\"DiveType\",\"TotalScore\",\"Dive1\",\"Dive2\",\"Dive3\"," +
                 "\"Dive4\",\"Dive5\",\"Dive6\",\"Dive7\",\"Dive8\",\"Dive9\",\"Dive10\"," +
-                "\"Dive11\",\"DiveNumber\",\"DiveStyle\",\"DivePosition\",\"Failed\",\"Score1\"," +
+                "\"Dive11\",\"DiveNumber\",\"DiveStyle\",\"DivePosition\",\"DD\",\"Failed\",\"Score1\"," +
                 "\"Score2\",\"Score3\",\"Score4\",\"Score5\",\"Score6\",\"Score7\",";
 
         for (PrintedResults result : results) {
@@ -177,6 +177,7 @@ public class RankingsByMeet extends Activity {
             divenumber = result.getDiveNumber();
             divestyle = result.getDiveStyle();
             diveposition = result.getDivePostion();
+            dd = result.getDd();
             failed = result.getFailed();
             score1 = result.getScore1();
             score2 = result.getScore2();
@@ -191,7 +192,7 @@ public class RankingsByMeet extends Activity {
                     + "\",\"" + dive2 + "\",\"" + dive3 + "\",\"" + dive4 + "\",\"" + dive5
                     + "\",\"" + dive6 + "\",\"" + dive7 + "\",\"" + dive8 + "\",\"" + dive9
                     + "\",\"" + dive10 + "\",\"" + dive11 + "\",\"" + divenumber + "\",\"" + divestyle
-                    + "\",\"" + diveposition + "\",\"" + failed + "\",\"" + score1 + "\",\"" + score2
+                    + "\",\"" + diveposition + "\",\"" + dd +  "\",\"" + failed + "\",\"" + score1 + "\",\"" + score2
                     + "\",\"" + score3 + "\",\"" + score4 + "\",\"" + score5 + "\",\"" + score6
                     + "\",\"" + score7 + "\"";
 
@@ -206,7 +207,7 @@ public class RankingsByMeet extends Activity {
         if (root.canWrite()){
             File dir    =   new File (root.getAbsolutePath() + "/PersonData");
             dir.mkdirs();
-            file   =   new File(dir, meetName + " Results.csv");
+            file   =   new File(dir, meetname + " Results.csv");
             FileOutputStream out   =   null;
             try {
                 out = new FileOutputStream(file);

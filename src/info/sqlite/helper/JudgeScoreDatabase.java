@@ -138,7 +138,8 @@ public class JudgeScoreDatabase extends DatabaseHelper {
     public ArrayList<String> getCatAndName(int meetid, int diverid, int divenumber){
         ArrayList<String> diveNames = new ArrayList<>();
         String selectQuery = "SELECT " + DIVE_CATEGORY + ", "
-                + DIVE_TYPE_NAME + ", " + DIVE_POSITION + " FROM " + TABLE_JUDGE_SCORES
+                + DIVE_TYPE_NAME + ", " + DIVE_POSITION + ", " + MULTIPLIER
+                + " FROM " + TABLE_JUDGE_SCORES
                 + " WHERE meet_id = " + meetid
                 + " AND diver_id = " + diverid
                 + " AND dive_number = " + divenumber;
@@ -151,6 +152,7 @@ public class JudgeScoreDatabase extends DatabaseHelper {
                 diveNames.add(b.setDiveCategory(c.getString(c.getColumnIndex(DIVE_CATEGORY))));
                 diveNames.add(b.setDiveTypeName(c.getString(c.getColumnIndex(DIVE_TYPE_NAME))));
                 diveNames.add(b.setDiveTypeName(c.getString(c.getColumnIndex(DIVE_POSITION))));
+                diveNames.add(c.getString(c.getColumnIndex(MULTIPLIER)));
             }while (c.moveToNext());
         }
         c.close();

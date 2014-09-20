@@ -137,7 +137,7 @@ public class DiverDatabase extends DatabaseHelper {
         ArrayList<PrintedResults> results = new ArrayList<>();
         PrintedResults r;
         String selectQuery = "SELECT DISTINCT d.name, d.school, m.name, m.date, m.judges, dt.dive_count, dtt.type, r.total_score, r.dive_1, r.dive_2, r.dive_3, r.dive_4, r.dive_5, "
-                + "r.dive_6, r.dive_7, r.dive_8, r.dive_9, r.dive_10, r.dive_11, js.dive_number, js.dive_type_name, js.dive_position, js.failed, "
+                + "r.dive_6, r.dive_7, r.dive_8, r.dive_9, r.dive_10, r.dive_11, js.dive_number, js.dive_type_name, js.dive_position, js.multiplier, js.failed, "
                 + "js.score_1, js.score_2, js.score_3, js.score_4, js.score_5, js.score_6, js.score_7 "
                 + "FROM diver d "
                 + "INNER JOIN results r on r.diver_id = d.id "
@@ -172,14 +172,15 @@ public class DiverDatabase extends DatabaseHelper {
             r.setDiveNumber(c.getString(19));
             r.setDiveStyle(c.getString(20));
             r.setDivePostion(c.getString(21));
-            r.setFailed(c.getString(22));
-            r.setScore1(c.getString(23));
-            r.setScore2(c.getString(24));
-            r.setScore3(c.getString(25));
-            r.setScore4(c.getString(26));
-            r.setScore5(c.getString(27));
-            r.setScore6(c.getString(28));
-            r.setScore7(c.getString(29));
+            r.setDd(c.getString(22));
+            r.setFailed(c.getString(23));
+            r.setScore1(c.getString(24));
+            r.setScore2(c.getString(25));
+            r.setScore3(c.getString(26));
+            r.setScore4(c.getString(27));
+            r.setScore5(c.getString(28));
+            r.setScore6(c.getString(29));
+            r.setScore7(c.getString(30));
             results.add(r);
         }
         c.close();
@@ -191,7 +192,7 @@ public class DiverDatabase extends DatabaseHelper {
     public ArrayList<DiverMeetResults> getDiverMeetResults(int meetid, int diverid){
         ArrayList<DiverMeetResults> results = new ArrayList<>();
         DiverMeetResults r;
-        String selectQuery = "SELECT d.name, m.name, js.dive_number, js.dive_type_name, js.dive_position, " +
+        String selectQuery = "SELECT d.name, m.name, js.dive_number, js.dive_type_name, js.dive_position, js.multiplier, " +
                 "js.total_score, js.failed, m.judges, js.score_1, js.score_2, js.score_3, js.score_4, js.score_5, js.score_6, js.score_7 " +
                 "from results r " +
                 "INNER JOIN diver d ON d.id = r.diver_id " +
@@ -207,16 +208,17 @@ public class DiverDatabase extends DatabaseHelper {
             r.setDiveNumber(c.getString(2));
             r.setDiveName(c.getString(3));
             r.setPosition(c.getString(4));
-            r.setTotal(c.getString(5));
-            r.setPassFailed(c.getString(6));
-            r.setJudges(c.getString(7));
-            r.setScore1(c.getString(8));
-            r.setScore2(c.getString(9));
-            r.setScore3(c.getString(10));
-            r.setScore4(c.getString(11));
-            r.setScore5(c.getString(12));
-            r.setScore6(c.getString(13));
-            r.setScore7(c.getString(14));
+            r.setDd(c.getString(5));
+            r.setTotal(c.getString(6));
+            r.setPassFailed(c.getString(7));
+            r.setJudges(c.getString(8));
+            r.setScore1(c.getString(9));
+            r.setScore2(c.getString(10));
+            r.setScore3(c.getString(11));
+            r.setScore4(c.getString(12));
+            r.setScore5(c.getString(13));
+            r.setScore6(c.getString(14));
+            r.setScore7(c.getString(15));
             results.add(r);
         }
         c.close();

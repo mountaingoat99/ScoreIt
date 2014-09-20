@@ -283,5 +283,6 @@
     <string name="report_name">Report Name</string>
     <string name="send_report">Send Report</string>
     <string name="choose_report">Choose a Report</string>
+    <string name="dd">Dive DD:</string>
 
 </resources>

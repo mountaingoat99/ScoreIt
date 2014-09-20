@@ -63,8 +63,7 @@
             android:text="@string/straight"
             android:textSize="@dimen/text_size_medium"
             android:textColor="@color/button_text"
-            android:layout_weight="1"
-            android:checked="true" />
+            android:layout_weight="1"/>
 
         <RadioButton
             android:id="@+id/radioPike"
@@ -116,7 +115,7 @@
             android:layout_marginTop="16dp"
             android:background="@color/header"
             android:gravity="center"
-            android:text="@string/enter_scores"
+            android:text=""
             android:textSize="@dimen/text_size_large"
             android:textColor="@color/header_text"/>
 

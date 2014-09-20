@@ -47,20 +47,24 @@ public class Dives extends Activity implements OnItemSelectedListener
 {
 	private Spinner spinner;
     private RadioButton radioTuck, radioPike, radioFree, radioStraight;
-    private TextView view4, view5, view6, view7;
+    private TextView view4, view5, view6, view7, DD , name;
     private Spinner score1, score2, score3, score4, score5, score6, score7;
-    private int judges, diverId, meetId, diveType, diveNumber, divePosition = 1;
+    private int judges, diverId, meetId, diveType, diveNumber, divePosition;
     private double boardType = 0.0;
     private double sc1, sc2, sc3, sc4, sc5, sc6, sc7, diveScoreTotal = 0.0, multiplier = 0.0, roundedDiveTotal = 0.0;
     private ArrayList<DiveStyleSpinner> searchDives;
     private ArrayList<Double> Scores = new ArrayList<>();
     private boolean ifZeroTotal = true;
-    private String failedDive = "P";
+    private String failedDive = "P", ddString = "", stringId;
+    private static final String KEY_TEXT_VALUE = "textValue";
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dives);
+        if (savedInstanceState != null) {
+            stringId = savedInstanceState.getString(KEY_TEXT_VALUE);
+        }
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
@@ -92,8 +96,20 @@ public class Dives extends Activity implements OnItemSelectedListener
     }
 
     @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_TEXT_VALUE, stringId);
+    }
+
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position,
                                long id) {
+        name = (TextView) findViewById(R.id.diveStyle);
+        if(name != null) {
+            stringId = name.getText().toString();
+        }
+        DisableRadioButtons();
+        getMultiplier();
     }
 
     private void getDiveNumber(){
@@ -101,6 +117,137 @@ public class Dives extends Activity implements OnItemSelectedListener
         diveNumber = db.getDiveNumber(meetId, diverId);
     }
 
+    private void DisableRadioButtons(){
+        int diveId;
+        double testS = 0.0;
+        double testP = 0.0;
+        double testT = 0.0;
+        double testF = 0.0;
+
+
+            switch (diveType) {
+                case 1:
+                    ForwardDatabase fdb = new ForwardDatabase(getApplicationContext());
+                    diveId = fdb.getDiveId(stringId);
+                    testS = fdb.getDOD(diveId, 1, boardType);
+                    testP = fdb.getDOD(diveId, 2, boardType);
+                    testT = fdb.getDOD(diveId, 3, boardType);
+                    testF = fdb.getDOD(diveId, 4, boardType);
+                    break;
+                case 2:
+                    BackDatabase bdb = new BackDatabase(getApplicationContext());
+                    diveId = bdb.getDiveId(stringId);
+                    testS = bdb.getDOD(diveId, 1, boardType);
+                    testP = bdb.getDOD(diveId, 2, boardType);
+                    testT = bdb.getDOD(diveId, 3, boardType);
+                    testF = bdb.getDOD(diveId, 4, boardType);
+                    break;
+                case 3:
+                    ReverseDatabase rdb = new ReverseDatabase(getApplicationContext());
+                    diveId = rdb.getDiveId(stringId);
+                    testS = rdb.getDOD(diveId, 1, boardType);
+                    testP = rdb.getDOD(diveId, 2, boardType);
+                    testT = rdb.getDOD(diveId, 3, boardType);
+                    testF = rdb.getDOD(diveId, 4, boardType);
+                    break;
+                case 4:
+                    InwardDatabase idb = new InwardDatabase(getApplicationContext());
+                    diveId = idb.getDiveId(stringId);
+                    testS = idb.getDOD(diveId, 1, boardType);
+                    testP = idb.getDOD(diveId, 2, boardType);
+                    testT = idb.getDOD(diveId, 3, boardType);
+                    testF = idb.getDOD(diveId, 4, boardType);
+                    break;
+                case 5:
+                    TwistDatabase tdb = new TwistDatabase(getApplicationContext());
+                    diveId = tdb.getDiveId(stringId);
+                    testS = tdb.getDOD(diveId, 1, boardType);
+                    testP = tdb.getDOD(diveId, 2, boardType);
+                    testT = tdb.getDOD(diveId, 3, boardType);
+                    testF = tdb.getDOD(diveId, 4, boardType);
+                    break;
+                case 6:
+                    ForwardPlatformDatabase fpdb = new ForwardPlatformDatabase(getApplicationContext());
+                    diveId = fpdb.getDiveId(stringId);
+                    testS = fpdb.getDOD(diveId, 1, boardType);
+                    testP = fpdb.getDOD(diveId, 2, boardType);
+                    testT = fpdb.getDOD(diveId, 3, boardType);
+                    testF = fpdb.getDOD(diveId, 4, boardType);
+                    break;
+                case 7:
+                    BackPlatformDatabase bpdb = new BackPlatformDatabase(getApplicationContext());
+                    diveId = bpdb.getDiveId(stringId);
+                    testS = bpdb.getDOD(diveId, 1, boardType);
+                    testP = bpdb.getDOD(diveId, 2, boardType);
+                    testT = bpdb.getDOD(diveId, 3, boardType);
+                    testF = bpdb.getDOD(diveId, 4, boardType);
+                    break;
+                case 8:
+                    ReversePlatformDatabase rpdb = new ReversePlatformDatabase(getApplicationContext());
+                    diveId = rpdb.getDiveId(stringId);
+                    testS = rpdb.getDOD(diveId, 1, boardType);
+                    testP = rpdb.getDOD(diveId, 2, boardType);
+                    testT = rpdb.getDOD(diveId, 3, boardType);
+                    testF = rpdb.getDOD(diveId, 4, boardType);
+                    break;
+                case 9:
+                    InwardPlatformDatabase ipdb = new InwardPlatformDatabase(getApplicationContext());
+                    diveId = ipdb.getDiveId(stringId);
+                    testS = ipdb.getDOD(diveId, 1, boardType);
+                    testP = ipdb.getDOD(diveId, 2, boardType);
+                    testT = ipdb.getDOD(diveId, 3, boardType);
+                    testF = ipdb.getDOD(diveId, 4, boardType);
+                    break;
+                case 10:
+                    TwistPlatformDatabase tpdb = new TwistPlatformDatabase(getApplicationContext());
+                    diveId = tpdb.getDiveId(stringId);
+                    testS = tpdb.getDOD(diveId, 1, boardType);
+                    testP = tpdb.getDOD(diveId, 2, boardType);
+                    testT = tpdb.getDOD(diveId, 3, boardType);
+                    testF = tpdb.getDOD(diveId, 4, boardType);
+                    break;
+                case 11:
+                    ArmstandPlatformDatabase apdb = new ArmstandPlatformDatabase(getApplicationContext());
+                    diveId = apdb.getDiveId(stringId);
+                    testS = apdb.getDOD(diveId, 1, boardType);
+                    testP = apdb.getDOD(diveId, 2, boardType);
+                    testT = apdb.getDOD(diveId, 3, boardType);
+                    testF = apdb.getDOD(diveId, 4, boardType);
+                    break;
+            }
+
+        if (testS == 0.0){
+            radioStraight.setEnabled(false);
+            radioStraight.setTextColor(this.getResources().getColor(R.color.static_text));
+        }else {
+            radioStraight.setEnabled(true);
+            radioStraight.setTextColor(this.getResources().getColor(R.color.random_text));
+        }
+
+        if (testP == 0.0){
+            radioPike.setEnabled(false);
+            radioPike.setTextColor(this.getResources().getColor(R.color.static_text));
+        }else {
+            radioPike.setEnabled(true);
+            radioPike.setTextColor(this.getResources().getColor(R.color.random_text));
+        }
+
+        if (testT == 0.0){
+            radioTuck.setEnabled(false);
+            radioTuck.setTextColor(this.getResources().getColor(R.color.static_text));
+        }else {
+            radioTuck.setEnabled(true);
+            radioTuck.setTextColor(this.getResources().getColor(R.color.random_text));
+        }
+
+        if (testF == 0.0){
+            radioFree.setEnabled(false);
+            radioFree.setTextColor(this.getResources().getColor(R.color.static_text));
+        }else {
+            radioFree.setEnabled(true);
+            radioFree.setTextColor(this.getResources().getColor(R.color.random_text));
+        }
+    }
 
     private void checkRadios() {
         radioStraight.setOnClickListener(new OnClickListener() {
@@ -111,6 +258,7 @@ public class Dives extends Activity implements OnItemSelectedListener
                 radioStraight.setChecked(true);
                 radioTuck.setChecked(false);
                 divePosition = 1;
+                getMultiplier();
             }
         });
         radioPike.setOnClickListener(new OnClickListener() {
@@ -121,6 +269,7 @@ public class Dives extends Activity implements OnItemSelectedListener
                 radioStraight.setChecked(false);
                 radioTuck.setChecked(false);
                 divePosition = 2;
+                getMultiplier();
             }
         });
         radioTuck.setOnClickListener(new OnClickListener() {
@@ -131,6 +280,7 @@ public class Dives extends Activity implements OnItemSelectedListener
                 radioStraight.setChecked(false);
                 radioTuck.setChecked(true);
                 divePosition = 3;
+                getMultiplier();
             }
         });
         radioFree.setOnClickListener(new OnClickListener() {
@@ -141,6 +291,7 @@ public class Dives extends Activity implements OnItemSelectedListener
                 radioStraight.setChecked(false);
                 radioTuck.setChecked(false);
                 divePosition = 4;
+                getMultiplier();
             }
         });
     }
@@ -565,65 +716,72 @@ public class Dives extends Activity implements OnItemSelectedListener
 
     private void getMultiplier(){
         int diveId;
-        TextView name = (TextView) findViewById(R.id.diveStyle);
-        String stringId = name.getText().toString();
-        //stringId = spinner.getSelectedItem().toString();
-        switch (diveType){
-            case 1:
-                ForwardDatabase fdb = new ForwardDatabase(getApplicationContext());
-                diveId = fdb.getDiveId(stringId);
-                multiplier = fdb.getDOD(diveId, divePosition, boardType);
-                break;
-            case 2:
-                BackDatabase bdb = new BackDatabase(getApplicationContext());
-                diveId = bdb.getDiveId(stringId);
-                multiplier = bdb.getDOD(diveId, divePosition, boardType);
-                break;
-            case 3:
-                ReverseDatabase rdb = new ReverseDatabase(getApplicationContext());
-                diveId = rdb.getDiveId(stringId);
-                multiplier = rdb.getDOD(diveId, divePosition, boardType);
-                break;
-            case 4:
-                InwardDatabase idb = new InwardDatabase(getApplicationContext());
-                diveId = idb.getDiveId(stringId);
-                multiplier = idb.getDOD(diveId, divePosition, boardType);
-                break;
-            case 5:
-                TwistDatabase tdb = new TwistDatabase(getApplicationContext());
-                diveId = tdb.getDiveId(stringId);
-                multiplier = tdb.getDOD(diveId, divePosition, boardType);
-                break;
-            case 6:
-                ForwardPlatformDatabase fpdb = new ForwardPlatformDatabase(getApplicationContext());
-                diveId = fpdb.getDiveId(stringId);
-                multiplier = fpdb.getDOD(diveId, divePosition, boardType);
-                break;
-            case 7:
-                BackPlatformDatabase bpdb = new BackPlatformDatabase(getApplicationContext());
-                diveId = bpdb.getDiveId(stringId);
-                multiplier = bpdb.getDOD(diveId, divePosition, boardType);
-                break;
-            case 8:
-                ReversePlatformDatabase rpdb = new ReversePlatformDatabase(getApplicationContext());
-                diveId = rpdb.getDiveId(stringId);
-                multiplier = rpdb.getDOD(diveId, divePosition, boardType);
-                break;
-            case 9:
-                InwardPlatformDatabase ipdb = new InwardPlatformDatabase(getApplicationContext());
-                diveId = ipdb.getDiveId(stringId);
-                multiplier = ipdb.getDOD(diveId, divePosition, boardType);
-                break;
-            case 10:
-                TwistPlatformDatabase tpdb = new TwistPlatformDatabase(getApplicationContext());
-                diveId = tpdb.getDiveId(stringId);
-                multiplier = tpdb.getDOD(diveId, divePosition, boardType);
-                break;
-            case 11:
-                ArmstandPlatformDatabase apdb = new ArmstandPlatformDatabase(getApplicationContext());
-                diveId = apdb.getDiveId(stringId);
-                multiplier = apdb.getDOD(diveId, divePosition, boardType);
-                break;
+        name = (TextView) findViewById(R.id.diveStyle);
+        if(name != null && divePosition != 0) {
+            stringId = name.getText().toString();
+            //stringId = spinner.getSelectedItem().toString();
+            switch (diveType) {
+                case 1:
+                    ForwardDatabase fdb = new ForwardDatabase(getApplicationContext());
+                    diveId = fdb.getDiveId(stringId);
+                    multiplier = fdb.getDOD(diveId, divePosition, boardType);
+                    break;
+                case 2:
+                    BackDatabase bdb = new BackDatabase(getApplicationContext());
+                    diveId = bdb.getDiveId(stringId);
+                    multiplier = bdb.getDOD(diveId, divePosition, boardType);
+                    break;
+                case 3:
+                    ReverseDatabase rdb = new ReverseDatabase(getApplicationContext());
+                    diveId = rdb.getDiveId(stringId);
+                    multiplier = rdb.getDOD(diveId, divePosition, boardType);
+                    break;
+                case 4:
+                    InwardDatabase idb = new InwardDatabase(getApplicationContext());
+                    diveId = idb.getDiveId(stringId);
+                    multiplier = idb.getDOD(diveId, divePosition, boardType);
+                    break;
+                case 5:
+                    TwistDatabase tdb = new TwistDatabase(getApplicationContext());
+                    diveId = tdb.getDiveId(stringId);
+                    multiplier = tdb.getDOD(diveId, divePosition, boardType);
+                    break;
+                case 6:
+                    ForwardPlatformDatabase fpdb = new ForwardPlatformDatabase(getApplicationContext());
+                    diveId = fpdb.getDiveId(stringId);
+                    multiplier = fpdb.getDOD(diveId, divePosition, boardType);
+                    break;
+                case 7:
+                    BackPlatformDatabase bpdb = new BackPlatformDatabase(getApplicationContext());
+                    diveId = bpdb.getDiveId(stringId);
+                    multiplier = bpdb.getDOD(diveId, divePosition, boardType);
+                    break;
+                case 8:
+                    ReversePlatformDatabase rpdb = new ReversePlatformDatabase(getApplicationContext());
+                    diveId = rpdb.getDiveId(stringId);
+                    multiplier = rpdb.getDOD(diveId, divePosition, boardType);
+                    break;
+                case 9:
+                    InwardPlatformDatabase ipdb = new InwardPlatformDatabase(getApplicationContext());
+                    diveId = ipdb.getDiveId(stringId);
+                    multiplier = ipdb.getDOD(diveId, divePosition, boardType);
+                    break;
+                case 10:
+                    TwistPlatformDatabase tpdb = new TwistPlatformDatabase(getApplicationContext());
+                    diveId = tpdb.getDiveId(stringId);
+                    multiplier = tpdb.getDOD(diveId, divePosition, boardType);
+                    break;
+                case 11:
+                    ArmstandPlatformDatabase apdb = new ArmstandPlatformDatabase(getApplicationContext());
+                    diveId = apdb.getDiveId(stringId);
+                    multiplier = apdb.getDOD(diveId, divePosition, boardType);
+                    break;
+            }
+            ddString = "Dive DD: " + multiplier;
+            DD.setText(ddString);
+        } else {
+            ddString = "Dive DD: ";
+            DD.setText(ddString);
         }
     }
 
@@ -703,6 +861,7 @@ public class Dives extends Activity implements OnItemSelectedListener
         view5 =  (TextView)findViewById(R.id.score5);
         view6 =  (TextView)findViewById(R.id.score6);
         view7 =  (TextView)findViewById(R.id.score7);
+        DD = (TextView)findViewById(R.id.Divider);
         spinner = (Spinner)findViewById(R.id.listDives);
     }
 

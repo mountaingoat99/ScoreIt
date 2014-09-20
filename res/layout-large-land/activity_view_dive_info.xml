@@ -157,11 +157,35 @@
             android:textSize="@dimen/text_size_large"
             android:textColor="@color/random_text" />
 
+        <TextView
+            android:id="@+id/divedd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divePosition"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/dd"
+            android:textSize="@dimen/text_size_medium"
+            android:textColor="@color/static_text" />
+
+        <TextView
+            android:id="@+id/ddValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/diveNameValue"
+            android:layout_alignBaseline="@id/divedd"
+            android:layout_alignLeft="@id/meetname"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/divePosition"
+            android:text=""
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/random_text" />
+
         <View
             android:id="@+id/View2"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/divePositionValue"
+            android:layout_below="@id/divedd"
             android:layout_marginTop="8dp"
             android:background="@color/header" />
 
@@ -480,7 +504,7 @@
             <Button
                 android:id="@+id/buttonReturn"
                 style="@android:style/Widget.Holo.Button"
-                android:layout_width="1000dp"
+                android:layout_width="1300dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/return_button"

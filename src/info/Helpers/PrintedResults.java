@@ -24,6 +24,16 @@ public class PrintedResults {
     private String diveNumber;
     private String diveStyle;
     private String divePostion;
+    private String dd;
+
+    public String getDd() {
+        return dd;
+    }
+
+    public void setDd(String dd) {
+        this.dd = dd;
+    }
+
     private String failed;
     private String score1;
     private String score2;
