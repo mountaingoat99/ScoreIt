@@ -2,12 +2,14 @@ package com.rodriguez.divingscores;
 
 import info.sqlite.helper.DiverDatabase;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -48,9 +50,9 @@ public class DiverDelete extends Activity {
     }
 	
 	public void fillEditText(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());
 		ArrayList<String> diverInfo;
-		diverInfo = db.getDiverInfo(diverId);
+        GetDiverInfo info = new GetDiverInfo();
+		diverInfo = info.doInBackground();
 						
 		if(!diverInfo.isEmpty()){
 			nameString = diverInfo.get(0);
@@ -73,11 +75,6 @@ public class DiverDelete extends Activity {
 		}
 	}
 	
-	public void deleteDiverinDB(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());
-		db.deleteDiver(diverId);
-	}
-	
 	public void addListenerOnButton()
     {
     	final Context context = this;
@@ -87,7 +84,8 @@ public class DiverDelete extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                deleteDiverinDB();
+                DeleteDiverinDB delete = new DeleteDiverinDB();
+                delete.doInBackground();
 
                 Toast.makeText(getApplicationContext(),
                         "Diver " + nameString + " has been deleted",
@@ -123,4 +121,24 @@ public class DiverDelete extends Activity {
     }
 
 
+    private class DeleteDiverinDB extends AsyncTask<Integer, Object, Object> {
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(Integer... params) {
+            db.deleteDiver(diverId);
+            return null;
+        }
+    }
+
+    private class GetDiverInfo extends AsyncTask<ArrayList<String>, Object, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        ArrayList<String> diverinfo;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return diverinfo = db.getDiverInfo(diverId);
+        }
+    }
 }

@@ -13,6 +13,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -31,6 +32,7 @@ public class MeetResults extends Activity {
 	private TextView name, school, city, state, date;
     private ListView myList;
     private int diverId, meetId, diveNumber;
+    private String stringId;
 
 	
 	@Override
@@ -62,9 +64,9 @@ public class MeetResults extends Activity {
     }	
 	
 	public void fillText(){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		ArrayList<String> meetInfo;
-		meetInfo = db.getMeetInfo(meetId);
+        ArrayList<String> meetInfo;
+        GetMeetInfo info = new GetMeetInfo();
+		meetInfo = info.doInBackground();
 		
 		if(!meetInfo.isEmpty()){
             String nameString = meetInfo.get(0);
@@ -100,9 +102,9 @@ public class MeetResults extends Activity {
 	}
 	
 	public void populateListViewFromDB(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());
 		ArrayList<String> diverInfo;
-		diverInfo = db.getDiverHistory(meetId);
+        GetDiverHistory his = new GetDiverHistory();
+		diverInfo = his.doInBackground();
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(
 			this, R.layout.list_item, diverInfo);
@@ -112,10 +114,9 @@ public class MeetResults extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-                String stringId;
                 stringId = myList.getItemAtPosition(position).toString();
-                DiverDatabase db = new DiverDatabase(getApplicationContext());
-                diverId = db.getId(stringId);
+                GetDiverId diveid = new GetDiverId();
+                diverId = diveid.doInBackground();
                 getDiveNumber();
                 if(diveNumber == 0){
                     Toast.makeText(getApplicationContext(),
@@ -123,7 +124,7 @@ public class MeetResults extends Activity {
                             Toast.LENGTH_LONG).show();
                 } else {
                     stringId = myList.getItemAtPosition(position).toString();
-                    diverId = db.getId(stringId);
+                    diverId = diveid.doInBackground();
                     Intent intent = new Intent(getBaseContext(), MeetScores.class);
                     Bundle b = new Bundle();
                     b.putInt("key", diverId);
@@ -136,8 +137,8 @@ public class MeetResults extends Activity {
 	}
 
     private void getDiveNumber(){
-        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
-        diveNumber = db.getDiveNumber(meetId, diverId);
+        GetDiveNumber num = new GetDiveNumber();
+        diveNumber = num.doInBackground();
     }
 	
 	@Override
@@ -166,5 +167,47 @@ public class MeetResults extends Activity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class GetMeetInfo extends AsyncTask<ArrayList<String>, Object, Object> {
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        ArrayList<String> meetinfo;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return meetinfo = db.getMeetInfo(meetId);
+        }
+    }
+
+    private class GetDiverHistory extends AsyncTask<ArrayList<String>, Object, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        ArrayList<String> info;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return info = db.getDiverHistory(meetId);
+        }
+    }
+
+    private class GetDiverId extends AsyncTask<String, Integer, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        int ids;
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            return ids = db.getId(stringId);
+        }
+    }
+
+    private class GetDiveNumber extends AsyncTask<Integer, Object, Object>{
+        DiveNumberDatabase db =  new DiveNumberDatabase(getApplicationContext());
+        int number;
+
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            return number = db.getDiveNumber(meetId, diverId);
+        }
     }
 }

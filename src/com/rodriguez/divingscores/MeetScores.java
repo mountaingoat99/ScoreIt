@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.NavUtils;
@@ -57,7 +58,6 @@ public class MeetScores extends Activity {
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        //facebook
 
         setContentView(R.layout.activity_meet_scores);
         ActionBar actionBar = getActionBar();
@@ -89,8 +89,8 @@ public class MeetScores extends Activity {
     }
 
     private void getDiveNumber(){
-        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
-        diveNumberFromDB = db.getDiveNumber(meetId, diverId);
+        GetDiveNumber num = new GetDiveNumber();
+        diveNumberFromDB = num.doInBackground();
     }
 
     @Override
@@ -418,9 +418,9 @@ public class MeetScores extends Activity {
     }
 
     public void fillText(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());
 		ArrayList<String> diverInfo;
-		diverInfo = db.getDiverInfo(diverId);
+        GetDiverInfo info = new GetDiverInfo();
+		diverInfo = info.doInBackground();
 
         nameString = diverInfo.get(0);
         String ageString = diverInfo.get(1);
@@ -434,9 +434,9 @@ public class MeetScores extends Activity {
 	}
 	
 	public void fillMeet() {
-		ResultDatabase db = new ResultDatabase(getApplicationContext());
 		ArrayList<String> meet;
-		meet = db.getScores(meetId, diverId);
+        GetMeetInfo info = new GetMeetInfo();
+		meet = info.doInBackground();
 
         meetNameString = meet.get(0);
         String schoolNameString = meet.get(1);
@@ -464,10 +464,10 @@ public class MeetScores extends Activity {
 		schoolState.setText(schoolStateString);	
 	}
 	
-	public void fillScores(){		
-		ResultDatabase db = new ResultDatabase(getApplicationContext());
+	public void fillScores(){
 		ArrayList<Double> scores;
-		scores = db.getResultsList(meetId, diverId);
+        GetResultList rList = new GetResultList();
+		scores = rList.doInBackground();
         String failDive = "F";
 
         int numberOfDive = 1;
@@ -625,9 +625,8 @@ public class MeetScores extends Activity {
     }
 
     private void fillType(){
-        TypeDatabase db = new TypeDatabase(getApplicationContext());
-        boardType = db.getType(meetId, diverId);
-        //double b = (double) boardType;
+        FillBoardType fill = new FillBoardType();
+        boardType = fill.doInBackground();
         String typeString = boardType + " Meters";
         Type.setText(typeString);
     }
@@ -803,5 +802,58 @@ public class MeetScores extends Activity {
                 + " on the " +  boards + " at the " + meetNameString
                 + " on " + dates + "." + "\n"
                 + "Sent from ScoreIt.";
+    }
+
+    private class GetDiveNumber extends AsyncTask<Integer, Object, Object> {
+        DiveNumberDatabase db =  new DiveNumberDatabase(getApplicationContext());
+        int number;
+
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            return number = db.getDiveNumber(meetId, diverId);
+        }
+    }
+
+    private class GetDiverInfo extends AsyncTask<ArrayList<String>, Object, Object> {
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        ArrayList<String> diverinfo;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return diverinfo = db.getDiverInfo(diverId);
+        }
+    }
+
+    private class GetMeetInfo extends AsyncTask<ArrayList<String>, Object, Object>{
+        ResultDatabase db = new ResultDatabase(getApplicationContext());
+        ArrayList<String> info;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return info = db.getScores(meetId, diverId);
+        }
+    }
+
+    private class GetResultList extends AsyncTask<ArrayList<Double>, Object, Object>{
+        ResultDatabase db = new ResultDatabase(getApplicationContext());
+        ArrayList<Double> result;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<Double> doInBackground(ArrayList<Double>... params) {
+            return result = db.getResultsList(meetId, diverId);
+        }
+    }
+
+    private class FillBoardType extends AsyncTask<Double, Object, Object>{
+        TypeDatabase db = new TypeDatabase(getApplicationContext());
+        Double type;
+
+        @Override
+        protected Double doInBackground(Double... params) {
+            return type = db.getType(meetId, diverId);
+        }
     }
 }

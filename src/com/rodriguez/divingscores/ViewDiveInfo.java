@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
@@ -98,12 +99,12 @@ public class ViewDiveInfo extends Activity {
     }
 
     private void showDiveScores(){
-        ResultDatabase rdb = new ResultDatabase(getApplicationContext());
-        totalScore = Double.toString(rdb.getDiveScore(meetId, diverId, diveNumber));
+        GetDiveScore score = new GetDiveScore();
+        totalScore = score.doInBackground();
         total.setText(totalScore);
 
-        JudgeScoreDatabase jdb = new JudgeScoreDatabase(getApplicationContext());
-        Boolean failed = jdb.checkFailed(meetId, diverId, diveNumber);
+        CheckFailedDive fail = new CheckFailedDive();
+        Boolean failed = fail.doInBackground();
         if(failed){
             failedString = "F";
         } else {
@@ -111,8 +112,8 @@ public class ViewDiveInfo extends Activity {
         }
         failedText.setText(failedString);
 
-
-        ArrayList<Double> scores = jdb.getScoresList(meetId, diverId, diveNumber);
+        GetScoreList scorelist = new GetScoreList();
+        ArrayList<Double> scores = scorelist.doInBackground();
         s1String = Double.toString(scores.get(0));
         s2String = Double.toString(scores.get(1));
         s3String = Double.toString(scores.get(2));
@@ -149,23 +150,23 @@ public class ViewDiveInfo extends Activity {
     }
 
     private void fillText(){
-        DiverDatabase db = new DiverDatabase(getApplicationContext());
         ArrayList<String> diverInfo;
-        diverInfo = db.getDiverInfo(diverId);
+        GetDiverInfo info = new GetDiverInfo();
+        diverInfo = info.doInBackground();
 
         nameString = diverInfo.get(0);
         name.setText(nameString);
 
-        MeetDatabase mdb = new MeetDatabase(getApplicationContext());
         ArrayList<String> meetInfo;
-        meetInfo = mdb.getMeetInfo(meetId);
+        GetMeetInfo mInfo = new GetMeetInfo();
+        meetInfo = mInfo.doInBackground();
 
         meetNameString = meetInfo.get(0);
         meetName.setText(meetNameString);
 
-        JudgeScoreDatabase jdb = new JudgeScoreDatabase(getApplicationContext());
         ArrayList<String> diveInfo;
-        diveInfo = jdb.getCatAndName(meetId, diverId, diveNumber);
+        GetCatAndName catName = new GetCatAndName();
+        diveInfo = catName.doInBackground();
         diveTypeString = diveInfo.get(0);
         diveStyleString = diveInfo.get(1);
         divePositionString = diveInfo.get(2);
@@ -189,8 +190,8 @@ public class ViewDiveInfo extends Activity {
     }
 
     private void getJudgeTotal(){
-        MeetDatabase db = new MeetDatabase(getApplicationContext());
-        judgeTotal = db.getJudges(meetId);
+        GetJudgeTotal total = new GetJudgeTotal();
+        judgeTotal = total.doInBackground();
     }
 
     private void showDiveNumber(){
@@ -374,4 +375,79 @@ public class ViewDiveInfo extends Activity {
         failedText = (TextView)findViewById(R.id.failedText);
         returnButton = (Button)findViewById(R.id.buttonReturn);
     }
+
+    private class GetDiveScore extends AsyncTask<String, Object, Object>{
+        ResultDatabase db = new ResultDatabase(getApplicationContext());
+        String result;
+
+        @Override
+        protected String doInBackground(String... params) {
+            return result = Double.toString(db.getDiveScore(meetId, diverId, diveNumber));
+        }
+    }
+
+    private class CheckFailedDive extends AsyncTask<Boolean, Object, Object>{
+        JudgeScoreDatabase db = new JudgeScoreDatabase(getApplicationContext());
+        boolean fail;
+
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+            return fail = db.checkFailed(meetId, diverId, diveNumber);
+        }
+    }
+
+    private class GetScoreList extends AsyncTask<ArrayList<Double>, Object, Object>{
+        JudgeScoreDatabase db = new JudgeScoreDatabase(getApplicationContext());
+        ArrayList<Double> scores;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<Double> doInBackground(ArrayList<Double>... params) {
+            return scores = db.getScoresList(meetId, diverId, diveNumber);
+        }
+    }
+
+    private class GetDiverInfo extends AsyncTask<ArrayList<String>, Object, Object> {
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        ArrayList<String> diverinfo;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return diverinfo = db.getDiverInfo(diverId);
+        }
+    }
+
+    private class GetMeetInfo extends AsyncTask<ArrayList<String>, Object, Object> {
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        ArrayList<String> meetinfo;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return meetinfo = db.getMeetInfo(meetId);
+        }
+    }
+
+    private class GetCatAndName extends AsyncTask<ArrayList<String>, Object, Object>{
+        JudgeScoreDatabase db = new JudgeScoreDatabase(getApplicationContext());
+        ArrayList<String> scores;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return db.getCatAndName(meetId, diverId, diveNumber);
+        }
+    }
+
+    private class GetJudgeTotal extends AsyncTask<Integer, Object, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        int total;
+
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            return total = db.getJudges(meetId);
+        }
+    }
+
 }

@@ -20,6 +20,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -144,7 +145,7 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
     public void onItemSelected(AdapterView<?> parent, View view, int position,
                                long id) {
 
-        if(boardType == 1 || boardType == 3) {
+        if(boardType == 1.0 || boardType == 3.0) {
             switch (position) {
                 case 1:
                     diveType = 1;
@@ -187,26 +188,26 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
     }
 
     private void getDiveTotals(){
-        DiveTotalDatabase db = new DiveTotalDatabase(getApplicationContext());
-        diveTotal = db.searchTotals(meetId, diverId);
+        SearchDiveTotals total = new SearchDiveTotals();
+        diveTotal = total.doInBackground();
     }
 
     private void getDiveNumber(){
-        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
-        diveNumber = db.getDiveNumber(meetId, diverId);
+        GetDiveNumber num = new GetDiveNumber();
+        diveNumber = num.doInBackground();
     }
 	
 	private void fillText(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());
 		ArrayList<String> diverInfo;
-		diverInfo = db.getDiverInfo(diverId);
+        GetDiverInfo info = new GetDiverInfo();
+		diverInfo = info.doInBackground();
 
         String nameString = diverInfo.get(0);
 		name.setText(nameString);
 			
-		MeetDatabase mdb = new MeetDatabase(getApplicationContext());
 		ArrayList<String> meetInfo;
-		meetInfo = mdb.getMeetInfo(meetId);
+        GetMeetInfo infoMeet = new GetMeetInfo();
+		meetInfo = infoMeet.doInBackground();
 
         String meetNameString = meetInfo.get(0);
 		meetName.setText(meetNameString);
@@ -428,9 +429,9 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
 		}
 
     public void getScoresFromDB(){
-        ResultDatabase db = new ResultDatabase(getApplicationContext());
         ArrayList<Double> scores;
-        scores = db.getResultsList(meetId, diverId);
+        GetScoresFromDB scoreList = new GetScoresFromDB();
+        scores = scoreList.doInBackground();
         s1String = Double.toString(scores.get(0));
         s2String = Double.toString(scores.get(1));
         s3String = Double.toString(scores.get(2));
@@ -443,6 +444,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
         s10String = Double.toString(scores.get(9));
         s11String = Double.toString(scores.get(10));
 
+        // this isn't actually a call to the database, it's just using the db helper class
+        // to total the results
         ResultsDB result = new ResultsDB();
         totalScore = (result.calcScoreTotal(scores.get(0), scores.get(1), scores.get(2),
                 scores.get(3), scores.get(4), scores.get(5), scores.get(6),
@@ -476,10 +479,9 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
     }
 	
 	private void loadSpinnerData(){
-        if(boardType == 1 || boardType == 3) {
-            DivesDatabase db = new DivesDatabase(getApplicationContext());
-
-            List<String> diveName = db.getDiveNames();
+        if(boardType == 1.0 || boardType == 3.0) {
+            GetSpringboardDiveName dives = new GetSpringboardDiveName();
+            List<String> diveName = dives.doInBackground();
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                     R.layout.spinner_item, diveName);
@@ -490,8 +492,8 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
                             dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this)
             );
         } else {
-            PlatformDivesDatabase db = new PlatformDivesDatabase(getApplicationContext());
-            List<String> diveName = db.getPlatformDiveNames();
+            GetPlatformDiveName divesP = new GetPlatformDiveName();
+            List<String> diveName = divesP.doInBackground();
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                     R.layout.spinner_item, diveName);
@@ -506,10 +508,23 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
 	}
 
     private void fillType(){
-        TypeDatabase db = new TypeDatabase(getApplicationContext());
-        boardType = db.getType(meetId, diverId);
-        int b = (int) boardType;
-        typeString = b + " Meters";
+        String boardString = "";
+        GetBoardType type = new GetBoardType();
+        boardType = type.doInBackground();
+
+        if (boardType == 1.0) {
+            boardString = "1";
+        }else if (boardType == 3.0) {
+            boardString = "3";
+        }else if (boardType == 5.0) {
+            boardString = "5";
+        }else if (boardType == 7.5) {
+            boardString = "7.5";
+        }else if (boardType == 10.0) {
+            boardString = "10";
+        }
+
+        typeString = boardString + " Meters";
     }
 
     private void setUpView(){
@@ -602,4 +617,88 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
 		
 	}
 
+
+    private class SearchDiveTotals extends AsyncTask<Integer, Object, Object> {
+        DiveTotalDatabase db = new DiveTotalDatabase(getApplicationContext());
+
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            return db.searchTotals(meetId, diverId);
+        }
+    }
+
+    private class GetDiveNumber extends AsyncTask<Integer, Object, Object>{
+        DiveNumberDatabase db =  new DiveNumberDatabase(getApplicationContext());
+        int number;
+
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            return number = db.getDiveNumber(meetId, diverId);
+        }
+    }
+
+    private class GetDiverInfo extends AsyncTask<ArrayList<String>, Object, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        ArrayList<String> diverinfo;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return diverinfo = db.getDiverInfo(diverId);
+        }
+    }
+
+    private class GetMeetInfo extends AsyncTask<ArrayList<String>, Object, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        ArrayList<String> meetinfo;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return meetinfo = db.getMeetInfo(meetId);
+        }
+    }
+
+    private class GetScoresFromDB extends AsyncTask<ArrayList<Double>, Object, Object>{
+        ResultDatabase db = new ResultDatabase(getApplicationContext());
+        ArrayList<Double> scoreList;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<Double> doInBackground(ArrayList<Double>... params) {
+            return scoreList = db.getResultsList(meetId, diverId);
+        }
+    }
+
+    private class GetSpringboardDiveName extends AsyncTask<List<String>, Object, Object>{
+        DivesDatabase db = new DivesDatabase(getApplicationContext());
+        List<String> dives;
+
+        @SafeVarargs
+        @Override
+        protected final List<String> doInBackground(List<String>... params) {
+            return dives = db.getDiveNames();
+        }
+    }
+
+    private class GetPlatformDiveName extends AsyncTask<List<String>, Object, Object>{
+        PlatformDivesDatabase db = new PlatformDivesDatabase(getApplicationContext());
+        List<String> dives;
+
+        @SafeVarargs
+        @Override
+        protected final List<String> doInBackground(List<String>... params) {
+            return dives = db.getPlatformDiveNames();
+        }
+    }
+
+    private class GetBoardType extends AsyncTask<Double, Object, Object>{
+        TypeDatabase db = new TypeDatabase(getApplicationContext());
+        Double type;
+
+        @Override
+        protected Double doInBackground(Double... params) {
+            return type = db.getType(meetId, diverId);
+        }
+    }
 }

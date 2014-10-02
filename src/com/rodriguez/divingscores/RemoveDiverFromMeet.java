@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,8 +54,8 @@ public class RemoveDiverFromMeet extends Activity {
 
             @Override
             public void onClick(View v) {
-                DiverDatabase db = new DiverDatabase(getApplicationContext());
-                db.removeDiverFromMeet(meetId, diverId);
+                RemoveDiver remove = new RemoveDiver();
+                remove.doInBackground();
                 Intent intent1 = new Intent(context, Welcome.class);
                 startActivity(intent1);
             }
@@ -71,5 +72,15 @@ public class RemoveDiverFromMeet extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
+    }
+
+    private class RemoveDiver extends AsyncTask<Object, Object, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            db.removeDiverFromMeet(meetId, diverId);
+            return null;
+        }
     }
 }

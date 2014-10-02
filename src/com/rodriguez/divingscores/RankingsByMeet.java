@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.NavUtils;
@@ -65,9 +66,9 @@ public class RankingsByMeet extends Activity {
     }
 
     private void populateListViewFromDB() {
-        DiverDatabase db = new DiverDatabase(getApplicationContext());
         ArrayList<RankingResults> searchResults;
-        searchResults = db.getRankings(meetId, Board);
+        GetRankings rank = new GetRankings();
+        searchResults = rank.doInBackground();
 
         myList.setAdapter(new MyCustomBaseAdapter(this, searchResults));
 
@@ -98,13 +99,13 @@ public class RankingsByMeet extends Activity {
     }
 
     private void getDiveNumber(){
-        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
-        diveNumber = db.getDiveNumber(meetId, diverId);
+        GetDiveNumber num = new GetDiveNumber();
+        diveNumber = num.doInBackground();
     }
 
     private void getMeetName(){
-        MeetDatabase db = new MeetDatabase(getApplicationContext());
-        meetName = db.getMeetName(meetId);
+        GetMeetName mName = new GetMeetName();
+        meetName = mName.doInBackground();
         name.setText(meetName);
     }
 
@@ -280,5 +281,36 @@ public class RankingsByMeet extends Activity {
         return DiverName + " has the top score at the "
                 + meetName + "."
                 + "\n" + "Sent from ScoreIt.";
+    }
+
+    private class GetRankings extends AsyncTask<ArrayList<RankingResults>, Object, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        ArrayList<RankingResults> results;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<RankingResults> doInBackground(ArrayList<RankingResults>... params) {
+            return db.getRankings(meetId, Board);
+        }
+    }
+
+    private class GetDiveNumber extends AsyncTask<Integer, Object, Object>{
+        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
+        int num;
+
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            return num = db.getDiveNumber(meetId, diverId);
+        }
+    }
+
+    private class GetMeetName extends AsyncTask<String, Object, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        String name;
+
+        @Override
+        protected String doInBackground(String... params) {
+            return name = db.getMeetName(meetId);
+        }
     }
 }

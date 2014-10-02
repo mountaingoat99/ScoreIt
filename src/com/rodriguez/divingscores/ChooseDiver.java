@@ -15,6 +15,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -43,7 +44,7 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
                 meetId = 0, diveTotal = 6;
     private double boardType = 1;
     private boolean checkResult, checkTotals, checkBoardType, checkDiveNumber;
-    String showDiveTotal;
+    private String showDiveTotal, stringId;
     final Context context = this;
 
     @Override
@@ -100,9 +101,9 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
     }
 
     private void loadMeetName(){
-        MeetDatabase db = new MeetDatabase(getApplicationContext());
         ArrayList<String> meetInfo;
-        meetInfo = db.getMeetInfo(meetId);
+        GetInfoForMeet meetinfo = new GetInfoForMeet();
+        meetInfo = meetinfo.doInBackground();
 
         if(!meetInfo.isEmpty()){
             String meetName = meetInfo.get(0);
@@ -117,8 +118,8 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
     }
 
     private void loadSpinnerName(){
-        DiverDatabase db = new DiverDatabase(getApplicationContext());
-        List<String> diverName = db.getDiverNames();
+        GetDiverInfo diver = new GetDiverInfo();
+        List<String> diverName = diver.doInBackground();
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, diverName);
 
@@ -138,17 +139,19 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
             public void onClick(View arg0) {
                 if (diverId != 0 && meetId != 0) {
                     // checks to see if a diver and meet are attached to results yet
-                    ResultDatabase db = new ResultDatabase(getApplicationContext());
-                    checkResult = db.checkResult(meetId, diverId);
+                    CheckTheResults checks = new CheckTheResults();
+                    checkResult = checks.doInBackground();
                     if (!checkResult) {
                         // enters 0 values in the results database
-                        db.createEmptyResult(meetId, diverId);
+                        CreateEmptyResult empty = new CreateEmptyResult();
+                        empty.doInBackground();
                     }
                     // checks to see if a diver and meet are attached to a diveNumber yet
-                    DiveNumberDatabase dbn = new DiveNumberDatabase(getApplicationContext());
-                    checkDiveNumber = dbn.checkNumber(meetId, diverId);
+                    CheckDiveNumber check = new CheckDiveNumber();
+                    checkDiveNumber = check.doInBackground();
                     if(!checkDiveNumber){
-                        dbn.createNewDiveNumber(meetId, diverId, boardType); // TODO add board type
+                        CreateNewDiveNumber newdive = new CreateNewDiveNumber();
+                        newdive.doInBackground();
                     }
 
                     enterDiveTotal();
@@ -181,12 +184,13 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
     }
 
     private void checkDiveTotal(){
-        DiveTotalDatabase db = new DiveTotalDatabase(getApplicationContext());
-        checkTotals = db.checkTotal(meetId, diverId);
+        CheckDiveTotals check = new CheckDiveTotals();
+        checkTotals = check.doInBackground();
         if(checkTotals){
             showDiveTotal = " Dives";
             radioGroupTotal.setVisibility(View.GONE);
-            int howManyDives = db.searchTotals(meetId, diverId);
+            SearchDiveTotals search = new SearchDiveTotals();
+            int howManyDives = search.doInBackground();
             showDiveTotal = howManyDives + showDiveTotal;
             DiveTotal.setText(showDiveTotal);
         }else {
@@ -196,12 +200,13 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
     }
 
     private void checkBoardType(){
-        TypeDatabase db = new TypeDatabase(getApplicationContext());
-        checkBoardType = db.checkType(meetId, diverId);
+        CheckBoardType checkboard = new CheckBoardType();
+        checkBoardType = checkboard.doInBackground();
         if(checkBoardType){
             layout1.setVisibility(View.GONE);
             layout2.setVisibility(View.GONE);
-            int typeOfDive = db.searchTypes(meetId, diverId);
+            GetBoardType boardtype = new GetBoardType();
+            String typeOfDive = boardtype.doInBackground();
             showDiveTotal = showDiveTotal + " - " + typeOfDive + " Meter" ;
             DiveTotal.setText(showDiveTotal);
             BoardType.setVisibility(View.GONE);
@@ -213,18 +218,20 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
     }
 
     private void enterDiveTotal(){
-        DiveTotalDatabase db = new DiveTotalDatabase(getApplicationContext());
-        checkTotals = db.checkTotal(meetId, diverId);
+        CheckDiveTotals check = new CheckDiveTotals();
+        checkTotals = check.doInBackground();
         if(!checkTotals){
-            db.fillDiveTotal(meetId, diverId, diveTotal);
+            FillDiveTotal fill = new FillDiveTotal();
+            fill.doInBackground();
         }
     }
 
     private void enterBoardDiveType(){
-        TypeDatabase db = new TypeDatabase(getApplicationContext());
-        checkBoardType = db.checkType(meetId, diverId);
+        CheckBoardType check = new CheckBoardType();
+        checkBoardType = check.doInBackground();
         if(!checkBoardType){
-            db.createType(meetId, diverId, boardType);
+            CreateBoardType create = new CreateBoardType();
+            create.doInBackground();
         }
     }
 
@@ -288,11 +295,10 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
     }
 
     public int getId(){
-        String stringId;
         int id;
         stringId = spinnerName.getSelectedItem().toString().trim();
-        DiverDatabase db = new DiverDatabase(getApplicationContext());
-        id = db.getId(stringId);
+        GetDiverID getid = new GetDiverID();
+        id = getid.doInBackground();
         return id;
     }
 
@@ -343,5 +349,147 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
 
     public void onNothingSelected(AdapterView<?> arg0)    {
 
+    }
+
+    private class GetInfoForMeet extends AsyncTask<ArrayList<String>, Object, Object> {
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        ArrayList<String> info;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return info = db.getMeetInfo(meetId);
+        }
+    }
+
+    private class GetDiverInfo extends AsyncTask<List<String>, List<String>, List<String>>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        List<String> diverName;
+
+        @SafeVarargs
+        @Override
+        protected final List<String> doInBackground(List<String>... params) {
+            return diverName = db.getDiverNames();
+        }
+    }
+
+    private class CheckTheResults extends AsyncTask<Boolean, Object, Object>{
+        ResultDatabase db = new ResultDatabase(getApplicationContext());
+        boolean check;
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+            return check = db.checkResult(meetId, diverId);
+        }
+    }
+
+    private class CreateEmptyResult extends AsyncTask <Object, Object, Object>{
+        ResultDatabase db = new ResultDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            db.createEmptyResult(meetId, diverId);
+            return null;
+        }
+    }
+
+    private class CheckDiveNumber extends AsyncTask<Boolean, Object, Object>{
+        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
+        boolean check;
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+            return check = db.checkNumber(meetId, diverId);
+        }
+    }
+
+    private class CreateNewDiveNumber extends AsyncTask<Object, Object, Object>{
+        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            db.createNewDiveNumber(meetId, diverId, boardType);
+            return null;
+        }
+    }
+
+    private class CheckDiveTotals extends AsyncTask<Boolean, Object, Object> {
+        DiveTotalDatabase db = new DiveTotalDatabase(getApplicationContext());
+        boolean check;
+
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+            return db.checkTotal(meetId, diverId);
+        }
+    }
+
+    private class SearchDiveTotals extends AsyncTask<Integer, Object, Object>{
+    DiveTotalDatabase db = new DiveTotalDatabase(getApplicationContext());
+
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            return db.searchTotals(meetId, diverId);
+        }
+    }
+
+    private class CheckBoardType extends AsyncTask<Boolean, Object, Object>{
+        TypeDatabase db = new TypeDatabase(getApplicationContext());
+        boolean check;
+
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+            return check = db.checkType(meetId, diverId);
+        }
+    }
+
+    private class GetBoardType extends AsyncTask<String, Object, Object>{
+        TypeDatabase db = new TypeDatabase(getApplicationContext());
+        double type;
+        String typeString;
+
+        @Override
+        protected String doInBackground(String... params) {
+            type =  db.searchTypes(meetId, diverId);
+            if (type == 1.0) {
+                typeString = "1";
+            }else if (type == 3.0) {
+                typeString = "3";
+            }else if (type == 5.0) {
+                typeString = "5";
+            }else if (type == 7.5) {
+                typeString = "7.5";
+            }else if (type == 10.0) {
+                typeString = "10";
+            }
+            return typeString;
+        }
+    }
+
+    private class FillDiveTotal extends AsyncTask<Object, Object, Object>{
+        DiveTotalDatabase db = new DiveTotalDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            db.fillDiveTotal(meetId, diverId, diveTotal);
+            return null;
+        }
+    }
+
+    private class CreateBoardType extends AsyncTask<Object, Object, Object> {
+        TypeDatabase db = new TypeDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            db.createType(meetId, diverId, boardType);
+            return null;
+        }
+    }
+
+        private class GetDiverID extends AsyncTask<Integer, Object, Object>{
+            DiverDatabase db = new DiverDatabase(getApplicationContext());
+            int id;
+
+            @Override
+            protected Integer doInBackground(Integer... params) {
+                return id = db.getId(stringId);
+        }
     }
 }

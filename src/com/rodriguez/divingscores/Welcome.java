@@ -7,9 +7,11 @@ import info.sqlite.helper.MeetDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -32,7 +34,7 @@ public class Welcome extends Activity implements OnItemSelectedListener
     private View layout2, layout3;
 	private int diveCount = 0, meetCount = 0, diverId = 0, meetId = 0;
 	private boolean diverCheck = false, meetCheck = false;
-
+    private String stringId = "";
     final Context context = this;
 
    @Override
@@ -41,8 +43,8 @@ public class Welcome extends Activity implements OnItemSelectedListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        setUpView();
 
+        setUpView();
         addListenerOnButton();
         loadSpinnerName();
         loadSpinnerMeet();
@@ -50,21 +52,23 @@ public class Welcome extends Activity implements OnItemSelectedListener
         spinnerMeet.setOnItemSelectedListener(this);
     }
 
+    // do not allow any back presses on the Welcome screen to other activities
+    // just exit the app
     @Override
     public void onBackPressed() {
-        // do not allow any back presses on the Welcome screen to other activities
-        // just exit the app
         Intent a = new Intent(Intent.ACTION_MAIN);
         a.addCategory(Intent.CATEGORY_HOME);
         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(a);
     }
 
+    // call a separate thread to get the diver names - originally was making the database call in the
+    // UI thread. Bad form. Don't be bad.
    	private void loadSpinnerName(){
-		//DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-	   DiverDatabase db = new DiverDatabase(getApplicationContext());
-		
-		List<String> diverName = db.getDiverNames();
+
+        GetDiverInfo diver = new GetDiverInfo();
+        List<String> diverName = diver.doInBackground();
+
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
 				R.layout.spinner_item, diverName);
 		dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
@@ -73,13 +77,14 @@ public class Welcome extends Activity implements OnItemSelectedListener
  						dataAdapter, R.layout.diver_name_spinner_row_nothing_selected, this));
 		
 	}
-  
+
+    // call a separate thread to get the meetnames
    private void loadSpinnerMeet(){
-		//DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		
-		List<String> meetName = db.getMeetNames();
-		ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
+
+        GetMeetInfo meet = new GetMeetInfo();
+        List<String> meetName = meet.doInBackground();
+
+       ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
 				R.layout.spinner_item, meetName);
 		dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
 		spinnerMeet.setAdapter(
@@ -87,12 +92,16 @@ public class Welcome extends Activity implements OnItemSelectedListener
 						dataAdapter, R.layout.meet_name_spinner_row_nothing_selected, this));
 	}
 
-  	public void addListenerOnButton()
-  	{
-        DiverDatabase ddb = new DiverDatabase(getApplicationContext());
-        diverCheck = ddb.checkDiver();
-        MeetDatabase mdb = new MeetDatabase(getApplicationContext());
-        meetCheck = mdb.checkMeet();
+    // Checks all the buttons and makes sure the proper data is in place before the user can
+    // start a meet, get reports, ect, then calls the correct Intent
+  	public void addListenerOnButton() {
+
+        // Database calls on separate threads
+        CheckDiver diver = new CheckDiver();
+        diverCheck = diver.doInBackground();
+        CheckMeet meet = new CheckMeet();
+        meetCheck = meet.doInBackground();
+
 	   btnNext.setOnClickListener(new OnClickListener() {
            public void onClick(View arg0) {
 
@@ -136,8 +145,10 @@ public class Welcome extends Activity implements OnItemSelectedListener
         btnReports.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                JudgeScoreDatabase db = new JudgeScoreDatabase(getApplicationContext());
-                boolean validMeet = db.checkJudgesScores();
+
+                // check db on a separate thread
+                ValidMeet val = new ValidMeet();
+                boolean validMeet = val.doInBackground();
                 if (validMeet) {
                     Intent intent = new Intent(context, Reports.class);
                     startActivity(intent);
@@ -167,9 +178,11 @@ public class Welcome extends Activity implements OnItemSelectedListener
 
 					@Override
 					public void onClick(View v) {
-                        MeetDatabase db = new MeetDatabase(getApplicationContext());
                         ArrayList<String> meetInfo;
-                        meetInfo = db.getMeetHistory(diverId);
+
+                        // calling a separate thread for the db select
+                        MeetHistoryThread his = new MeetHistoryThread();
+                        meetInfo = his.doInBackground(diverId);
                         if(!meetInfo.isEmpty()) {
                             Intent intent = new Intent(getBaseContext(), DiverHistory.class);
                             Bundle b = new Bundle();
@@ -224,9 +237,11 @@ public class Welcome extends Activity implements OnItemSelectedListener
 
 					@Override
 					public void onClick(View v) {
-                        DiverDatabase db = new DiverDatabase(getApplicationContext());
                         ArrayList<String> diverInfo;
-                        diverInfo = db.getDiverHistory(meetId);
+
+                        // calls a separate thread to get the database info
+                        DiverHistoryThread his = new DiverHistoryThread();
+                        diverInfo = his.doInBackground(meetId);
                         if(!diverInfo.isEmpty()) {
                             Intent intent = new Intent(getBaseContext(), MeetResults.class);
                             Bundle b = new Bundle();
@@ -269,19 +284,18 @@ public class Welcome extends Activity implements OnItemSelectedListener
 	}
 	
 	public int getDiverId(String spinner){
-		String stringId;
         int id;
         if(spinner.equals("name"))
 		{
 			stringId = spinnerName.getSelectedItem().toString().trim();
-			DiverDatabase db = new DiverDatabase(getApplicationContext());
-			id = db.getId(stringId);
+            GetDiverId ID = new GetDiverId();
+            id = ID.doInBackground(stringId);
 		}
 		else
 		{
 			stringId = spinnerMeet.getSelectedItem().toString().trim();
-			MeetDatabase db = new MeetDatabase(getApplicationContext());
-			id = db.getId(stringId);
+            GetMeetId ID = new GetMeetId();
+            id = ID.doInBackground(stringId);
 		}		
 		return id;
 	}
@@ -339,5 +353,100 @@ public class Welcome extends Activity implements OnItemSelectedListener
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Async database tasks
+    // These are private classes used to make the database calls in separate threads
+    // so as to not tie up the UI thread. Otherwise the app will drop frames
+    // and that never looks good.
+    private class GetDiverInfo extends AsyncTask<List<String>, List<String>, List<String>>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        List<String> diverName;
+
+        @SafeVarargs
+        @Override
+        protected final List<String> doInBackground(List<String>... params) {
+            return diverName = db.getDiverNames();
+        }
+    }
+
+    private class GetMeetInfo extends AsyncTask<List<String>, List<String>, List<String>>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        List<String> meetName;
+
+        @SafeVarargs
+        @Override
+        protected final List<String> doInBackground(List<String>... params) {
+            return meetName = db.getMeetNames();
+        }
+    }
+
+    private class CheckDiver extends AsyncTask<Boolean, Object, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        Boolean diver;
+
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+        return diver = db.checkDiver();
+        }
+    }
+
+    private class CheckMeet extends AsyncTask<Boolean, Object, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        Boolean meet;
+
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+            return meet = db.checkMeet();
+        }
+    }
+
+    private class ValidMeet extends AsyncTask<Boolean, Object, Object>{
+        JudgeScoreDatabase db = new JudgeScoreDatabase(getApplicationContext());
+        Boolean validmeet;
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+            return validmeet = db.checkJudgesScores();
+        }
+    }
+
+    private class MeetHistoryThread extends AsyncTask<Integer, ArrayList<String>, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        ArrayList<String> meetinfo;
+
+        @Override
+        protected ArrayList<String> doInBackground(Integer... params) {
+            return meetinfo = db.getMeetHistory(diverId);
+        }
+    }
+
+    private class DiverHistoryThread extends AsyncTask<Integer, ArrayList<String>, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        ArrayList<String> diverinfo;
+
+        @Override
+        protected ArrayList<String> doInBackground(Integer... params) {
+            return diverinfo = db.getDiverHistory(meetId);
+        }
+    }
+
+    private class GetDiverId extends AsyncTask<String, Integer, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        int ids;
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            return ids = db.getId(stringId);
+        }
+    }
+
+    private class GetMeetId extends AsyncTask<String, Integer, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        int ids;
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            return ids = db.getId(stringId);
+        }
     }
 }

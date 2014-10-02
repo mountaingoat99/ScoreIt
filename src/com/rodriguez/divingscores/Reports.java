@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -36,8 +37,7 @@ public class Reports extends Activity implements OnItemSelectedListener {
     private Button btnSendReport;
     private int diverId = 0, meetId = 0, reportId = 0;
     private double boardType = 0.0;
-    private boolean diverCheck = false, meetCheck = false;
-
+    private String stringId;
     final Context context = this;
 
     @Override
@@ -228,8 +228,6 @@ public class Reports extends Activity implements OnItemSelectedListener {
             r.append("\n").append(dataString);
         }
 
-
-
         combinedString = columnString + "\n" + r;
 
         File file   = null;
@@ -355,7 +353,6 @@ public class Reports extends Activity implements OnItemSelectedListener {
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-
         Spinner spinner = (Spinner) parent;
         if(spinner.getId() == R.id.spinnerDiver && position >= 1) {
             String nameSpinner = "name";
@@ -399,17 +396,14 @@ public class Reports extends Activity implements OnItemSelectedListener {
     }
 
     private void loadSpinnerMeet(){
-        //DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-        MeetDatabase db = new MeetDatabase(getApplicationContext());
-
+        GetNameForMeetRank rank = new GetNameForMeetRank();
         ArrayList<RankingsMeet> list;
         ArrayList<String> newList = new ArrayList<>();
-        list = db.getNameForMeetRank();
+        list = rank.doInBackground();
         for (RankingsMeet meet : list){
             newList.add("  " + meet.getMeetName() + "-" + meet.getBoardSize() + "  Meter");
         }
 
-        //List<String> meetName = db.getMeetNames();
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, newList);
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
@@ -420,10 +414,8 @@ public class Reports extends Activity implements OnItemSelectedListener {
 
 
     private void loadSpinnerName(){
-        //DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-        DiverDatabase db = new DiverDatabase(getApplicationContext());
-
-        List<String> diverName = db.getDiverNames();
+        GetDiverInfo diver = new GetDiverInfo();
+        List<String> diverName = diver.doInBackground();
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, diverName);
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
@@ -434,14 +426,13 @@ public class Reports extends Activity implements OnItemSelectedListener {
     }
 
     public int getDiverId(String spinner){
-        String stringId;
         String name;
         int id;
         if(spinner.equals("name"))
         {
             stringId = spinnerName.getSelectedItem().toString().trim();
-            DiverDatabase db = new DiverDatabase(getApplicationContext());
-            id = db.getId(stringId);
+            GetDiverId diveid = new GetDiverId();
+            id = diveid.doInBackground();
         }
         else
         {
@@ -482,5 +473,47 @@ public class Reports extends Activity implements OnItemSelectedListener {
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private class GetNameForMeetRank extends AsyncTask<ArrayList<RankingsMeet>, Object, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        ArrayList<RankingsMeet> name;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<RankingsMeet> doInBackground(ArrayList<RankingsMeet>... params) {
+            return name = db.getNameForMeetRank();
+        }
+    }
+
+    private class GetDiverInfo extends AsyncTask<List<String>, List<String>, List<String>>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        List<String> diverName;
+
+        @SafeVarargs
+        @Override
+        protected final List<String> doInBackground(List<String>... params) {
+            return diverName = db.getDiverNames();
+        }
+    }
+
+    private class GetDiverId extends AsyncTask<String, Integer, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        int ids;
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            return ids = db.getId(stringId);
+        }
+    }
+
+    private class GetMeetId extends AsyncTask<String, Integer, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        int ids;
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            return ids = db.getId(stringId);
+        }
     }
 }

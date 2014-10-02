@@ -3,11 +3,14 @@ package com.rodriguez.divingscores;
 import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.MeetDatabase;
+
+import java.nio.channels.AsynchronousCloseException;
 import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -26,6 +29,7 @@ public class DiverHistory extends Activity {
     private ListView myList;
 	private TextView name, age, grade, school;
     private int diverId, meetId, diveNumber;
+    private String stringId;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -55,9 +59,9 @@ public class DiverHistory extends Activity {
     }	
 		
 	public void fillText(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());
-		ArrayList<String> diverInfo;
-		diverInfo = db.getDiverInfo(diverId);
+        ArrayList<String> diverInfo;
+		GetDiverInfo info = new GetDiverInfo();
+		diverInfo = info.doInBackground();
 			
 		if(!diverInfo.isEmpty()){
             String nameString = diverInfo.get(0);
@@ -81,9 +85,9 @@ public class DiverHistory extends Activity {
 	}
 	
 	private void populateListViewFromDB() {
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		ArrayList<String> meetInfo;
-		meetInfo = db.getMeetHistory(diverId);	
+        ArrayList<String> meetInfo;
+        GetMeetHistory history = new GetMeetHistory();
+		meetInfo = history.doInBackground();
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(
 			this, R.layout.list_item, meetInfo);
@@ -93,10 +97,9 @@ public class DiverHistory extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-                String stringId;
                 stringId = myList.getItemAtPosition(position).toString();
-                MeetDatabase db = new MeetDatabase(getApplicationContext());
-                meetId = db.getId(stringId);
+                GetMeetId ID = new GetMeetId();
+                meetId = ID.doInBackground(stringId);
                 getDiveNumber();
                 if(diveNumber == 0){
                     Toast.makeText(getApplicationContext(),
@@ -104,7 +107,7 @@ public class DiverHistory extends Activity {
                             Toast.LENGTH_LONG).show();
                 } else {
                     stringId = myList.getItemAtPosition(position).toString();
-                    meetId = db.getId(stringId);
+                    meetId = ID.doInBackground(stringId);
                     Intent intent = new Intent(getBaseContext(), MeetScores.class);
                     Bundle b = new Bundle();
                     b.putInt("key", diverId);
@@ -117,8 +120,8 @@ public class DiverHistory extends Activity {
 	}
 
     private void getDiveNumber(){
-        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
-        diveNumber = db.getDiveNumber(meetId, diverId);
+        GetDiveNumber num = new GetDiveNumber();
+        diveNumber = num.doInBackground();
     }
 	
 	@Override
@@ -147,5 +150,47 @@ public class DiverHistory extends Activity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class GetDiverInfo extends AsyncTask<ArrayList<String>, Object, Object> {
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        ArrayList<String> diverinfo;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return diverinfo = db.getDiverInfo(diverId);
+        }
+    }
+
+    private class GetMeetHistory extends AsyncTask<ArrayList<String>, Object, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        ArrayList<String> info;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return info = db.getMeetHistory(diverId);
+        }
+    }
+
+    private class GetMeetId extends AsyncTask<String, Integer, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        int ids;
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            return ids = db.getId(stringId);
+        }
+    }
+
+    private class GetDiveNumber extends AsyncTask<Integer, Object, Object>{
+        DiveNumberDatabase db =  new DiveNumberDatabase(getApplicationContext());
+        int number;
+
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            return number = db.getDiveNumber(meetId, diverId);
+        }
     }
 }

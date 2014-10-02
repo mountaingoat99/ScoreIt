@@ -9,6 +9,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -27,6 +28,7 @@ public class Choose extends Activity implements OnItemSelectedListener {
 
     private Spinner spinnerMeet;
 	private int meetSpinPosition, meetId = 0;
+    private String stringId;
 	
 	@Override
 		public void onCreate(Bundle savedInstanceState) 
@@ -60,9 +62,8 @@ public class Choose extends Activity implements OnItemSelectedListener {
     }
    
    private void loadSpinnerMeet(){
-	    MeetDatabase db = new MeetDatabase(getApplicationContext());
-	    
-		List<String> meetName = db.getMeetNames();
+       GetMeetInfo meet = new GetMeetInfo();
+       List<String> meetName = meet.doInBackground();
 		
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, meetName);
@@ -106,11 +107,10 @@ public class Choose extends Activity implements OnItemSelectedListener {
 	}
    
    public int getId(){
-	   String stringId;
        int id;
 	   stringId = spinnerMeet.getSelectedItem().toString().trim();
-	   MeetDatabase db = new MeetDatabase(getApplicationContext());
-	   id = db.getId(stringId);
+       GetMeetId ID = new GetMeetId();
+       id = ID.doInBackground(stringId);
 	   return id;
 	}
    
@@ -146,8 +146,28 @@ public class Choose extends Activity implements OnItemSelectedListener {
         return super.onOptionsItemSelected(item);
     }	
 	
-	public void onNothingSelected(AdapterView<?> arg0) 
-	{
-		// TODO Auto-generated method stub		
-	}		
+	public void onNothingSelected(AdapterView<?> arg0) {
+
+	}
+
+    private class GetMeetInfo extends AsyncTask<List<String>, List<String>, List<String>> {
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        List<String> meetName;
+
+        @SafeVarargs
+        @Override
+        protected final List<String> doInBackground(List<String>... params) {
+            return meetName = db.getMeetNames();
+        }
+    }
+
+    private class GetMeetId extends AsyncTask<String, Integer, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        int ids;
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            return ids = db.getId(stringId);
+        }
+    }
 }

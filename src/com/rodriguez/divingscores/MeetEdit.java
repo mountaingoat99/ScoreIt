@@ -2,6 +2,7 @@ package com.rodriguez.divingscores;
 
 import info.sqlite.helper.MeetDatabase;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -10,6 +11,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -67,9 +69,10 @@ public class MeetEdit extends Activity implements
     }
 
     public void fillEditText(){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
 		ArrayList<String> meetInfo;
-		meetInfo = db.getMeetInfo(meetId);
+        GetInfoForMeet meetinfo = new GetInfoForMeet();
+        meetInfo = meetinfo.doInBackground();
+
 		
 		if(!meetInfo.isEmpty()){
 			nameString = meetInfo.get(0);
@@ -110,35 +113,65 @@ public class MeetEdit extends Activity implements
 			startActivity(intent);
 		}
 	}
-	
-	public void editNameinDB(String newName){
+
+    private class EditNameinDB extends AsyncTask<String, Object, Object>{
 		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		db.editMeetName(meetId, newName);
-	}
-	
-	public void editSchoolinDB(String newSchool){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		db.editMeetSchool(meetId, newSchool);
-	}
-	
-	public void editCityinDB(String newCity){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		db.editMeetCity(meetId, newCity);
-	}
-	
-	public void editStateinDB(String newState){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		db.editMeetState(meetId, newState);
-	}
-	
-	public void editDateinDB(String newDate){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		db.editMeetDate(meetId, newDate);
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editMeetName(meetId, nameEdit);
+            return null;
+        }
 	}
 
-    public void editJudgeinDB(int newJudge){
+    private class EditSchoolinDB extends AsyncTask<String, Object, Object>{
         MeetDatabase db = new MeetDatabase(getApplicationContext());
-        db.editMeetJudges(meetId, newJudge);
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editMeetSchool(meetId, schoolEdit);
+            return null;
+        }
+	}
+
+    private class EditCityinDB extends AsyncTask<String, Object, Object>{
+		MeetDatabase db = new MeetDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editMeetCity(meetId, cityEdit);
+            return null;
+        }
+	}
+
+    private class EditStateinDB extends AsyncTask<String, Object, Object>{
+		MeetDatabase db = new MeetDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editMeetState(meetId, stateEdit);
+            return null;
+        }
+	}
+
+    private class EditDateinDB extends AsyncTask<String, Object, Object>{
+		MeetDatabase db = new MeetDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editMeetDate(meetId, dateEdit);
+            return null;
+        }
+	}
+
+    private class EditJudgeinDB extends AsyncTask<String, Object, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editMeetJudges(meetId, judges);
+            return null;
+        }
     }
 	
 	public void addListenerOnButton()
@@ -170,22 +203,27 @@ public class MeetEdit extends Activity implements
                     return;
                 }
                 if (!nameEdit.equals(nameString)) {
-                    editNameinDB(nameEdit);
+                    EditNameinDB eName = new EditNameinDB();
+                    eName.doInBackground();
                 }
                 if (!schoolEdit.equals(schoolString)) {
-                    editSchoolinDB(schoolEdit);
+                    EditSchoolinDB eSchool = new EditSchoolinDB();
+                    eSchool.doInBackground();
                 }
                 if (!cityEdit.equals(cityString)) {
-                    editCityinDB(cityEdit);
+                    EditCityinDB eCity = new EditCityinDB();
+                    eCity.doInBackground();
                 }
                 if (!stateEdit.equals(stateString)) {
-                    editStateinDB(stateEdit);
+                    EditStateinDB eState = new EditStateinDB();
+                    eState.doInBackground();
                 }
                 if (!dateEdit.equals(dateString)) {
-                    editDateinDB(dateEdit);
+                    EditDateinDB eDate = new EditDateinDB();
+                    eDate.doInBackground();
                 }
-
-                editJudgeinDB(judges);
+                EditJudgeinDB eJudge = new EditJudgeinDB();
+                eJudge.doInBackground();
                 Toast.makeText(getApplicationContext(),
                         "Diver has been edited to " + nameEdit + ", "
                                 + schoolEdit + ", " + cityEdit + ", "
@@ -248,6 +286,16 @@ public class MeetEdit extends Activity implements
             );
             dpd.show();
         }
+    }
 
+    private class GetInfoForMeet extends AsyncTask<ArrayList<String>, Object, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        ArrayList<String> info;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return info = db.getMeetInfo(meetId);
+        }
     }
 }

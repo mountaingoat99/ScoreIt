@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -34,12 +35,7 @@ public class EnterDiver extends Activity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         addListenerOnButton();
     }
-	
-	public void writeNameToDB(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());
-		db.fillDiver(nameString, ageString, gradeString, schoolString);		
-	}
-	
+
 	public void addListenerOnButton()
     {
     	final Context context = this;
@@ -65,7 +61,10 @@ public class EnterDiver extends Activity {
     	        			"Please make an entry in all fields", Toast.LENGTH_LONG).show();
     	        }
     	        else{
-    	        	writeNameToDB();
+                    // calls a separate thread to write to the db
+                    WriteNewDiver newdiver = new WriteNewDiver();
+                    newdiver.doInBackground();
+
     	        	Toast.makeText(getApplicationContext(),
     	        			"Diver has been saved", Toast.LENGTH_SHORT).show();
     	        	Intent intent = new Intent(context, Welcome.class);
@@ -99,5 +98,15 @@ public class EnterDiver extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Async database tasks
+    private class WriteNewDiver extends AsyncTask<String, Object, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.fillDiver(nameString, ageString, gradeString, schoolString);
+            return null;
+        }
+    }
 
 }

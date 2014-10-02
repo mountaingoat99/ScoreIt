@@ -8,6 +8,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -49,9 +50,9 @@ public class MeetDelete extends Activity {
     }
 	
 	public void fillEditText(){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
 		ArrayList<String> meetInfo;
-		meetInfo = db.getMeetInfo(meetId);
+        GetMeetInfo info = new GetMeetInfo();
+		meetInfo = info.doInBackground();
 		
 		if(!meetInfo.isEmpty()){
 			nameString = meetInfo.get(0);
@@ -76,11 +77,6 @@ public class MeetDelete extends Activity {
 		}
 	}
 	
-	public void deleteMeetinDB(){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		db.deleteMeet(meetId);
-	}
-	
 	public void addListenerOnButton()
     {
     	final Context context = this;
@@ -88,7 +84,9 @@ public class MeetDelete extends Activity {
     	btnDelete.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                deleteMeetinDB();
+
+                DeleteMeetinDB delete = new DeleteMeetinDB();
+                delete.doInBackground();
 
                 Toast.makeText(getApplicationContext(),
                         "Meet " + nameString + " has been deleted",
@@ -121,5 +119,26 @@ public class MeetDelete extends Activity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class DeleteMeetinDB extends AsyncTask<Integer, Object, Object> {
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(Integer... params) {
+            db.deleteMeet(meetId);
+            return null;
+        }
+    }
+
+    private class GetMeetInfo extends AsyncTask<ArrayList<String>, Object, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        ArrayList<String> meetinfo;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return meetinfo = db.getMeetInfo(meetId);
+        }
     }
 }

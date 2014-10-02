@@ -37,8 +37,8 @@ public class TypeDatabase extends DatabaseHelper {
     }
 
     //----------------looks for a dive type associated with total-----------//
-    public int searchTypes(int meetid, int diverid){
-        int id = 0;
+    public Double searchTypes(int meetid, int diverid){
+        double id = 0;
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT type from dive_type "
                 + " WHERE meet_id = " + meetid
@@ -47,7 +47,7 @@ public class TypeDatabase extends DatabaseHelper {
 
         if (c != null && c.getCount()>0 && c.moveToFirst()){
             do{
-                id = c.getInt(0);
+                id = c.getDouble(0);
             }while (c.moveToNext());
         }
         if (c != null) {

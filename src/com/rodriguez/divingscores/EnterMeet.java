@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -76,12 +77,6 @@ OnClickListener {
         }
     }
 	
-	public void writeMeetToDB(){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		
-		db.fillMeet(nameString, schoolString, cityString, stateString, dateString, judges);
-	}
-	
 	public void addListenerOnButton()
     {
     	final Context context = this;
@@ -112,7 +107,8 @@ OnClickListener {
                     Toast.makeText(getApplicationContext(),
                             "Please make an entry in all fields", Toast.LENGTH_LONG).show();
                 } else {
-                    writeMeetToDB();
+                    WriteNewMeet newmeet = new WriteNewMeet();
+                    newmeet.doInBackground();
                     Toast.makeText(getApplicationContext(),
                             "Meet has been saved", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, Welcome.class);
@@ -144,6 +140,17 @@ OnClickListener {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Async database tasks
+    private class WriteNewMeet extends AsyncTask<String, Object, Object> {
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.fillMeet(nameString, schoolString, cityString, stateString, dateString, judges);
+            return null;
+        }
     }
 
 }

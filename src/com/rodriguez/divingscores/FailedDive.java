@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,8 +56,8 @@ public class FailedDive extends Activity implements OnItemSelectedListener {
     }
 
     private void getDiveNumber(){
-        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
-        diveNumber = db.getDiveNumber(meetId, diverId);
+        GetDiveNumber number = new GetDiveNumber();
+        diveNumber = number.doInBackground();
     }
 
     public void addListenerOnButton(){
@@ -93,9 +94,9 @@ public class FailedDive extends Activity implements OnItemSelectedListener {
     }
 
     private void incrementDiveNumber(){
-        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
+        UpdateDiveNumber update = new UpdateDiveNumber();
         diveNumber ++;
-        db.updateDiveNumber(meetId, diverId, diveNumber);
+        update.doInBackground();
     }
 
     public void updateJudgeScore(){
@@ -166,5 +167,25 @@ public class FailedDive extends Activity implements OnItemSelectedListener {
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private class GetDiveNumber extends AsyncTask<Integer, Object, Object>{
+        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
+        int num;
+
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            return num = db.getDiveNumber(meetId, diverId);
+        }
+    }
+
+    private class UpdateDiveNumber extends AsyncTask<Object, Object, Object>{
+        DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            db.updateDiveNumber(meetId, diverId, diveNumber);
+            return null;
+        }
     }
 }
