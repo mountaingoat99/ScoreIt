@@ -229,20 +229,41 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/buttonChooseJW"
-            style="@android:style/Widget.Holo.Button"
+        <LinearLayout
+            android:id="@+id/layout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/layout2"
+            android:layout_marginTop="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_below="@+id/layout2"
-            android:text="@string/next"
-            android:textSize="@dimen/button_text"
-            android:textColor="@color/button_text"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentLeft="true"/>
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/buttonChooseList"
+                style="@android:style/Widget.Holo.Button"
+                android:layout_width="800dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/enter_list"
+                android:textSize="@dimen/button_text"
+                android:textColor="@color/button_text"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentLeft="true"/>
+
+            <Button
+                android:id="@+id/buttonChooseJW"
+                style="@android:style/Widget.Holo.Button"
+                android:layout_width="800dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/enter_scores"
+                android:textSize="@dimen/button_text"
+                android:textColor="@color/button_text"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentLeft="true"/>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

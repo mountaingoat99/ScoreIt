@@ -4,7 +4,7 @@
 
     <item android:id="@+id/menu_rankings"
         android:title="@string/rankings_menu"
-        android:orderInCategory="200"
+        android:orderInCategory="100"
         android:showAsAction="collapseActionView" />
 
     <item android:id="@+id/menu_enter_diver"
@@ -14,12 +14,17 @@
 
     <item android:id="@+id/menu_enter_meet"
         android:title="@string/enter_new_meet_menu"
-        android:orderInCategory="200"
+        android:orderInCategory="300"
         android:showAsAction="collapseActionView" />
 
     <item android:id="@+id/menu_remove_diver_from_meet"
         android:title="@string/remove_diver_from_meet"
-        android:orderInCategory="200"
+        android:orderInCategory="400"
+        android:showAsAction="collapseActionView" />
+
+    <item android:id="@+id/menu_how_to"
+        android:title="@string/how_to_string"
+        android:orderInCategory="500"
         android:showAsAction="collapseActionView" />
 
 </menu>

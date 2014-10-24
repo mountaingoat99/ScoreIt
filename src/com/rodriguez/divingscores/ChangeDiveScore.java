@@ -2,7 +2,6 @@ package com.rodriguez.divingscores;
 
 import info.controls.NothingSelectedSpinnerAdapter;
 import info.sqlite.helper.DiveNumberDatabase;
-import info.sqlite.helper.DiveTotalDatabase;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.JudgeScoreDatabase;
 import info.sqlite.helper.MeetDatabase;
@@ -47,7 +46,8 @@ public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
     private String  totalScore, s1String, s2String, s3String, s4String, s5String, s6String, s7String, failedString, testNumber;
     private String editTotal = "0.0", edit1 = "0.0", edit2 = "0.0", edit3 = "0.0", edit4 = "0.0",
             edit5 = "0.0", edit6 = "0.0", edit7 = "0.0", editFailed;
-    private Double e1 = 0.0, e2 = 0.0, e3 = 0.0, e4 = 0.0, e5 = 0.0, e6 = 0.0, e7 = 0.0, newOverAllScore, allScoreTotal, multiplier = 0.0;
+    private Double e1 = 0.0, e2 = 0.0, e3 = 0.0, e4 = 0.0, e5 = 0.0, e6 = 0.0, e7 = 0.0, newOverAllScore, allScoreTotal,
+            multiplier = 0.0, roundedDiveTotal;
     private Boolean noSpinChoice, alert = true;
     final Context context = this;
 
@@ -380,13 +380,27 @@ public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
     private Double getMultiplerScore(){
         double score = 0.0;
         ArrayList<Double> Scores = new ArrayList<>();
-        Scores.add(e1);
-        Scores.add(e2);
-        Scores.add(e3);
-        Scores.add(e4);
-        Scores.add(e5);
-        Scores.add(e6);
-        Scores.add(e7);
+
+        // only add as many scores to the array as there are judges
+        if (judgeTotal == 3) {
+            Scores.add(e1);
+            Scores.add(e2);
+            Scores.add(e3);
+        }else if(judgeTotal == 5) {
+            Scores.add(e1);
+            Scores.add(e2);
+            Scores.add(e3);
+            Scores.add(e4);
+            Scores.add(e5);
+        }else{
+            Scores.add(e1);
+            Scores.add(e2);
+            Scores.add(e3);
+            Scores.add(e4);
+            Scores.add(e5);
+            Scores.add(e6);
+            Scores.add(e7);
+        }
 
         Double[] theScores = new Double[ Scores.size()];
         Scores.toArray(theScores);
@@ -418,7 +432,10 @@ public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
         if(multiplier != 0.0) {
             score = score * multiplier;
         }
-        return  score;
+
+        roundedDiveTotal = .5 *Math.round(score * 2);
+
+        return  roundedDiveTotal;
     }
 
     private void getJudgeTotal(){

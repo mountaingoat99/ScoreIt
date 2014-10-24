@@ -5,7 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_about">About</string>
-    <string name="title_activity_welcome">Score My Dive</string>
+    <string name="title_activity_welcome">Detailed Scoring</string>
     <string name="title_activity_choose_diver">Choose Diver</string>
 
     <string-array name="dive_array">
@@ -137,6 +137,7 @@
     <string name="diver_name">Diver Name:</string>
     <string name="meet_name">Meet Name:</string>
     <string name="next">Next</string>
+    <string name="enter_list">Enter List</string>
     <string name="dive_1">Dive 1:</string>
     <string name="dive_2">Dive 2:</string>
     <string name="dive_3">Dive 3:</string>
@@ -241,10 +242,11 @@
     <string name="dialog_message">To "Fail" a dive enter "0.00" in the Total box. You can only update the Total Score or the Judges Scores.
                         Updating the Total Score will set all Judge Scores to Zero.
                         Updating the Judges Scores will always recalculate the Total Score.</string>
-    <string name="how_to1">\t Start by entering divers and meets and then click the "Enter Scores" button.
-                        From there you can choose which Meet you will be attending, then which Diver you want to enter scores for.</string>
+    <string name="how_to1">\t In the Quick Score mode the only thing that will be saved is a score sheet name that you can edit, the dive
+                            scores, and the total for a meet. In the Detailed Scores you can save info about multiple divers, meets, and all details
+                            from a meet: Dive name, DOD, position, judge scores, total scores, dates, ect\#8230</string>
     <string name="how_to2">\t You can enter multiple divers during a meet. Calculate scores by either entering the judges scores
-                        or just enter the total score. The app will keep a running total of the score as the meet progresses.
+                        or just enter the total score. The detailed section will keep a running total of the score as the meet progresses.
                         You can also edit the scores in case you entered the wrong value, or enter a failed dive. Use the Android
                         Menu/Overflow buttons on the top right of the screen.</string>
     <string name="how_to3">\t I encourage you to watch the YouTube video demonstration of the app and all of its features. If you have
@@ -284,5 +286,48 @@
     <string name="send_report">Send Report</string>
     <string name="choose_report">Choose a Report</string>
     <string name="dd">Dive DD:</string>
+    <string name="title_activity_enter_dive_list">Enter Dive List</string>
+    <string name="title_activity_choose_dives_from_list">Choose Dives From List</string>
+    <string name="title_activity_enter_score_from_list">Enter Score From List</string>
+    <string name="title_activity_edit_dive_list">Edit Dive List</string>
+    <string name="title_activity_enter_total_score_from_dive_list">Enter Total Score From Dive List</string>
+    <string name="list_info">How To Score</string>
+    <string name="dialog_list_info">You can enter scores two different ways. If you use a dive list you have to enter
+                                    all the dives first. Once the list is complete you can choose the "Next" button and
+                                    score the dives in the list in any order, or edit them anytime. If you do not
+                                    want to use a list, just hit the "Next" button and you will enter the dive information
+                                    and score each dive at the same time. Use the menu button in the next screen if you need to
+                                    change a dive score.</string>
+    <string name="welcome_info">More Options</string>
+    <string name="edit_dive">Update</string>
+    <string name="enter_dive">Enter Dive</string>
+    <string name="two_judge_option">Score Two Judge Meet</string>
+    <string name="two_judge_info">If your meet only has two judges, use the three judge option, then when you are in the screens to enter scores,
+                                    enter scores for the first two judges, zero for the third judge, then press the \'Score Two Judge Meet\' option in the menu.</string>
+    <string name="dialog_welcome_info">You will need to enter at least one diver and one meet
+                                    to proceed with scoring in this screen.
+                                    By using the Menu button in the upper right (or the bottom left button on Samsung Devices)
+                                    you can see Meet Rankings, Change Dive Scores, Fail Dives, and other options in each screen
+                                    of the app.</string>
+    <string name="dialog_edit_quick_list_info">To Edit a Score Sheet Name or Dive Score, just long press the values. The total score will be updated after every score update.
+                                                Use the Menu if you need to delete a Score Sheet.</string>
+    <string name="title_activity_home">Score My Dive</string>
+    <string name="score_my_dive">Score My Dive</string>
+    <string name="quick_score">Quick Scores</string>
+    <string name="detail_score">Detailed Scores</string>
+    <string name="home_info">Thanks for using our App.</string>
+    <string name="quick_score_info">The Quick Score option will give you a very basic score sheet that can be saved in the app.</string>
+    <string name="detail_score_info">The Detailed Score option will save all details about any number of divers, meets, and scores.</string>
+    <string name="title_activity_quick_score">QuickScore</string>
+    <string name="title_activity_quick_score_edit">Quick Score Edit</string>
+    <string name="choose_score_sheet">Choose Score Sheet</string>
+    <string name="new_score_sheet">New Score Sheet</string>
+    <string name="name_meet">Score Sheet Name:</string>
+    <string name="total_save">Total and Save</string>
+    <string name="totals">Total:</string>
+    <string name="title_activity_edit_quick_score_value">Update</string>
+    <string name="save">Save</string>
+    <string name="delete_score_sheet">Delete Score Sheet</string>
+    <string name="edit_dive_list_info">After entering all the dives in the list you will have the option to score them. You can edit a dive by long clicking the dive name.</string>
 
 </resources>

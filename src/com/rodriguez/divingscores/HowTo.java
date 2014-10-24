@@ -13,7 +13,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import com.rodriguez.divingscores.R;
 
 public class HowTo extends Activity {
 
@@ -41,7 +40,7 @@ public class HowTo extends Activity {
         link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=6sHgaUIN7Zk&list=UUmOmSbB5YzaLx86a2rVr7aw")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=0t84j9rFS0A&feature=youtu.be")));
                 Log.i("Video", "Video Playing App Tutorial");
             }
         });

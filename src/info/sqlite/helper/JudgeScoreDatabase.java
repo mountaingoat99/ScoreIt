@@ -240,6 +240,22 @@ public class JudgeScoreDatabase extends DatabaseHelper {
         db.close();
     }
 
+    public void updateJudgeScoreTypes(int meetid, int diverid, String diveCategory, String diveTypeName, String divePosition,
+                                      double multiplier, int divenumber){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "UPDATE " + getTableJudgeScores() + " SET "
+                + getDiveCategory() + "='" + diveCategory + "', "
+                + getDiveTypeName() + "='" + diveTypeName + "', "
+                + getDivePosition() + "='" + divePosition + "', "
+                + getMultiplier() + "=" + multiplier
+                + " WHERE meet_id = " + meetid
+                + " AND diver_id = " + diverid
+                + " AND dive_number = " + divenumber;
+
+        db.execSQL(selectQuery);
+        db.close();
+    }
+
     //-------------------updates a score in the database with a score------------------------------------//
     public void updateJudgeScoreFailed(int meetid, int diverid, int divenumber, String failed, double totalscore, double score1, double score2,
                                 double score3, double score4, double score5, double score6, double score7){

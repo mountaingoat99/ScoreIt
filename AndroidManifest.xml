@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rodriguez.divingscores"
-    android:versionCode="4"
-    android:versionName="1.4" >
+    android:versionCode="5"
+    android:versionName="1.5" >
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="20" />
+        android:targetSdkVersion="21" />
 
     <supports-screens
         android:largeScreens="true"
@@ -25,8 +25,9 @@
             android:value="com.rodriguez.divingscores" />
 
         <activity
-            android:name=".Welcome"
-            android:label="@string/title_activity_welcome" >
+            android:name="com.rodriguez.divingscores.Home"
+            android:label="@string/title_activity_home"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,186 +35,201 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DiverHistory"
+            android:name="com.rodriguez.divingscores.Welcome"
+            android:label="@string/title_activity_welcome" >
+            <intent-filter>
+                <action android:name="android.intent.action.Home.Welcome" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rodriguez.divingscores.Home" />
+        </activity>
+        <activity
+            android:name="com.rodriguez.divingscores.DiverHistory"
             android:label="@string/title_activity_diver_history" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.DiverHistory" />
+                <action android:name="com.rodriguez.divingscores.Home.DiverHistory" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome" />
+                android:value="com.rodriguez.divingscores.Home" />
         </activity>
         <activity
-            android:name=".MeetScores"
+            android:name="com.rodriguez.divingscores.MeetScores"
             android:label="@string/title_activity_meet_scores" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.MeetScores" />
+                <action android:name="com.rodriguez.divingscores.Home.MeetScores" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome.DiverHistory" />
+                android:value="com.rodriguez.divingscores.Home.DiverHistory" />
         </activity>
         <activity
-            android:name=".DiverEdit"
+            android:name="com.rodriguez.divingscores.DiverEdit"
             android:label="@string/title_activity_diver_edit" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.DiverEdit" />
+                <action android:name="com.rodriguez.divingscores.Home.DiverEdit" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome" />
+                android:value="com.rodriguez.divingscores.Home" />
         </activity>
         <activity
-            android:name=".DiverDelete"
-            android:label="@string/title_activity_diver_delete" >
+            android:name="com.rodriguez.divingscores.DiverDelete"
+            android:label="@string/title_activity_diver_delete"
+            android:theme="@android:style/Theme.Holo.Dialog">
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.DiverDelete" />
+                <action android:name="com.rodriguez.divingscores.Home.DiverDelete" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome" />
+                android:value="com.rodriguez.divingscores.Home" />
         </activity>
         <activity
-            android:name=".MeetResults"
+            android:name="com.rodriguez.divingscores.MeetResults"
             android:label="@string/title_activity_meet_results" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.MeetResults" />
+                <action android:name="com.rodriguez.divingscores.Home.MeetResults" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome" />
+                android:value="com.rodriguez.divingscores.Home" />
         </activity>
         <activity
-            android:name=".MeetEdit"
+            android:name="com.rodriguez.divingscores.MeetEdit"
             android:label="@string/title_activity_meet_edit" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.MeetEdit" />
+                <action android:name="com.rodriguez.divingscores.Home.MeetEdit" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome" />
+                android:value="com.rodriguez.divingscores.Home" />
         </activity>
         <activity
-            android:name=".MeetDelete"
-            android:label="@string/title_activity_meet_delete" >
+            android:name="com.rodriguez.divingscores.MeetDelete"
+            android:label="@string/title_activity_meet_delete"
+            android:theme="@android:style/Theme.Holo.Dialog">
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.MeetDelete" />
+                <action android:name="com.rodriguez.divingscores.Home.MeetDelete" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome" />
+                android:value="com.rodriguez.divingscores.Home" />
         </activity>
         <activity
-            android:name=".Choose"
+            android:name="com.rodriguez.divingscores.Choose"
             android:label="@string/title_activity_choose" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.Choose" />
+                <action android:name="com.rodriguez.divingscores.Home.Choose" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome" />
+                android:value="com.rodriguez.divingscores.Home" />
         </activity>
         <activity
-            android:name=".ChooseDiver"
+            android:name="com.rodriguez.divingscores.ChooseDiver"
             android:label="@string/title_activity_choose_diver" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.ChooseDiver" />
+                <action android:name="com.rodriguez.divingscores.Home.ChooseDiver" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome" />
+                android:value="com.rodriguez.divingscores.Home" />
         </activity>
         <activity
-            android:name=".ChooseSummary"
+            android:name="com.rodriguez.divingscores.ChooseSummary"
             android:label="@string/title_activity_choose_summary" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.ChooseSummary" />
+                <action android:name="com.rodriguez.divingscores.Home.ChooseSummary" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome.ChooseDiver" />
+                android:value="com.rodriguez.divingscores.Home.ChooseDiver" />
         </activity>
         <activity
-            android:name=".EnterDiver"
+            android:name="com.rodriguez.divingscores.EnterDiver"
             android:label="@string/title_activity_enter_diver" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.EnterDiver" />
+                <action android:name="com.rodriguez.divingscores.Home.EnterDiver" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome" />
+                android:value="com.rodriguez.divingscores.Home" />
         </activity>
         <activity
-            android:name=".EnterMeet"
+            android:name="com.rodriguez.divingscores.EnterMeet"
             android:label="@string/title_activity_enter_meet" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.EnterMeet" />
+                <action android:name="com.rodriguez.divingscores.Home.EnterMeet" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome" />
+                android:value="com.rodriguez.divingscores.Home" />
         </activity>
-        <activity android:name=".Dives" >
+        <activity android:name="com.rodriguez.divingscores.Dives" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.Dives" />
+                <action android:name="com.rodriguez.divingscores.Home.Dives" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome.ChooseSummary" />
+                android:value="com.rodriguez.divingscores.Home.ChooseSummary" />
         </activity>
         <activity
-            android:name=".HowTo"
+            android:name="com.rodriguez.divingscores.HowTo"
             android:label="@string/title_activity_how_to" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.HowTo" />
+                <action android:name="com.rodriguez.divingscores.Home.HowTo" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChangeDiveScore"
+            android:name="com.rodriguez.divingscores.ChangeDiveScore"
             android:label="@string/title_activity_change_dive_score" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.ChangeDiveScore" />
+                <action android:name="com.rodriguez.divingscores.Home.ChangeDiveScore" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -223,11 +239,11 @@
                 android:value="com.rodriguez.divingscores.ChooseSummary" />
         </activity>
         <activity
-            android:name=".FailedDive"
+            android:name="com.rodriguez.divingscores.FailedDive"
             android:label="@string/title_activity_failed_dive"
-            android:theme="@android:style/Theme.Holo.Dialog" >
+            android:theme="@android:style/Theme.Holo.Dialog">
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.FailedDive" />
+                <action android:name="com.rodriguez.divingscores.Home.FailedDive" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -236,11 +252,28 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rodriguez.divingscores.ChooseSummary" />
         </activity>
+
         <activity
-            android:name=".EnterFinalDiveScore"
+            android:name="com.rodriguez.divingscores.EditQuickScoreValue"
+            android:label="@string/title_activity_edit_quick_score_value"
+            android:theme="@android:style/Theme.Holo.Dialog"
+            android:windowSoftInputMode="stateAlwaysVisible">
+            <intent-filter>
+                <action android:name="com.rodriguez.divingscores.Home.EditQuickScoreValue" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rodriguez.divingscores.QuickScoreEdit" />
+        </activity>
+
+        <activity
+            android:name="com.rodriguez.divingscores.EnterFinalDiveScore"
             android:label="@string/title_activity_enter_final_dive_score" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.EnterFinalDiveScore" />
+                <action android:name="com.rodriguez.divingscores.Home.EnterFinalDiveScore" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -250,11 +283,11 @@
                 android:value="com.rodriguez.divingscores.ChooseSummary" />
         </activity>
         <activity
-            android:name=".RemoveDiverFromMeet"
+            android:name="com.rodriguez.divingscores.RemoveDiverFromMeet"
             android:label="@string/title_activity_remove_diver_from_meet"
-            android:theme="@android:style/Theme.Holo.Dialog" >
+            android:theme="@android:style/Theme.Holo.Dialog">
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.RemoveDiverFromMeet" />
+                <action android:name="com.rodriguez.divingscores.Home.RemoveDiverFromMeet" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -264,18 +297,18 @@
                 android:value="com.rodriguez.divingscores.ChooseDiver" />
         </activity>
         <activity
-            android:name=".About"
+            android:name="com.rodriguez.divingscores.About"
             android:label="@string/title_activity_about"
             android:theme="@android:style/Theme.Holo.Dialog" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome" />
+                android:value="com.rodriguez.divingscores.Home" />
         </activity>
         <activity
-            android:name=".ViewDiveInfo"
+            android:name="com.rodriguez.divingscores.ViewDiveInfo"
             android:label="@string/title_activity_view_dive_info" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.ViewDiveInfo" />
+                <action android:name="com.rodriguez.divingscores.Home.ViewDiveInfo" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -285,19 +318,19 @@
                 android:value="com.rodriguez.divingscores.MeetScores" />
         </activity>
         <activity
-            android:name=".Rankings"
+            android:name="com.rodriguez.divingscores.Rankings"
             android:label="@string/title_activity_rankings" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.Rankings" />
+                <action android:name="com.rodriguez.divingscores.Home.Rankings" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".RankingsByMeet"
+            android:name="com.rodriguez.divingscores.RankingsByMeet"
             android:label="@string/title_activity_rankings_by_meet" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.RankingsByMeet" />
+                <action android:name="com.rodriguez.divingscores.Home.RankingsByMeet" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -307,17 +340,110 @@
                 android:value="com.rodriguez.divingscores.Rankings" />
         </activity>
         <activity
-            android:name=".Reports"
+            android:name="com.rodriguez.divingscores.Reports"
             android:label="@string/title_activity_reports" >
             <intent-filter>
-                <action android:name="com.rodriguez.divingscores.Welcome.Reports" />
+                <action android:name="com.rodriguez.divingscores.Home.Reports" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rodriguez.divingscores.Welcome" />
+                android:value="com.rodriguez.divingscores.Home" />
         </activity>
+        <activity
+            android:name="com.rodriguez.divingscores.EnterDiveList"
+            android:label="@string/title_activity_enter_dive_list" >
+            <intent-filter>
+                <action android:name="com.rodriguez.divingscores.Home.EnterDiveList" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rodriguez.divingscores.ChooseDiver" />
+        </activity>
+        <activity
+            android:name="com.rodriguez.divingscores.ChooseDivesFromList"
+            android:label="@string/title_activity_choose_dives_from_list" >
+            <intent-filter>
+                <action android:name="com.rodriguez.divingscores.Home.ChooseDivesFromList" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rodriguez.divingscores.EnterDiveList" />
+        </activity>
+        <activity
+            android:name="com.rodriguez.divingscores.EnterScoreFromList"
+            android:label="@string/title_activity_enter_score_from_list" >
+            <intent-filter>
+                <action android:name="com.rodriguez.divingscores.Home.EnterScoreFromList" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rodriguez.divingscores.ChooseDivesFromList" />
+        </activity>
+        <activity
+            android:name="com.rodriguez.divingscores.EditDiveList"
+            android:label="@string/title_activity_edit_dive_list" >
+            <intent-filter>
+                <action android:name="com.rodriguez.divingscores.Home.EditDiveList" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rodriguez.divingscores.EnterDiveList" />
+        </activity>
+        <activity
+            android:name="com.rodriguez.divingscores.EnterTotalScoreFromDiveList"
+            android:label="@string/title_activity_enter_total_score_from_dive_list" >
+            <intent-filter>
+                <action android:name="com.rodriguez.divingscores.Home.EnterTotalScoreFromDiveList" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rodriguez.divingscores.ChooseDivesFromList" />
+        </activity>
+        <activity
+            android:name="com.rodriguez.divingscores.QuickScore"
+            android:label="@string/title_activity_quick_score" >
+            <intent-filter>
+                <action android:name="com.rodriguez.divingscores.Home.QuickScore" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rodriguez.divingscores.Home" />
+        </activity>
+        <activity
+            android:name="com.rodriguez.divingscores.QuickScoreEdit"
+            android:label="@string/title_activity_quick_score_edit" >
+            <intent-filter>
+                <action android:name="com.rodriguez.divingscores.Home.QuickScoreEdit" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rodriguez.divingscores.Home" />
+        </activity>
+
     </application>
 
 </manifest>

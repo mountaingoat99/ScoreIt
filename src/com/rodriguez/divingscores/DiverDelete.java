@@ -2,7 +2,6 @@ package com.rodriguez.divingscores;
 
 import info.sqlite.helper.DiverDatabase;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import android.app.ActionBar;
@@ -16,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,6 +31,7 @@ public class DiverDelete extends Activity {
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_diver_delete);
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {

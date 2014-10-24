@@ -28,7 +28,9 @@ import info.controls.SpinnerDiveStyleCustomBaseAdpater;
 import info.sqlite.helper.ArmstandPlatformDatabase;
 import info.sqlite.helper.BackDatabase;
 import info.sqlite.helper.BackPlatformDatabase;
+import info.sqlite.helper.DiveListDatabase;
 import info.sqlite.helper.DiveNumberDatabase;
+import info.sqlite.helper.DiveTotalDatabase;
 import info.sqlite.helper.ForwardDatabase;
 import info.sqlite.helper.ForwardPlatformDatabase;
 import info.sqlite.helper.InwardDatabase;
@@ -45,11 +47,11 @@ public class EnterFinalDiveScore extends Activity implements OnItemSelectedListe
     private EditText score1;
     private TextView DD, name;
     private RadioButton radioTuck, radioPike, radioFree, radioStraight;
-    private int diverId, meetId, diveType, diveNumber, divePosition;
+    private int diverId, meetId, diveType, diveNumber, diveTotal, divePosition;
     private double boardType = 0.0;
     private double  sc1 = 0.0, multiplier = 0.0, total = 0.0;
     private ArrayList<DiveStyleSpinner> searchDives;
-    private String failedDive = "P", ddString, stringId;
+    private String failedDive = "P", ddString, stringId, className = "nonList";
     private static final String KEY_TEXT_VALUE = "textValue";
 
     @Override
@@ -76,6 +78,7 @@ public class EnterFinalDiveScore extends Activity implements OnItemSelectedListe
         loadSpinnerData();
         setTitle();
         getDiveNumber();
+        getDiveTotal();
         addListenerOnButton();
         checkRadios();
     }
@@ -89,6 +92,11 @@ public class EnterFinalDiveScore extends Activity implements OnItemSelectedListe
     private void getDiveNumber(){
         GetDiveNumber num = new GetDiveNumber();
         diveNumber = num.doInBackground();
+    }
+
+    private void getDiveTotal(){
+        SearchDiveTotals search = new SearchDiveTotals();
+        diveTotal = search.doInBackground();
     }
 
     @Override
@@ -523,8 +531,10 @@ public class EnterFinalDiveScore extends Activity implements OnItemSelectedListe
 
     private void incrementDiveNumber(){
         IncrementDiveNumber divenumber = new IncrementDiveNumber();
-        diveNumber ++;
-        divenumber.doInBackground();
+        if (diveNumber != diveTotal) {
+            diveNumber++;
+            divenumber.doInBackground();
+        }
     }
 
     private void calcScores() {
@@ -537,6 +547,7 @@ public class EnterFinalDiveScore extends Activity implements OnItemSelectedListe
         if(diveNumber == 1){
             resultIndex = 3;
             db.writeDiveScore(meetId, diverId, resultIndex, sc1, total);
+            updateDiveListToYes();
             return;
         }
         if(diveNumber == 2){
@@ -666,6 +677,11 @@ public class EnterFinalDiveScore extends Activity implements OnItemSelectedListe
         sc1 = .5 * Math.round(roundedNumber * 2);
     }
 
+    private void updateDiveListToYes(){
+        UpdateDiveListToYes yes = new UpdateDiveListToYes();
+        yes.doInBackground();
+    }
+
     private void checkRadios() {
         radioStraight.setOnClickListener(new OnClickListener() {
             @Override
@@ -740,15 +756,20 @@ public class EnterFinalDiveScore extends Activity implements OnItemSelectedListe
             case R.id.menu_failed_dive:
                 getMultiplier();
                 if (multiplier != 0.0) {
-                    String diveTypeName = spinner.getSelectedItem().toString();
+                    TextView name = (TextView) findViewById(R.id.diveStyle);
+                    TextView id = (TextView) findViewById(R.id.diveId);
+                    String i = id.getText().toString();
+                    String diveTypeName = i + " - " + name.getText().toString();
                     Intent intent = new Intent(context, FailedDive.class);
                     Bundle b = new Bundle();
+                    b.putString("className", className);
                     b.putInt("keyDiver", diverId);
                     b.putInt("keyMeet", meetId);
                     b.putInt("keyDiveType", diveType);
                     b.putString("keyDiveTypeName", diveTypeName);
                     b.putInt("keyDivePosition", divePosition);
                     b.putDouble("boardType", boardType);
+                    b.putDouble("multiplier", multiplier);
                     intent.putExtras(b);
                     startActivity(intent);
                     break;
@@ -766,6 +787,16 @@ public class EnterFinalDiveScore extends Activity implements OnItemSelectedListe
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private class UpdateDiveListToYes extends AsyncTask<Object, Object, Object>{
+        DiveListDatabase db = new DiveListDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(Object... params){
+            db.setNoList(meetId, diverId);
+            return null;
+        }
     }
 
     private class GetTotalScore extends AsyncTask<Double, Object, Object>{
@@ -1104,6 +1135,15 @@ public class EnterFinalDiveScore extends Activity implements OnItemSelectedListe
         @Override
         protected final ArrayList<DiveStyleSpinner> doInBackground(ArrayList<DiveStyleSpinner>... params) {
             return names = db.getArmstandFiveNames();
+        }
+    }
+
+    private class SearchDiveTotals extends AsyncTask<Integer, Object, Object>{
+        DiveTotalDatabase db = new DiveTotalDatabase(getApplicationContext());
+
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            return db.searchTotals(meetId, diverId);
         }
     }
 }

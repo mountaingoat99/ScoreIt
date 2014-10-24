@@ -16,18 +16,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.os.Environment;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -36,6 +37,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,14 +47,15 @@ public class MeetScores extends Activity {
                         grade, school, total, Type, score1, score2, score3, score4, score5,
                         score6, score7, score8, score9, score10, score11, s1, s2, s3, s4,
                         s5, s6, s7, s8, s9, s10, s11;
-    private int diverId, meetId, diveCount, diveNumberFromDB, diveNumber = 0;
+    private int diverId, meetId, diveNumberFromDB, diveNumber = 0;
     private String score1String, score2String, score3String, score4String, score5String, score6String,
                         score7String, score8String, score9String, score10String, score11String, totalString;
     private String meetNameString, meetDateString, nameString, schoolString;
-    private Boolean failed, dialogShown = true;
+    private Boolean failed;
     private double boardType = 0.0;
     Bitmap myBitmap;
     final Context context = this;
+    public boolean firstAlertMeetScores;
 
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -65,9 +68,6 @@ public class MeetScores extends Activity {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        if (savedInstanceState != null){
-            dialogShown = savedInstanceState.getBoolean("keyBool");
-        }
 
         setupView();
         
@@ -82,10 +82,22 @@ public class MeetScores extends Activity {
         fillScores();
         fillType();
         setUpLongPress();
-        if(dialogShown){
+        loadSavedPreferences();
+        if(!firstAlertMeetScores){
             showDialog();
         }
+    }
 
+    private void loadSavedPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        firstAlertMeetScores = sp.getBoolean("firstAlertMeetScores",false);
+    }
+
+    private void savePreferences(String key, boolean value){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        Editor editor = sp.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
     }
 
     private void getDiveNumber(){
@@ -93,29 +105,22 @@ public class MeetScores extends Activity {
         diveNumberFromDB = num.doInBackground();
     }
 
-    @Override
-    protected void onSaveInstanceState(@SuppressWarnings("NullableProblems") Bundle savedState){
-        super.onSaveInstanceState(savedState);
-        savedState.putBoolean("keyBool", dialogShown);
-
-    }
-
     private void showDialog(){
         final Dialog dialog = new Dialog(context);
         dialog.setCanceledOnTouchOutside(true);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_see_dive_info);
+        Button okButton = (Button) dialog.findViewById(R.id.buttonOkay);
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                savePreferences("firstAlertMeetScores", true);
+                dialog.cancel();
+            }
+        });
 
         dialog.show();
-
-        final Timer t = new Timer();
-        t.schedule(new TimerTask() {
-            public void run() {
-                dialog.dismiss();
-                t.cancel();
-            }
-        }, 2000);
-        dialogShown = false;
     }
 
     private void setUpLongPress(){

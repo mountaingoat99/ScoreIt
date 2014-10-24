@@ -14,6 +14,7 @@ import info.sqlite.model.FrontPlatformDB;
 import info.sqlite.model.InwardDB;
 import info.sqlite.model.InwardPlatformDB;
 import info.sqlite.model.PlatformDivesDB;
+import info.sqlite.model.QuickScoreDB;
 import info.sqlite.model.ReverseDB;
 import info.sqlite.model.ReversePlatformDB;
 import info.sqlite.model.ScoresDB;
@@ -26,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	protected static final String LOG = "DatabaseHelper";
 	
 	// Database Version
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	
 	// Database name
 	private static final String DATABASE_NAME = "DIVE_DOD";
@@ -56,6 +57,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String TABLE_SCORES = "scores";
     protected static final String TABLE_JUDGE_SCORES = "judge_scores";
     protected static final String TABLE_DIVE_NUMBER = "dive_number";
+
+    // version 2 database
+    protected static final String TABLE_DIVE_LIST = "dive_list";
+    protected static final String TABLE_QUICK_SCORE = "quick_score";
 
 	// common column names
 	protected static final String KEY_ID = "id";
@@ -144,6 +149,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String SCORE_7 = "score_7";
     protected static final String MULTIPLIER = "multiplier";
 
+    // version 2 database changes
+    // dive list table
+    protected static final String LIST_FILLED = "list_filled";
+    protected static final String NO_LIST = "no_list";
+
+    // quick score table
+    protected static final String NAME_MEET = "name_meet";
+
+    public static String getTableQuickScore() {
+        return TABLE_QUICK_SCORE;
+    }
+    public static String getNameMeet() {
+        return NAME_MEET;
+    }
+    public static String getListFilled() {
+        return LIST_FILLED;
+    }
     public static String getTableJudgeScores() { return TABLE_JUDGE_SCORES; }
     public static String getTableScores() { return TABLE_SCORES; }
     public static String getTableDiveType() { return TABLE_DIVE_TYPE; }
@@ -195,6 +217,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static String getTableArmstandDives() {
         return TABLE_PLATFORM_DIVES;
+    }
+
+    public static String getTableDiveList() {
+        return TABLE_DIVE_LIST;
     }
 
     public static String getTenMeter() {
@@ -393,7 +419,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	// table create statements
-	public static final String CREATE_TABLE_FORWARD = "CREATE TABLE "
+	public static final String CREATE_TABLE_FORWARD = "CREATE TABLE IF NOT EXISTS "
 			+ TABLE_FORWARD + "(" + KEY_ID + " INTEGER, "
             + ONE_METER + " TEXT, " + THREE_METER + " TEXT, "
 			+ DIVE_NAME + " TEXT, " + ONE_S + " REAL, " + ONE_P + " REAL, "
@@ -401,7 +427,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ THREE_P + " REAL, " + THREE_T + " REAL, " + THREE_F + " REAL "
 			+ ")";
 
-	public static final String CREATE_TABLE_BACK = "CREATE TABLE "
+	public static final String CREATE_TABLE_BACK = "CREATE TABLE IF NOT EXISTS "
 			+ TABLE_BACK + "(" + KEY_ID + " INTEGER, "
             + ONE_METER + " TEXT, " + THREE_METER + " TEXT, "
 			+ DIVE_NAME + " TEXT, " + ONE_S + " REAL, " + ONE_P + " REAL, "
@@ -409,7 +435,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ THREE_P + " REAL, " + THREE_T + " REAL, " + THREE_F + " REAL "
 			+ ")";
 	
-	public static final String CREATE_TABLE_INWARD = "CREATE TABLE "
+	public static final String CREATE_TABLE_INWARD = "CREATE TABLE IF NOT EXISTS "
 			+ TABLE_INWARD + "(" + KEY_ID + " INTEGER, "
             + ONE_METER + " TEXT, " + THREE_METER + " TEXT, "
 			+ DIVE_NAME + " TEXT, " + ONE_S + " REAL, " + ONE_P + " REAL, "
@@ -417,7 +443,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ THREE_P + " REAL, " + THREE_T + " REAL, " + THREE_F + " REAL "
 			+ ")";
 	
-	public static final String CREATE_TABLE_REVERSE = "CREATE TABLE "
+	public static final String CREATE_TABLE_REVERSE = "CREATE TABLE IF NOT EXISTS "
 			+ TABLE_REVERSE + "(" + KEY_ID + " INTEGER, "
             + ONE_METER + " TEXT, " + THREE_METER + " TEXT, "
 			+ DIVE_NAME + " TEXT, " + ONE_S + " REAL, " + ONE_P + " REAL, "
@@ -425,7 +451,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ THREE_P + " REAL, " + THREE_T + " REAL, " + THREE_F + " REAL "
 			+ ")";
 	
-	public static final String CREATE_TABLE_TWIST = "CREATE TABLE "
+	public static final String CREATE_TABLE_TWIST = "CREATE TABLE IF NOT EXISTS "
 			+ TABLE_TWIST + "(" + KEY_ID + " INTEGER, "
             + ONE_METER + " TEXT, " + THREE_METER + " TEXT, "
 			+ DIVE_NAME + " TEXT, " + ONE_S + " REAL, " + ONE_P + " REAL, "
@@ -433,7 +459,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ THREE_P + " REAL, " + THREE_T + " REAL, " + THREE_F + " REAL "
 			+ ")";
 
-    public static final String CREATE_TABLE_PLATFORM_FRONT = "CREATE TABLE "
+    public static final String CREATE_TABLE_PLATFORM_FRONT = "CREATE TABLE IF NOT EXISTS "
             + TABLE_PLATFORM_FRONT + "(" + KEY_ID + " INTEGER, "
             + TEN_METER + " TEXT, " + SEVEN_FIVE_METER + " TEXT, " + FIVE_METER + " TEXT, "
             + DIVE_NAME + " TEXT, " + TEN_S + " REAL, " + TEN_P + " REAL, "
@@ -442,7 +468,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + FIVE_S + " REAL, " + FIVE_P + " REAL, " + FIVE_T + " REAL, " + FIVE_F + " REAL "
             + ")";
 
-    public static final String CREATE_TABLE_PLATFORM_BACK = "CREATE TABLE "
+    public static final String CREATE_TABLE_PLATFORM_BACK = "CREATE TABLE IF NOT EXISTS "
             + TABLE_PLATFORM_BACK + "(" + KEY_ID + " INTEGER, "
             + TEN_METER + " TEXT, " + SEVEN_FIVE_METER + " TEXT, " + FIVE_METER + " TEXT, "
             + DIVE_NAME + " TEXT, " + TEN_S + " REAL, " + TEN_P + " REAL, "
@@ -451,7 +477,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + FIVE_S + " REAL, " + FIVE_P + " REAL, " + FIVE_T + " REAL, " + FIVE_F + " REAL "
             + ")";
 
-    public static final String CREATE_TABLE_PLATFORM_REVERSE = "CREATE TABLE "
+    public static final String CREATE_TABLE_PLATFORM_REVERSE = "CREATE TABLE IF NOT EXISTS "
             + TABLE_PLATFORM_REVERSE + "(" + KEY_ID + " INTEGER, "
             + TEN_METER + " TEXT, " + SEVEN_FIVE_METER + " TEXT, " + FIVE_METER + " TEXT, "
             + DIVE_NAME + " TEXT, " + TEN_S + " REAL, " + TEN_P + " REAL, "
@@ -460,7 +486,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + FIVE_S + " REAL, " + FIVE_P + " REAL, " + FIVE_T + " REAL, " + FIVE_F + " REAL "
             + ")";
 
-    public static final String CREATE_TABLE_PLATFORM_INWARD = "CREATE TABLE "
+    public static final String CREATE_TABLE_PLATFORM_INWARD = "CREATE TABLE IF NOT EXISTS "
             + TABLE_PLATFORM_INWARD + "(" + KEY_ID + " INTEGER, "
             + TEN_METER + " TEXT, " + SEVEN_FIVE_METER + " TEXT, " + FIVE_METER + " TEXT, "
             + DIVE_NAME + " TEXT, " + TEN_S + " REAL, " + TEN_P + " REAL, "
@@ -469,7 +495,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + FIVE_S + " REAL, " + FIVE_P + " REAL, " + FIVE_T + " REAL, " + FIVE_F + " REAL "
             + ")";
 
-    public static final String CREATE_TABLE_PLATFORM_TWIST = "CREATE TABLE "
+    public static final String CREATE_TABLE_PLATFORM_TWIST = "CREATE TABLE IF NOT EXISTS "
             + TABLE_PLATFORM_TWIST + "(" + KEY_ID + " INTEGER, "
             + TEN_METER + " TEXT, " + SEVEN_FIVE_METER + " TEXT, " + FIVE_METER + " TEXT, "
             + DIVE_NAME + " TEXT, " + TEN_S + " REAL, " + TEN_P + " REAL, "
@@ -478,7 +504,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + FIVE_S + " REAL, " + FIVE_P + " REAL, " + FIVE_T + " REAL, " + FIVE_F + " REAL "
             + ")";
 
-    public static final String CREATE_TABLE_PLATFORM_ARMSTAND = "CREATE TABLE "
+    public static final String CREATE_TABLE_PLATFORM_ARMSTAND = "CREATE TABLE IF NOT EXISTS "
             + TABLE_PLATFORM_ARMSTAND + "(" + KEY_ID + " INTEGER, "
             + TEN_METER + " TEXT, " + SEVEN_FIVE_METER + " TEXT, " + FIVE_METER + " TEXT, "
             + DIVE_NAME + " TEXT, " + TEN_S + " REAL, " + TEN_P + " REAL, "
@@ -487,30 +513,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + FIVE_S + " REAL, " + FIVE_P + " REAL, " + FIVE_T + " REAL, " + FIVE_F + " REAL "
             + ")";
 
-    public static final String CREATE_TABLE_DIVES = "CREATE TABLE "
+    public static final String CREATE_TABLE_DIVES = "CREATE TABLE IF NOT EXISTS "
 			+ TABLE_DIVES + "(" + KEY_ID + " INTEGER, " 
 			+ DIVE_NAME + " TEXT " + ")";
 
-    public static final String CREATE_TABLE_PLATFORM_DIVES = "CREATE TABLE "
+    public static final String CREATE_TABLE_PLATFORM_DIVES = "CREATE TABLE IF NOT EXISTS "
             + TABLE_PLATFORM_DIVES + "(" + KEY_ID + " INTEGER, "
             + DIVE_NAME + " TEXT " + ")";
 
-    public static final String CREATE_TABLE_SCORES = "CREATE TABLE "
+    public static final String CREATE_TABLE_SCORES = "CREATE TABLE IF NOT EXISTS "
             + TABLE_SCORES + "(" + KEY_ID + " INTEGER, "
             + DIGITS + " TEXT " + ")";
 	
-	public static final String CREATE_TABLE_DIVER_NAME = "CREATE TABLE "
+	public static final String CREATE_TABLE_DIVER_NAME = "CREATE TABLE IF NOT EXISTS "
 			+ TABLE_DIVER_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ DIVER_NAME + " TEXT, " + DIVER_AGE + " INTEGER, " + DIVER_GRADE + " TEXT, "
 			+ DIVER_SCHOOL + " TEXT " + ")";
 	
-	public static final String CREATE_TABLE_MEET_NAME = "CREATE TABLE "
+	public static final String CREATE_TABLE_MEET_NAME = "CREATE TABLE IF NOT EXISTS "
 			+ TABLE_MEET_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ MEET_NAME + " TEXT, " + MEET_SCHOOL + " TEXT, " + MEET_CITY + " TEXT, "
 			+ MEET_STATE + " TEXT, " + MEET_DATE + " TEXT, " + MEET_JUDGES + " INT "
 			+ ")";
 	
-	public static final String CREATE_TABLE_RESULTS = "CREATE TABLE "
+	public static final String CREATE_TABLE_RESULTS = "CREATE TABLE IF NOT EXISTS "
 			+ TABLE_RESULTS + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ MEET_ID + " INTEGER, " + DIVER_ID + " INTEGER, "
 			+ DIVE_1 + " TEXT, " + DIVE_2 + " TEXT, " + DIVE_3 + " TEXT, "
@@ -521,21 +547,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "FOREIGN KEY (" + DIVER_ID + ") REFERENCES " + TABLE_DIVER_NAME + " (id))";
 
 
-    public static final String CREATE_TABLE_DIVE_TOTAL = "CREATE TABLE "
+    public static final String CREATE_TABLE_DIVE_TOTAL = "CREATE TABLE IF NOT EXISTS "
             + TABLE_DIVE_TOTALS + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + MEET_ID + " INTEGER, "  + DIVER_ID + " INTEGER, "
             + DIVE_COUNT + " INTEGER, "
             + "FOREIGN KEY (" + MEET_ID + ") REFERENCES " + TABLE_MEET_NAME + " (id), "
             + "FOREIGN KEY (" + DIVER_ID + ") REFERENCES " + TABLE_DIVER_NAME + " (id))";
 
-    public static final String CREATE_TABLE_DIVE_TYPE = "CREATE TABLE "
+    public static final String CREATE_TABLE_DIVE_TYPE = "CREATE TABLE IF NOT EXISTS "
             + TABLE_DIVE_TYPE + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + MEET_ID + " INTEGER, "  + DIVER_ID + " INTEGER, "
             + DIVE_TYPE + " INTEGER, "
             + "FOREIGN KEY (" + MEET_ID + ") REFERENCES " + TABLE_MEET_NAME + " (id), "
             + "FOREIGN KEY (" + DIVER_ID + ") REFERENCES " + TABLE_DIVER_NAME + " (id))";
 
-    public static final String CREATE_TABLE_JUDGE_SCORES = "CREATE TABLE "
+    public static final String CREATE_TABLE_JUDGE_SCORES = "CREATE TABLE IF NOT EXISTS "
             + TABLE_JUDGE_SCORES + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + MEET_ID + " INTEGER, "  + DIVER_ID + " INTEGER, " + DIVE_NUMBER + " INTEGER, "
             + DIVE_CATEGORY + " TEXT, " + DIVE_TYPE_NAME + " TEXT, "
@@ -546,25 +572,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "FOREIGN KEY (" + MEET_ID + ") REFERENCES " + TABLE_MEET_NAME + " (id), "
             + "FOREIGN KEY (" + DIVER_ID + ") REFERENCES " + TABLE_DIVER_NAME + " (id))";
 
-    public static final String CREATE_TABLE_DIVE_NUMBER = "CREATE TABLE "
+    public static final String CREATE_TABLE_DIVE_NUMBER = "CREATE TABLE IF NOT EXISTS "
             + TABLE_DIVE_NUMBER + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + MEET_ID + " INTEGER, "  + DIVER_ID + " INTEGER, "
             + DIVE_NUMBER + " INTEGER, " + DIVE_TYPE + " REAL, "
             + "FOREIGN KEY (" + MEET_ID + ") REFERENCES " + TABLE_MEET_NAME + " (id), "
             + "FOREIGN KEY (" + DIVER_ID + ") REFERENCES " + TABLE_DIVER_NAME + " (id))";
 
+    // Version 2 database changes
+    public static final String CREATE_TABLE_DIVE_LIST = "CREATE TABLE IF NOT EXISTS "
+            + TABLE_DIVE_LIST + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + MEET_ID + " INTEGER, "  + DIVER_ID + " INTEGER, "
+            + LIST_FILLED + " INTEGER, " + NO_LIST + " INTEGER, "
+            + "FOREIGN KEY (" + MEET_ID + ") REFERENCES " + TABLE_MEET_NAME + " (id), "
+            + "FOREIGN KEY (" + DIVER_ID + ") REFERENCES " + TABLE_DIVER_NAME + " (id))";
+
+    public static final String CREATE_TABLE_QUICK_SCORE = "CREATE TABLE IF NOT EXISTS "
+            + TABLE_QUICK_SCORE + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + NAME_MEET + " TEXT, "
+            + DIVE_1 + " TEXT, " + DIVE_2 + " TEXT, " + DIVE_3 + " TEXT, "
+            + DIVE_4 + " TEXT, " + DIVE_5 + " TEXT, " + DIVE_6 + " TEXT, "
+            + DIVE_7 + " TEXT, " + DIVE_8 + " TEXT, " + DIVE_9 + " TEXT, "
+            + DIVE_10 + " TEXT, " + DIVE_11 + " TEXT, " +  TOTAL_SCORE + " REAL " + ")";
+
     //---------------Triggers---------------------------------------------------------------------//
-    public static final String DIVER_DELETE_TRIGGER = "CREATE TRIGGER diver_delete_trigger "
+    public static final String DIVER_DELETE_TRIGGER = "CREATE TRIGGER IF NOT EXISTS diver_delete_trigger "
             + "BEFORE DELETE ON " + TABLE_DIVER_NAME + " FOR EACH ROW BEGIN "
             + "DELETE FROM " + TABLE_DIVE_NUMBER + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; "
+            + "DELETE FROM " + TABLE_DIVE_LIST + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_JUDGE_SCORES + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_RESULTS + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_DIVE_TOTALS + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_DIVE_TYPE + " WHERE " + DIVER_ID + " = old." + KEY_ID + "; END";
 
-    public static final String MEET_DELETE_TRIGGER = "CREATE TRIGGER meet_delete_trigger "
+    public static final String MEET_DELETE_TRIGGER = "CREATE TRIGGER IF NOT EXISTS meet_delete_trigger "
             + "BEFORE DELETE ON " + TABLE_MEET_NAME + " FOR EACH ROW BEGIN "
             + "DELETE FROM " + TABLE_DIVE_NUMBER + " WHERE " + MEET_ID + " = old." + KEY_ID + "; "
+            + "DELETE FROM " + TABLE_DIVE_LIST + " WHERE " + MEET_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_JUDGE_SCORES + " WHERE " + MEET_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_RESULTS + " WHERE " + MEET_ID + " = old." + KEY_ID + "; "
             + "DELETE FROM " + TABLE_DIVE_TOTALS + " WHERE " + MEET_ID + " = old." + KEY_ID + "; "
@@ -600,6 +644,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_DIVE_TYPE);
         db.execSQL(CREATE_TABLE_JUDGE_SCORES);
         db.execSQL(CREATE_TABLE_DIVE_NUMBER);
+        db.execSQL(CREATE_TABLE_DIVE_LIST);
+        db.execSQL(CREATE_TABLE_QUICK_SCORE);
         db.execSQL((DIVER_DELETE_TRIGGER));
         db.execSQL((MEET_DELETE_TRIGGER));
 
@@ -621,38 +667,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         fillPlatformDives(db);
         fillScores(db);
 
+        fillSampleQuickScore(db);
+
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BACK);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_FORWARD);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_INWARD);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_REVERSE);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_TWIST);
+        switch (newVersion){
+            case 2:
+                db.execSQL(CREATE_TABLE_DIVE_LIST);
+                db.execSQL(CREATE_TABLE_QUICK_SCORE);
+                fillSampleQuickScore(db);
+                break;
+            default:
+                throw new IllegalStateException(
+                        "onUpgrade() with unknown new Version" + newVersion);
+        }
 
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_BACK);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_FRONT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_INWARD);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_REVERSE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_TWIST);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_ARMSTAND);
-
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVES);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_DIVES);
-
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SCORES);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVER_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEET_NAME);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESULTS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVE_TOTALS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVE_TYPE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_JUDGE_SCORES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVE_NUMBER);
-        db.execSQL("DROP TABLE IF EXISTS " + DIVER_DELETE_TRIGGER);
-        db.execSQL("DROP TABLE IF EXISTS " + MEET_DELETE_TRIGGER);
-
-		onCreate(db);
+//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BACK);
+//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_FORWARD);
+//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_INWARD);
+//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_REVERSE);
+//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_TWIST);
+//
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_BACK);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_FRONT);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_INWARD);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_REVERSE);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_TWIST);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_ARMSTAND);
+//
+//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVES);
+//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLATFORM_DIVES);
+//
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SCORES);
+//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVER_NAME);
+//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEET_NAME);
+//		db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESULTS);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVE_TOTALS);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVE_TYPE);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_JUDGE_SCORES);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DIVE_NUMBER);
+//        db.execSQL("DROP TABLE IF EXISTS " + DIVER_DELETE_TRIGGER);
+//        db.execSQL("DROP TABLE IF EXISTS " + MEET_DELETE_TRIGGER);
 	}
 
     public void createDives(DivesDB dives, SQLiteDatabase db){
@@ -681,7 +738,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_SCORES, null, values);
     }
 
-    public void createForward(ForwardDB forward, SQLiteDatabase db) {   //TODO add in new values
+    public void createForward(ForwardDB forward, SQLiteDatabase db) {
 
         ContentValues values = new ContentValues();
         values.put(KEY_ID, forward.getId());
@@ -912,6 +969,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(FIVE_F, d.getFiveD());
 
         db.insert(TABLE_PLATFORM_ARMSTAND, null, values);
+    }
+
+    private void createQuickScore(QuickScoreDB quickscore, SQLiteDatabase db){
+        ContentValues values = new ContentValues();
+        values.put(NAME_MEET, quickscore.getNameMeet());
+        values.put(DIVE_1, quickscore.getDive1());
+        values.put(DIVE_2, quickscore.getDive2());
+        values.put(DIVE_3, quickscore.getDive3());
+        values.put(DIVE_4, quickscore.getDive4());
+        values.put(DIVE_5, quickscore.getDive5());
+        values.put(DIVE_6, quickscore.getDive6());
+        values.put(DIVE_7, quickscore.getDive7());
+        values.put(DIVE_8, quickscore.getDive8());
+        values.put(DIVE_9, quickscore.getDive9());
+        values.put(DIVE_10, quickscore.getDive10());
+        values.put(DIVE_11, quickscore.getDive11());
+        values.put(TOTAL_SCORE, quickscore.getTotalScore());
+
+        db.insert(TABLE_QUICK_SCORE, null, values);
+    }
+
+    private void fillSampleQuickScore(SQLiteDatabase db){
+        QuickScoreDB sheet = new QuickScoreDB("Sample Diver - Sample Meet", 28.0, 35.5, 32.5,
+                                     30.0, 39.5, 24.5, 26.0, 41.5, 39.0, 22.0, 27.0, 345.5);
+
+        createQuickScore(sheet, db);
     }
 
 	private void fillDives(SQLiteDatabase db){

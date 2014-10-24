@@ -14,8 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rodriguez.divingscores.R;
-
 import java.util.ArrayList;
 
 import info.controls.RankingMeetBaseAdapter;
@@ -66,7 +64,6 @@ public class Rankings extends Activity {
                 Boolean noScores = ddb.checkDiverForRankings(meetId, Board);
                 if(noScores) {
                     Intent intent = new Intent(getBaseContext(), RankingsByMeet.class);
-                    //TODO send the board to the RankByMeet
                     Bundle b = new Bundle();
                     b.putInt("keyMeet", meetId);
                     b.putDouble("keyBoard", Board);

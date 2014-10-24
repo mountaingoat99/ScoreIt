@@ -202,7 +202,7 @@ public class ResultDatabase extends DatabaseHelper {
         db.close();
     }
 
-    //-----------------updates a record in the database with a score-----------------------------//
+    //-----------------gets a record in the database with a score-----------------------------//
     public Double getDiveScore(int meetid, int diverid, int columnindex){
         double totalScore = 0;
         String column = null;

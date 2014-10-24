@@ -4,7 +4,6 @@ import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.MeetDatabase;
 
-import java.nio.channels.AsynchronousCloseException;
 import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.Activity;

@@ -8,16 +8,22 @@ import info.sqlite.helper.MeetDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -35,13 +41,18 @@ public class Welcome extends Activity implements OnItemSelectedListener
 	private int diveCount = 0, meetCount = 0, diverId = 0, meetId = 0;
 	private boolean diverCheck = false, meetCheck = false;
     private String stringId = "";
-    final Context context = this;
+    private final Context context = this;
+    public boolean firstAlertWelcome;
 
    @Override
    public void onCreate(Bundle savedInstanceState) 
    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+       ActionBar actionBar = getActionBar();
+       if (actionBar != null) {
+           actionBar.setDisplayHomeAsUpEnabled(false);
+       }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         setUpView();
@@ -50,16 +61,67 @@ public class Welcome extends Activity implements OnItemSelectedListener
         loadSpinnerMeet();
         spinnerName.setOnItemSelectedListener(this);
         spinnerMeet.setOnItemSelectedListener(this);
+
+       // shared preference for the alert dialog
+       loadSavedPreferences();
+       if (!firstAlertWelcome) {
+           showAlert();
+       }
+   }
+
+    @Override
+    public void onBackPressed(){
+
+        final Context context = this;
+        Intent intent = new Intent(context, Home.class);
+        startActivity(intent);
     }
 
-    // do not allow any back presses on the Welcome screen to other activities
-    // just exit the app
-    @Override
-    public void onBackPressed() {
-        Intent a = new Intent(Intent.ACTION_MAIN);
-        a.addCategory(Intent.CATEGORY_HOME);
-        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(a);
+    private void loadSavedPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        firstAlertWelcome = sp.getBoolean("firstAlertWelcome",false);
+    }
+
+    private void savePreferences(String key, boolean value){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        Editor editor = sp.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    private void showAlert(){
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_welcome_info);
+        Button okButton = (Button) dialog.findViewById(R.id.buttonOkay);
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                savePreferences("firstAlertWelcome", true);
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void showMenuHowToAlert(){
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_welcome_info);
+        Button okButton = (Button) dialog.findViewById(R.id.buttonOkay);
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
     }
 
     // call a separate thread to get the diver names - originally was making the database call in the
@@ -339,8 +401,7 @@ public class Welcome extends Activity implements OnItemSelectedListener
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.menu_how_to:
-                Intent intent3 = new Intent(context, HowTo.class);
-                startActivity(intent3);
+                showMenuHowToAlert();
                 break;
             case R.id.menu_about:
                 Intent intent2 = new Intent(context, About.class);

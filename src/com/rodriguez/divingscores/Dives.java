@@ -29,6 +29,7 @@ import info.controls.SpinnerDiveStyleCustomBaseAdpater;
 import info.sqlite.helper.ArmstandPlatformDatabase;
 import info.sqlite.helper.BackDatabase;
 import info.sqlite.helper.BackPlatformDatabase;
+import info.sqlite.helper.DiveListDatabase;
 import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.ForwardDatabase;
 import info.sqlite.helper.ForwardPlatformDatabase;
@@ -55,7 +56,7 @@ public class Dives extends Activity implements OnItemSelectedListener
     private ArrayList<DiveStyleSpinner> searchDives;
     private ArrayList<Double> Scores = new ArrayList<>();
     private boolean ifZeroTotal = true;
-    private String failedDive = "P", ddString = "", stringId;
+    private String failedDive = "P", ddString = "", stringId, className = "nonList";
     private static final String KEY_TEXT_VALUE = "textValue";
 	
     @Override
@@ -90,6 +91,7 @@ public class Dives extends Activity implements OnItemSelectedListener
         loadSpinnerData();
         setTitle();
         getDiveNumber();
+        getJudges();
         showScores();
         addListenerOnButton();
         checkRadios();
@@ -453,6 +455,7 @@ public class Dives extends Activity implements OnItemSelectedListener
 
     //loads the spinners for the scores
     private void loadScoreSpinners(){
+        int spinnerPosition = 10;
         GetScoreNames snames = new GetScoreNames();
         List<String> scoreNames = snames.doInBackground();
 
@@ -460,12 +463,19 @@ public class Dives extends Activity implements OnItemSelectedListener
                 R.layout.spinner_item, scoreNames);
         da.setDropDownViewResource(R.layout.spinner_layout);
         score1.setAdapter(da);
+        score1.setSelection(spinnerPosition);
         score2.setAdapter(da);
+        score2.setSelection(spinnerPosition);
         score3.setAdapter(da);
+        score3.setSelection(spinnerPosition);
         score4.setAdapter(da);
+        score4.setSelection(spinnerPosition);
         score5.setAdapter(da);
+        score5.setSelection(spinnerPosition);
         score6.setAdapter(da);
+        score6.setSelection(spinnerPosition);
         score7.setAdapter(da);
+        score7.setSelection(spinnerPosition);
     }
     
     public void addListenerOnButton()
@@ -489,8 +499,9 @@ public class Dives extends Activity implements OnItemSelectedListener
                         startActivity(intent);
                     } else {
                         Toast.makeText(getApplicationContext(),
-                                "Scores entered will be 0. Please enter accurate score" +
-                                        " or fail the dive using the menu button.",
+                                "Scores entered are not valid. Please enter an accurate score," +
+                                        "or use the menu button to fail the dive " +
+                                        "or score a 2 Judge Meet.",
                                 Toast.LENGTH_LONG).show();
                     }
                 }else{
@@ -509,6 +520,11 @@ public class Dives extends Activity implements OnItemSelectedListener
         divenumber.doInBackground();
     }
 
+    private void updateDiveListToYes(){
+        UpdateDiveListToYes yes = new UpdateDiveListToYes();
+        yes.doInBackground();
+    }
+
     private void calcScores() {
         ifZeroTotal = true;
         GetTotalScore tScore = new GetTotalScore();
@@ -520,7 +536,12 @@ public class Dives extends Activity implements OnItemSelectedListener
         Arrays.sort(theScores);
 
         if(judges == 3){
-            diveScoreTotal = sc1 + sc2 + sc3;
+            if(sc1 == 0.0 || sc2 == 0.0 || sc3 == 0.0){
+                ifZeroTotal = false;
+                return;
+            }else {
+                diveScoreTotal = sc1 + sc2 + sc3;
+            }
         }else if (judges == 5){
             // converts the sorted array to a list and removes the smallest and largest scores
             List<Double> list = new ArrayList<>(Arrays.asList(theScores));
@@ -563,6 +584,7 @@ public class Dives extends Activity implements OnItemSelectedListener
         if(diveNumber == 1){
             resultIndex = 3;
             db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
+            updateDiveListToYes();
             return;
         }
         if(diveNumber == 2){
@@ -679,6 +701,21 @@ public class Dives extends Activity implements OnItemSelectedListener
         db.fillNewJudgeScores(meetId, diverId, diveNumber, diveCategory, diveTypeName, DivePosition,
                              failedDive, roundedDiveTotal,  sc1, sc2, sc3, sc4, sc5, sc6, sc7, multiplier);
     }
+
+    // this is used when a meet only has two judges
+    private void getTwoJudgeScoreText(){
+        double roundedScore;
+        sc1 = Double.parseDouble(score1.getSelectedItem().toString().trim());
+        sc2 = Double.parseDouble(score2.getSelectedItem().toString().trim());
+        //score = (sc1 + sc2) / 2;
+        roundedScore = .5 * Math.round(((sc1 + sc2) / 2) * 2);
+        sc3 = roundedScore;
+        sc4 = 0.0;
+        sc5 = 0.0;
+        sc6 = 0.0;
+        sc7 = 0.0;
+    }
+
 
     private void getScoreText(){
         Scores.clear();
@@ -823,9 +860,6 @@ public class Dives extends Activity implements OnItemSelectedListener
     }
 
     private void showScores(){
-        GetJudgeTotal jt = new GetJudgeTotal();
-        judges = jt.doInBackground();
-
         if(judges == 3){
             score4.setVisibility(View.INVISIBLE);
             view4.setVisibility(View.INVISIBLE);
@@ -841,6 +875,11 @@ public class Dives extends Activity implements OnItemSelectedListener
             score7.setVisibility(View.INVISIBLE);
             view7.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void getJudges(){
+        GetJudgeTotal jt = new GetJudgeTotal();
+        judges = jt.doInBackground();
     }
 
     private void setUpView(){
@@ -869,7 +908,7 @@ public class Dives extends Activity implements OnItemSelectedListener
         getMenuInflater().inflate(R.menu.activity_dives, menu);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         final Context context = this;
@@ -886,12 +925,14 @@ public class Dives extends Activity implements OnItemSelectedListener
                     String diveTypeName = i + " - " + name.getText().toString();
                     Intent intent = new Intent(context, FailedDive.class);
                     Bundle b = new Bundle();
+                    b.putString("className", className);
                     b.putInt("keyDiver", diverId);
                     b.putInt("keyMeet", meetId);
                     b.putInt("keyDiveType", diveType);
                     b.putString("keyDiveTypeName", diveTypeName);
                     b.putInt("keyDivePosition", divePosition);
                     b.putDouble("boardType", boardType);
+                    b.putDouble("multiplier", multiplier);
                     intent.putExtras(b);
                     startActivity(intent);
                     break;
@@ -899,6 +940,50 @@ public class Dives extends Activity implements OnItemSelectedListener
                     Toast.makeText(getApplicationContext(),
                             "Dive and Position is not valid, " +
                                     "Please Choose a Valid Combination.",
+                            Toast.LENGTH_LONG).show();
+                    break;
+                }
+            case R.id.menu_two_judge_option:
+                if (judges == 3) {
+                    getMultiplier();
+                    if (multiplier != 0.0) {
+                        Double test3Spin;
+                        test3Spin = Double.parseDouble(score3.getSelectedItem().toString().trim());
+                        if (test3Spin == 0.0){
+                            getTwoJudgeScoreText();
+                            calcScores();
+                            if(ifZeroTotal) {
+                                updateJudgeScores();
+                                Bundle b = new Bundle();
+                                b.putInt("keyDiver", diverId);
+                                b.putInt("keyMeet", meetId);
+                                Intent intent = new Intent(context, ChooseSummary.class);
+                                intent.putExtras(b);
+                                startActivity(intent);
+                                break;
+                            } else {
+                                Toast.makeText(getApplicationContext(),
+                                        "Scores entered will be 0. Please enter accurate score" +
+                                                " or fail the dive using the menu button.",
+                                        Toast.LENGTH_LONG).show();
+                                break;
+                            }
+                        }else{
+                            Toast.makeText(getApplicationContext(),
+                                    "Please set the 3rd score to 0.0",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                    }else{
+                        Toast.makeText(getApplicationContext(),
+                                "Dive and Position is not valid, " +
+                                        "Please Choose a Valid Combination.",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(),
+                            "This can only be used on meets with 3 judges.",
                             Toast.LENGTH_LONG).show();
                     break;
                 }
@@ -910,6 +995,16 @@ public class Dives extends Activity implements OnItemSelectedListener
 	public void onNothingSelected(AdapterView<?> parent) {
 
 	}
+
+    private class UpdateDiveListToYes extends AsyncTask<Object, Object, Object>{
+        DiveListDatabase db = new DiveListDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(Object... params){
+            db.setNoList(meetId, diverId);
+            return null;
+        }
+    }
 
     private class GetDiveNumber extends AsyncTask<Integer, Object, Object>{
         DiveNumberDatabase db = new DiveNumberDatabase(getApplicationContext());

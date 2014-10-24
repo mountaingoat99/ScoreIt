@@ -7,15 +7,19 @@ import java.util.Calendar;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -32,6 +36,8 @@ OnClickListener {
 	private EditText txtDate;
     private int judges, judgeChecked;
 	private String nameString, schoolString, cityString, stateString, dateString;
+    public boolean firstAlert2Judges;
+    private final Context context = this;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -47,6 +53,59 @@ OnClickListener {
         txtDate.setOnClickListener(this);
 
         addListenerOnButton();
+
+        // shared preference for the alert dialog
+        loadSavedPreferences();
+        if (!firstAlert2Judges) {
+            showAlert();
+        }
+    }
+
+    private void loadSavedPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        firstAlert2Judges = sp.getBoolean("firstAlertTwoJudges",false);
+    }
+
+    private void savePreferences(String key, boolean value){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    private void showAlert(){
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_judge_2_info);
+        Button okButton = (Button) dialog.findViewById(R.id.buttonOkay);
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                savePreferences("firstAlertTwoJudges", true);
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void showAlertForMenu(){
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_judge_2_info);
+        Button okButton = (Button) dialog.findViewById(R.id.buttonOkay);
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
     }
 	
 	@Override
@@ -128,15 +187,13 @@ OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
-        final Context context = this;
         switch (item.getItemId())
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.menu_how_to:
-                Intent intent3 = new Intent(context, HowTo.class);
-                startActivity(intent3);
+                showAlertForMenu();
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -117,7 +117,7 @@
         android:layout_marginRight="6dp"
         android:layout_below="@id/Divider"
         android:text="@string/total_score"
-        android:textSize="@dimen/text_size_small"
+        android:textSize="@dimen/text_size_medium"
         android:textColor="@color/static_text" />
 
     <EditText
@@ -134,7 +134,7 @@
         android:maxLength="5"
         android:layout_marginRight="8dp"
         android:layout_alignParentEnd="true"
-        android:textSize="@dimen/text_size_small"
+        android:textSize="@dimen/text_size_medium"
         android:textColor="@color/random_text">
     </EditText>
 

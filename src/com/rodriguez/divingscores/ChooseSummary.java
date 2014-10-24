@@ -1,21 +1,5 @@
 package com.rodriguez.divingscores;
 
-import info.controls.NothingSelectedSpinnerAdapter;
-import info.sqlite.helper.DiveNumberDatabase;
-import info.sqlite.helper.DiveTotalDatabase;
-import info.sqlite.helper.DiverDatabase;
-import info.sqlite.helper.DivesDatabase;
-import info.sqlite.helper.JudgeScoreDatabase;
-import info.sqlite.helper.MeetDatabase;
-import info.sqlite.helper.PlatformDivesDatabase;
-import info.sqlite.helper.ResultDatabase;
-import info.sqlite.helper.TypeDatabase;
-import info.sqlite.model.ResultsDB;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -35,6 +19,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import info.controls.NothingSelectedSpinnerAdapter;
+import info.sqlite.helper.DiveNumberDatabase;
+import info.sqlite.helper.DiveTotalDatabase;
+import info.sqlite.helper.DiverDatabase;
+import info.sqlite.helper.DivesDatabase;
+import info.sqlite.helper.JudgeScoreDatabase;
+import info.sqlite.helper.MeetDatabase;
+import info.sqlite.helper.PlatformDivesDatabase;
+import info.sqlite.helper.ResultDatabase;
+import info.sqlite.helper.TypeDatabase;
+import info.sqlite.model.ResultsDB;
+
 public class ChooseSummary extends Activity implements OnItemSelectedListener {
 
 	private TextView name, meetName, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11,
@@ -51,7 +51,7 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
     private String infoString1, infoString2, infoString3, infoString4, infoString5,
                     infoString6, infoString7, infoString8, infoString9, infoString10, infoString11;
     private String typeString, noDive = "There are no scores entered yet.";
-    private Boolean failed, dive6 = false, dive11 = false;
+    private Boolean failed;
     private Double totalScore;
 
     @Override
@@ -328,7 +328,6 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
                 //dive6 = true;
             }
         }
-        //if(dive6 && diveTotal == 6){    //TODO remove these after test fail on last dive
         if(diveNumber == 6 && diveTotal == 6){
             Toast.makeText(getApplicationContext(),
                     "Congratulations, all six dives are complete," +
@@ -415,18 +414,17 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
                 //dive11 = true;
             }
         }
-            //if(dive11 && diveTotal == 11){
-            if(diveNumber == 11 && diveTotal == 11){
-                //spinner.setVisibility(View.GONE);
-                Toast.makeText(getApplicationContext(),
-                        "Congratulations, all eleven dives are complete," +
-                                " total score is " + totalString,
-                        Toast.LENGTH_LONG).show();
-                judgeButton.setVisibility(View.GONE);
-                totalbutton.setVisibility(View.GONE);
-                spinner.setEnabled(false);
-            }
-		}
+        if(diveNumber == 11 && diveTotal == 11){
+            //spinner.setVisibility(View.GONE);
+            Toast.makeText(getApplicationContext(),
+                    "Congratulations, all eleven dives are complete," +
+                            " total score is " + totalString,
+                    Toast.LENGTH_LONG).show();
+            judgeButton.setVisibility(View.GONE);
+            totalbutton.setVisibility(View.GONE);
+            spinner.setEnabled(false);
+        }
+    }
 
     public void getScoresFromDB(){
         ArrayList<Double> scores;

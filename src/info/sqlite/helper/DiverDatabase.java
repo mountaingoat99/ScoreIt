@@ -338,17 +338,20 @@ public class DiverDatabase extends DatabaseHelper {
         String selectQuery3 = "DELETE FROM " + getTableResults() + " WHERE meet_id =" + meetid + " AND diver_id =" + diverid;
         String selectQuery4 = "DELETE FROM " + getTableDiveTotals() + " WHERE meet_id =" + meetid + " AND diver_id =" + diverid;
         String selectQuery5 = "DELETE FROM " + getTableDiveType() + " WHERE meet_id =" + meetid + " AND diver_id =" + diverid;
+        String selectQuery6 = "DELETE FROM " + getTableDiveList() + " WHERE meet_id =" + meetid + " AND diver_id =" + diverid;
 
         Log.e(getLog(), selectQuery1);
         Log.e(getLog(), selectQuery2);
         Log.e(getLog(), selectQuery3);
         Log.e(getLog(), selectQuery4);
         Log.e(getLog(), selectQuery5);
+        Log.e(getLog(), selectQuery6);
         db.execSQL(selectQuery1);
         db.execSQL(selectQuery2);
         db.execSQL(selectQuery3);
         db.execSQL(selectQuery4);
         db.execSQL(selectQuery5);
+        db.execSQL(selectQuery6);
 
         db.close();
     }
