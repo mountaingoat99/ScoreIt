@@ -1,20 +1,19 @@
 package info.sqlite.helper;
 
-import info.Helpers.DiverMeetResults;
-import info.Helpers.DiverScoreTotals;
-import info.sqlite.model.DiverNameDB;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import info.Helpers.DiverMeetResults;
+import info.Helpers.DiverScoreTotals;
 import info.Helpers.PrintedResults;
 import info.Helpers.RankingResults;
+import info.sqlite.model.DiverNameDB;
 
 public class DiverDatabase extends DatabaseHelper {
 

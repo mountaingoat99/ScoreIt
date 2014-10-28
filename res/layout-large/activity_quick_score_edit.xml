@@ -26,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/Header"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/name_meet"
         android:textSize="@dimen/text_size_large"
         android:textColor="@color/static_text" />
@@ -38,23 +38,33 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/enterNameED"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:textSize="@dimen/text_size_large"
         android:textColor="@color/random_text">
-    </TextView>  
+    </TextView>
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/editNameMeet"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/header" />
 
     <TableLayout
         android:id="@+id/tableLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editNameMeet"
+        android:layout_below="@id/line1"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp">
 
         <TableRow

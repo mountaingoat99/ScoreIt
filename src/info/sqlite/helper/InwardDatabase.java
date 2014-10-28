@@ -1,11 +1,11 @@
 package info.sqlite.helper;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 import info.Helpers.DiveStyleSpinner;
 

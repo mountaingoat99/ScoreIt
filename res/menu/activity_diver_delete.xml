@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:divingscores="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/menu_how_to"
         android:title="@string/how_to_string"
         android:orderInCategory="200"
-        android:showAsAction="collapseActionView" />
+        divingscores:showAsAction="collapseActionView" />
 </menu>

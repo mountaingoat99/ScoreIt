@@ -1,21 +1,21 @@
 package com.rodriguez.divingscores;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
 
 import java.io.File;
@@ -28,11 +28,10 @@ import java.util.List;
 import info.Helpers.DiverMeetResults;
 import info.Helpers.DiverScoreTotals;
 import info.Helpers.PrintedResults;
-import info.controls.NothingSelectedSpinnerAdapter;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.MeetDatabase;
 
-public class Reports extends Activity implements OnItemSelectedListener {
+public class Reports extends ActionBarActivity implements OnItemSelectedListener {
     private Spinner spinnerName, spinnerMeet, spinnerReports;
     private Button btnSendReport;
     private int diverId = 0, meetId = 0, reportId = 0;
@@ -44,6 +43,10 @@ public class Reports extends Activity implements OnItemSelectedListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setUpView();
 
@@ -383,6 +386,7 @@ public class Reports extends Activity implements OnItemSelectedListener {
     private void loadSpinnerReports(){
         ArrayList<String> reportName = new ArrayList<>();
 
+        reportName.add("  Choose Report");
         reportName.add("  Meet Results");
         reportName.add("  Diver Score Totals By Meet");
         reportName.add("  Diver Judge Scores By Meet");
@@ -390,9 +394,10 @@ public class Reports extends Activity implements OnItemSelectedListener {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, reportName);
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        spinnerReports.setAdapter(
-                new NothingSelectedSpinnerAdapter(
-                        dataAdapter, R.layout.report_name_spinner_row_nothing_selected, this));
+        spinnerReports.setAdapter(dataAdapter);
+//        spinnerReports.setAdapter(
+//                new NothingSelectedSpinnerAdapter(
+//                        dataAdapter, R.layout.report_name_spinner_row_nothing_selected, this));
     }
 
     private void loadSpinnerMeet(){
@@ -407,9 +412,12 @@ public class Reports extends Activity implements OnItemSelectedListener {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, newList);
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        spinnerMeet.setAdapter(
-                new NothingSelectedSpinnerAdapter(
-                        dataAdapter, R.layout.meet_name_spinner_row_nothing_selected, this));
+        dataAdapter.insert("  Choose Meet", 0);
+        spinnerMeet.setAdapter(dataAdapter);
+
+//        spinnerMeet.setAdapter(
+//                new NothingSelectedSpinnerAdapter(
+//                        dataAdapter, R.layout.meet_name_spinner_row_nothing_selected, this));
     }
 
 
@@ -419,9 +427,11 @@ public class Reports extends Activity implements OnItemSelectedListener {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, diverName);
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        spinnerName.setAdapter(
-                new NothingSelectedSpinnerAdapter(
-                        dataAdapter, R.layout.diver_name_spinner_row_nothing_selected, this));
+        dataAdapter.insert("  Choose Name", 0);
+        spinnerName.setAdapter(dataAdapter);
+//        spinnerName.setAdapter(
+//                new NothingSelectedSpinnerAdapter(
+//                        dataAdapter, R.layout.diver_name_spinner_row_nothing_selected, this));
 
     }
 

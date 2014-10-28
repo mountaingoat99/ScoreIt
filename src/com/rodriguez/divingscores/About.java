@@ -1,8 +1,8 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,21 +10,17 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.rodriguez.divingscores.R;
-
-public class About extends Activity {
+public class About extends ActionBarActivity {
 
     private Button cancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_about);
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
-        }
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         cancel = (Button)findViewById(R.id.buttonOkay);
 

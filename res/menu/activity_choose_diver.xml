@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:divingscores="http://schemas.android.com/apk/res-auto">
 
 
     <item android:id="@+id/menu_rankings"
         android:title="@string/rankings_menu"
         android:orderInCategory="100"
-        android:showAsAction="collapseActionView" />
+        divingscores:showAsAction="collapseActionView" />
 
     <item android:id="@+id/menu_enter_diver"
         android:title="@string/enter_new_diver_info"
         android:orderInCategory="200"
-        android:showAsAction="collapseActionView" />
+        divingscores:showAsAction="collapseActionView" />
 
     <item android:id="@+id/menu_enter_meet"
         android:title="@string/enter_new_meet_menu"
         android:orderInCategory="300"
-        android:showAsAction="collapseActionView" />
+        divingscores:showAsAction="collapseActionView" />
 
     <item android:id="@+id/menu_remove_diver_from_meet"
         android:title="@string/remove_diver_from_meet"
         android:orderInCategory="400"
-        android:showAsAction="collapseActionView" />
+        divingscores:showAsAction="collapseActionView" />
 
     <item android:id="@+id/menu_how_to"
         android:title="@string/how_to_string"
         android:orderInCategory="500"
-        android:showAsAction="collapseActionView" />
+        divingscores:showAsAction="collapseActionView" />
 
 </menu>

@@ -1,12 +1,11 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.NavUtils;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiveTotalDatabase;
 import info.sqlite.helper.JudgeScoreDatabase;
@@ -29,7 +29,7 @@ import info.sqlite.helper.ResultDatabase;
 import info.sqlite.helper.ScoresDatabase;
 
 
-public class EnterScoreFromList extends Activity implements AdapterView.OnItemSelectedListener {
+public class EnterScoreFromList extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner score1, score2, score3, score4, score5, score6, score7;
     private TextView header, view4, view5, view6, view7;
@@ -49,7 +49,7 @@ public class EnterScoreFromList extends Activity implements AdapterView.OnItemSe
         if (savedInstanceState != null) {
             stringId = savedInstanceState.getString(KEY_TEXT_VALUE);
         }
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }

@@ -27,7 +27,7 @@
         <Spinner
             android:id="@+id/spinnerDiverName"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_below="@id/EnterMeetM"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"

@@ -20,7 +20,7 @@
         <Spinner
             android:id="@+id/spinnerDiveNumber"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_below="@id/TextViewChooseC"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -66,6 +66,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/layout1"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:background="@color/header" />
 
         <TextView
@@ -122,6 +124,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/dbMeet"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:background="@color/header" />
 
         <LinearLayout
@@ -191,6 +195,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/layouts"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:background="@color/header" />
 
     <ScrollView

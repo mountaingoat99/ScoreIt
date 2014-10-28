@@ -1,12 +1,11 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.NavUtils;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +23,7 @@ import info.sqlite.helper.JudgeScoreDatabase;
 import info.sqlite.helper.ResultDatabase;
 
 
-public class EnterTotalScoreFromDiveList extends Activity {
+public class EnterTotalScoreFromDiveList extends ActionBarActivity {
 
     private TextView header;
     private EditText score1;
@@ -39,7 +38,7 @@ public class EnterTotalScoreFromDiveList extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_total_score_from_dive_list);
 
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }

@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import info.Helpers.PrintedResults;
-
 import java.util.ArrayList;
+
+import info.Helpers.PrintedResults;
 
 public class PrintedCustomBaseAdapter extends BaseAdapter{
 

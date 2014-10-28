@@ -1,20 +1,21 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+
 import info.sqlite.helper.DiverDatabase;
 
-public class RemoveDiverFromMeet extends Activity {
+public class RemoveDiverFromMeet extends ActionBarActivity {
 
     private Button cancel, yes;
     private int meetId, diverId;
@@ -22,13 +23,10 @@ public class RemoveDiverFromMeet extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_remove_diver_from_meet);
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
-        }
+        setContentView(R.layout.activity_remove_diver_from_meet);ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         cancel = (Button)findViewById(R.id.buttonCancel);
         yes = (Button)findViewById(R.id.buttonYes);

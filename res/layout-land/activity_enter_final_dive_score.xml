@@ -13,7 +13,7 @@
             android:layout_gravity="left"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:background="@color/header"
             android:gravity="center"
             android:text="@string/choose_dive"

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:divingscores="http://schemas.android.com/apk/res-auto" >
 
 
     <item android:id="@+id/menu_rankings"
         android:title="@string/rankings_menu"
         android:orderInCategory="200"
-        android:showAsAction="collapseActionView" />
+        divingscores:showAsAction="collapseActionView" />
 
     <item android:id="@+id/menu_change_dive_score"
         android:title="@string/change_dive_score"
         android:orderInCategory="200"
-        android:showAsAction="collapseActionView" />
+        divingscores:showAsAction="collapseActionView" />
 
 </menu>

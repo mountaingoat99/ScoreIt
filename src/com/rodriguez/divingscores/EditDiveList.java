@@ -1,11 +1,10 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import info.Helpers.DiveStyleSpinner;
-import info.controls.NothingSelectedSpinnerAdapter;
 import info.controls.SpinnerDiveStyleCustomBaseAdpater;
 import info.sqlite.helper.ArmstandPlatformDatabase;
 import info.sqlite.helper.BackDatabase;
@@ -41,7 +39,7 @@ import info.sqlite.helper.TwistDatabase;
 import info.sqlite.helper.TwistPlatformDatabase;
 
 
-public class EditDiveList extends Activity implements AdapterView.OnItemSelectedListener {
+public class EditDiveList extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
 
     private TextView DODView, name;
     private Spinner diveCategory, diveStyle;
@@ -54,10 +52,10 @@ public class EditDiveList extends Activity implements AdapterView.OnItemSelected
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_edit_dive_list);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
@@ -174,10 +172,12 @@ public class EditDiveList extends Activity implements AdapterView.OnItemSelected
                     R.layout.spinner_item, diveName);
 
             dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
-            diveCategory.setAdapter(
-                    new NothingSelectedSpinnerAdapter(
-                            dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this)
-            );
+            dataAdapter.insert("  Choose a Dive Category", 0);
+            diveCategory.setAdapter(dataAdapter);
+//            diveCategory.setAdapter(
+//                    new NothingSelectedSpinnerAdapter(
+//                            dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this)
+//            );
         } else {
             GetPlatformDiveName divesP = new GetPlatformDiveName();
             List<String> diveName = divesP.doInBackground();
@@ -186,10 +186,12 @@ public class EditDiveList extends Activity implements AdapterView.OnItemSelected
                     R.layout.spinner_item, diveName);
 
             dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
-            diveCategory.setAdapter(
-                    new NothingSelectedSpinnerAdapter(
-                            dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this)
-            );
+            dataAdapter.insert("  Choose a Dive Category", 0);
+            diveCategory.setAdapter(dataAdapter);
+//            diveCategory.setAdapter(
+//                    new NothingSelectedSpinnerAdapter(
+//                            dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this)
+//            );
         }
         if (diveCategory.getSelectedItemPosition() == 0){
             diveCategory.setSelection(1);

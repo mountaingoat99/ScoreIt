@@ -1,11 +1,11 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +17,7 @@ import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.JudgeScoreDatabase;
 import info.sqlite.helper.ResultDatabase;
 
-public class FailedDive extends Activity {
+public class FailedDive extends ActionBarActivity {
 
     private Button failButton;
     private Button returnButton;
@@ -29,13 +29,10 @@ public class FailedDive extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_failed_dive);
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
-        }
+        setContentView(R.layout.activity_failed_dive);ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         failButton = (Button)findViewById(R.id.buttonFailDive);
         returnButton = (Button)findViewById(R.id.buttonFailReturn);

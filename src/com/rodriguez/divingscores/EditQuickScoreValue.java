@@ -1,10 +1,10 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,29 +13,25 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import info.sqlite.helper.QuickScoreDatabase;
 
 
-public class EditQuickScoreValue extends Activity {
+public class EditQuickScoreValue extends ActionBarActivity {
 
     private TextView header;
     private EditText sheetName, score;
     private Button btnUpdate, btnReturn;
     private int sheetId, diveNumber;
-    private String updateValue, emptyScore = "0.0", Name = "";
+    private String updateValue, Name = "";
     private final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_edit_quick_score_value);
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
-        }
+        setContentView(R.layout.activity_edit_quick_score_value);ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         btnUpdate = (Button)findViewById(R.id.buttonUpdate);
         btnReturn = (Button)findViewById(R.id.buttonReturn);

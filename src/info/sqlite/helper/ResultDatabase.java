@@ -1,13 +1,13 @@
 package info.sqlite.helper;
 
-import info.sqlite.model.ResultsDB;
-
-import java.util.ArrayList;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
+
+import info.sqlite.model.ResultsDB;
 
 public class ResultDatabase extends DatabaseHelper {
 

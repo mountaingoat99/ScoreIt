@@ -1,10 +1,9 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +19,7 @@ import info.controls.RankingMeetBaseAdapter;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.MeetDatabase;
 
-public class Rankings extends Activity {
+public class Rankings extends ActionBarActivity {
 
     private ListView myList;
     private int meetId;
@@ -29,7 +28,7 @@ public class Rankings extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rankings);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }

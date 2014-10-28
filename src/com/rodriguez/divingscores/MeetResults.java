@@ -1,21 +1,11 @@
 package com.rodriguez.divingscores;
 
-import info.sqlite.helper.DiveNumberDatabase;
-import info.sqlite.helper.DiverDatabase;
-import info.sqlite.helper.MeetDatabase;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +17,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MeetResults extends Activity {
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
+import info.sqlite.helper.DiveNumberDatabase;
+import info.sqlite.helper.DiverDatabase;
+import info.sqlite.helper.MeetDatabase;
+
+public class MeetResults extends ActionBarActivity {
 	
 	private TextView name, school, city, state, date;
     private ListView myList;
@@ -40,7 +39,7 @@ public class MeetResults extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meet_results);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }

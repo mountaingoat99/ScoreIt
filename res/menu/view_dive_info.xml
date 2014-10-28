@@ -1,15 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.rodriguez.divingscores.ViewDiveInfo">
+    xmlns:divingscores="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/action_email"
-        android:icon="@drawable/ic_action_email"
+        android:icon="@drawable/ic_email_white_24dp"
         android:title="@string/email_results"
-        android:showAsAction="always"/>
+        divingscores:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_share"
-        android:icon="@drawable/ic_action_share"
+        android:icon="@drawable/ic_share_white_24dp"
         android:title="@string/share"
-        android:showAsAction="always"/>
+        divingscores:showAsAction="ifRoom"/>
 
 </menu>

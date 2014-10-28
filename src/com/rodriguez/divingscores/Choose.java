@@ -1,17 +1,11 @@
 package com.rodriguez.divingscores;
 
-import info.controls.NothingSelectedSpinnerAdapter;
-import info.sqlite.helper.MeetDatabase;
-
-import java.util.List;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +18,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class Choose extends Activity implements OnItemSelectedListener {
+import java.util.List;
+
+import info.sqlite.helper.MeetDatabase;
+
+public class Choose extends ActionBarActivity implements OnItemSelectedListener {
 
     private Spinner spinnerMeet;
 	private int meetSpinPosition, meetId = 0;
@@ -34,8 +32,8 @@ public class Choose extends Activity implements OnItemSelectedListener {
 		public void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_choose); 
-		ActionBar actionBar = getActionBar();
+		setContentView(R.layout.activity_choose);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
@@ -69,9 +67,11 @@ public class Choose extends Activity implements OnItemSelectedListener {
                 R.layout.spinner_item, meetName);
 		
 		dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
- 		spinnerMeet.setAdapter(
- 				new NothingSelectedSpinnerAdapter(
- 						dataAdapter, R.layout.meet_name_spinner_row_nothing_selected, this));
+        dataAdapter.insert("  Choose a Meet", 0);
+        spinnerMeet.setAdapter(dataAdapter);
+// 		spinnerMeet.setAdapter(
+// 				new NothingSelectedSpinnerAdapter(
+// 						dataAdapter, R.layout.meet_name_spinner_row_nothing_selected, this));
 	}
    
    public void addListenerOnButton()

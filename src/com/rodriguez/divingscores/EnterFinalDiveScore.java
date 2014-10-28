@@ -1,12 +1,11 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,7 +41,7 @@ import info.sqlite.helper.ReversePlatformDatabase;
 import info.sqlite.helper.TwistDatabase;
 import info.sqlite.helper.TwistPlatformDatabase;
 
-public class EnterFinalDiveScore extends Activity implements OnItemSelectedListener {
+public class EnterFinalDiveScore extends ActionBarActivity implements OnItemSelectedListener {
     private Spinner spinner;
     private EditText score1;
     private TextView DD, name;
@@ -61,7 +60,7 @@ public class EnterFinalDiveScore extends Activity implements OnItemSelectedListe
         if (savedInstanceState != null) {
             stringId = savedInstanceState.getString(KEY_TEXT_VALUE);
         }
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }

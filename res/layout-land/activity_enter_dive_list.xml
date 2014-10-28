@@ -74,6 +74,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/dbMeet"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header" />
 
         <Spinner
@@ -94,6 +96,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/DiveCategory"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header"
             android:visibility="visible"/>
 

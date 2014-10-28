@@ -1,23 +1,11 @@
 package com.rodriguez.divingscores;
 
-import info.controls.NothingSelectedSpinnerAdapter;
-import info.sqlite.helper.DiveNumberDatabase;
-import info.sqlite.helper.DiverDatabase;
-import info.sqlite.helper.JudgeScoreDatabase;
-import info.sqlite.helper.MeetDatabase;
-import info.sqlite.helper.ResultDatabase;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +21,18 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import info.controls.NothingSelectedSpinnerAdapter;
+import info.sqlite.helper.DiveNumberDatabase;
+import info.sqlite.helper.DiverDatabase;
+import info.sqlite.helper.JudgeScoreDatabase;
+import info.sqlite.helper.MeetDatabase;
+import info.sqlite.helper.ResultDatabase;
+
+public class ChangeDiveScore extends ActionBarActivity implements OnItemSelectedListener{
 
     private TextView name, meetName, s1v, s2v, s3v, s4v, s5v, s6v, s7v,
             totalView, failedV, failedText;
@@ -55,7 +54,7 @@ public class ChangeDiveScore extends Activity implements OnItemSelectedListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_dive_score);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }

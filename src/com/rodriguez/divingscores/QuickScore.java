@@ -1,13 +1,12 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,11 +18,10 @@ import android.widget.Spinner;
 
 import java.util.List;
 
-import info.controls.NothingSelectedSpinnerAdapter;
 import info.sqlite.helper.QuickScoreDatabase;
 
 
-public class QuickScore extends Activity implements AdapterView.OnItemSelectedListener {
+public class QuickScore extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner spinner;
     private Button btnNewScoreSheet;
@@ -38,9 +36,9 @@ public class QuickScore extends Activity implements AdapterView.OnItemSelectedLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_score);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         loadSavedPreferences();
@@ -84,16 +82,21 @@ public class QuickScore extends Activity implements AdapterView.OnItemSelectedLi
     }
 
     private void loadSpinner(){
+
+
         GetScoreSheets sheets = new GetScoreSheets();
         List<String> scoreSheets = sheets.doInBackground();
 
         dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, scoreSheets);
-
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        spinner.setAdapter(
-                new NothingSelectedSpinnerAdapter(
-                        dataAdapter, R.layout.quick_score_spinner_row_nothing_selected, this));
+        dataAdapter.insert("  Choose a Score Sheet", 0);
+        spinner.setAdapter(dataAdapter);
+
+
+//        spinner.setAdapter(
+//                new NothingSelectedSpinnerAdapter(
+//                        dataAdapter, R.layout.quick_score_spinner_row_nothing_selected, this));
     }
 
     public void addListenerOnButton(){

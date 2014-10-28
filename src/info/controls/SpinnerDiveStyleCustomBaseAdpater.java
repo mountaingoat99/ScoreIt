@@ -7,10 +7,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import info.Helpers.DiveStyleSpinner;
 import com.rodriguez.divingscores.R;
 
 import java.util.ArrayList;
+
+import info.Helpers.DiveStyleSpinner;
 
 public class SpinnerDiveStyleCustomBaseAdpater extends BaseAdapter {
 

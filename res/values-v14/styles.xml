@@ -1,5 +1,13 @@
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar" />
+    <style name="Theme.MyTheme." parent="@style/Theme.AppCompat">
+
+        <item name="android:background">@color/background_material_dark</item>
+        <item name="android:windowBackground">@color/background_material_dark</item>
+        <item name="android:colorBackground">@color/background_material_dark</item>
+
+    </style>
+
+    <!--<style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar" />-->
 
 </resources>

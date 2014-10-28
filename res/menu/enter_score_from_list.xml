@@ -1,13 +1,14 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:divingscores="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/menu_failed_dive"
         android:title="@string/failed_dive"
         android:orderInCategory="200"
-        android:showAsAction="collapseActionView" />
+        divingscores:showAsAction="collapseActionView" />
 
     <item android:id="@+id/menu_two_judge_option"
         android:title="@string/two_judge_option"
         android:orderInCategory="200"
-        android:showAsAction="collapseActionView" />
+        divingscores:showAsAction="collapseActionView" />
 
 </menu>

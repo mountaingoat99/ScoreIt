@@ -12,8 +12,8 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/header"
         android:gravity="center"
+        android:background="@color/header"
         android:text="@string/score_my_dive"
         android:textSize="@dimen/text_size_large"
         android:textColor="@color/header_text" />

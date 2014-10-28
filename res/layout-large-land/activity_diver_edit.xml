@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/editTextNameED"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="16dp"
             android:text="@string/name"
             android:textSize="@dimen/text_size_medium"
             android:textColor="@color/static_text"/>
@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/editTextGradeED"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="16dp"
             android:text="@string/grade"
             android:textSize="@dimen/text_size_medium"
             android:textColor="@color/static_text"/>
@@ -126,7 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/editTextSchoolED"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="16dp"
             android:text="@string/school"
             android:textSize="@dimen/text_size_medium"
             android:textColor="@color/static_text"/>
@@ -154,8 +154,8 @@
             android:textSize="@dimen/button_text"
             android:textColor="@color/button_text"
             style="@android:style/Widget.Holo.Button"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentLeft="true"/>

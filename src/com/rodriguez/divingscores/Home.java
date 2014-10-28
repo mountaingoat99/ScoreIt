@@ -1,10 +1,10 @@
 package com.rodriguez.divingscores;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 
-public class Home extends Activity {
+public class Home extends ActionBarActivity {
 
     private Button btnQuick, btnDetailed;
     private final Context context = this;

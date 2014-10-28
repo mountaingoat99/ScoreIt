@@ -26,7 +26,7 @@
         <Spinner
             android:id="@+id/spinnerMeetName"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_below="@id/TextViewNewMeet"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"

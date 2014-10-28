@@ -1,11 +1,10 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +21,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import info.controls.NothingSelectedSpinnerAdapter;
 import info.sqlite.helper.DiveTotalDatabase;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.JudgeScoreDatabase;
@@ -32,7 +30,7 @@ import info.sqlite.helper.TypeDatabase;
 import info.sqlite.model.ResultsDB;
 
 
-public class ChooseDivesFromList extends Activity implements AdapterView.OnItemSelectedListener {
+public class ChooseDivesFromList extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner diveNumberSpinner;
     private TextView name, meetName, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, total,
@@ -56,7 +54,7 @@ public class ChooseDivesFromList extends Activity implements AdapterView.OnItemS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_dives_from_list);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
@@ -223,9 +221,11 @@ public class ChooseDivesFromList extends Activity implements AdapterView.OnItemS
                 R.layout.spinner_item, diveNum);
 
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        diveNumberSpinner.setAdapter(
-                new NothingSelectedSpinnerAdapter(
-                        dataAdapter, R.layout.diver_number_spinner_row_nothing_selected, this));
+        dataAdapter.insert("  Choose Dive Number", 0);
+        diveNumberSpinner.setAdapter(dataAdapter);
+//        diveNumberSpinner.setAdapter(
+//                new NothingSelectedSpinnerAdapter(
+//                        dataAdapter, R.layout.diver_number_spinner_row_nothing_selected, this));
     }
 
     private void fillScores(){

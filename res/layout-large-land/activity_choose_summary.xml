@@ -37,8 +37,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/spinnerDiveCatC"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp" >
 
             <Button
@@ -69,14 +69,16 @@
             android:layout_height="1dp"
             android:layout_below="@id/layout3"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header" />
 
         <LinearLayout
             android:id="@+id/layout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
             android:layout_below="@id/View0">
 
@@ -147,6 +149,8 @@
     	    android:layout_height="1dp"
     	    android:layout_below="@id/layout1"
     	    android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
     	    android:background="@color/header" />
 
         <LinearLayout
@@ -154,8 +158,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/View2C"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp" >
 
             <TextView
@@ -216,6 +220,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/layouts"
             android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header" />
 
         <TableLayout
@@ -224,8 +230,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/View3"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp">
 
             <TableRow

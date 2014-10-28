@@ -1,12 +1,11 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +22,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import info.controls.NothingSelectedSpinnerAdapter;
 import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiveTotalDatabase;
 import info.sqlite.helper.DiverDatabase;
@@ -35,7 +33,7 @@ import info.sqlite.helper.ResultDatabase;
 import info.sqlite.helper.TypeDatabase;
 import info.sqlite.model.ResultsDB;
 
-public class ChooseSummary extends Activity implements OnItemSelectedListener {
+public class ChooseSummary extends ActionBarActivity implements OnItemSelectedListener {
 
 	private TextView name, meetName, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11,
 					s1v, s2v, s3v, s4v, s5v, s6v, s7v, s8v, s9v, s10v, s11v, total,
@@ -59,7 +57,7 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_choose_summary);
-		ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
@@ -483,24 +481,27 @@ public class ChooseSummary extends Activity implements OnItemSelectedListener {
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                     R.layout.spinner_item, diveName);
-
             dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
-            spinner.setAdapter(
-                    new NothingSelectedSpinnerAdapter(
-                            dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this)
-            );
+            dataAdapter.insert("  Choose a Dive Category", 0);
+            spinner.setAdapter(dataAdapter);
+//            spinner.setAdapter(
+//                   new NothingSelectedSpinnerAdapter(
+//                            dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this)
+
         } else {
             GetPlatformDiveName divesP = new GetPlatformDiveName();
             List<String> diveName = divesP.doInBackground();
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                     R.layout.spinner_item, diveName);
-
             dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
-            spinner.setAdapter(
-                    new NothingSelectedSpinnerAdapter(
-                            dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this)
-            );
+            dataAdapter.insert("  Choose a Dive Category", 0);
+            spinner.setAdapter(dataAdapter);
+
+//            spinner.setAdapter(
+//                    new NothingSelectedSpinnerAdapter(
+//                            dataAdapter, R.layout.dive_type_spinner_row_nothing_selected, this)
+
         }
 		
 	}

@@ -22,7 +22,7 @@
     <Spinner
         android:id="@+id/spinnerDiver"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_below="@id/Reports"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -45,30 +45,30 @@
     <Spinner
         android:id="@+id/spinnerMeet"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_below="@id/View0"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:prompt="@string/choose_meet" />
 
-        <TextView
-            android:id="@+id/View1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_below="@+id/spinnerMeet"
-            android:background="@color/AndroidDarkBlue"
-            android:gravity="center"
-            android:textSize="@dimen/text_size_large"
-            android:textColor="@color/white"/>
+    <TextView
+        android:id="@+id/View1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/spinnerMeet"
+        android:background="@color/AndroidDarkBlue"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/white"/>
 
     <Spinner
         android:id="@+id/spinnerReports"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_below="@id/View1"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"

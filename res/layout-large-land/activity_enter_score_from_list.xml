@@ -13,7 +13,7 @@
             android:layout_gravity="left"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:background="@color/header"
             android:gravity="center"
             android:text="@string/enter_scores"
@@ -26,8 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/textView"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp">
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
 
             <TableRow
                 android:id="@+id/tableRow1"
@@ -294,8 +294,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tableLayout1"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
             android:text="@string/total"
             android:textSize="@dimen/button_text"
             android:textColor="@color/button_text"

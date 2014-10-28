@@ -1,12 +1,11 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +19,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +44,7 @@ import info.sqlite.helper.ScoresDatabase;
 import info.sqlite.helper.TwistDatabase;
 import info.sqlite.helper.TwistPlatformDatabase;
 
-public class Dives extends Activity implements OnItemSelectedListener
+public class Dives extends ActionBarActivity implements OnItemSelectedListener
 {
 	private Spinner spinner;
     private RadioButton radioTuck, radioPike, radioFree, radioStraight;
@@ -66,7 +66,7 @@ public class Dives extends Activity implements OnItemSelectedListener
         if (savedInstanceState != null) {
             stringId = savedInstanceState.getString(KEY_TEXT_VALUE);
         }
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }

@@ -1,11 +1,27 @@
 package com.rodriguez.divingscores;
 
-import info.sqlite.helper.DiveNumberDatabase;
-import info.sqlite.helper.DiverDatabase;
-import info.sqlite.helper.JudgeScoreDatabase;
-import info.sqlite.helper.ResultDatabase;
-import info.sqlite.helper.TypeDatabase;
-import info.sqlite.model.ResultsDB;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,31 +33,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.os.Environment;
-import android.support.v4.app.NavUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import info.sqlite.helper.DiveNumberDatabase;
+import info.sqlite.helper.DiverDatabase;
+import info.sqlite.helper.JudgeScoreDatabase;
+import info.sqlite.helper.ResultDatabase;
+import info.sqlite.helper.TypeDatabase;
+import info.sqlite.model.ResultsDB;
 
-public class MeetScores extends Activity {
+public class MeetScores extends ActionBarActivity {
 	
 	private TextView meetName, schoolName, schoolCity, schoolState, meetDate, name, age,
                         grade, school, total, Type, score1, score2, score3, score4, score5,
@@ -63,7 +62,7 @@ public class MeetScores extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_meet_scores);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }

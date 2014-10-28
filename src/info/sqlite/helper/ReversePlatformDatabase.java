@@ -5,9 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import info.Helpers.DiveStyleSpinner;
-
 import java.util.ArrayList;
+
+import info.Helpers.DiveStyleSpinner;
 
 
 public class ReversePlatformDatabase extends DatabaseHelper {

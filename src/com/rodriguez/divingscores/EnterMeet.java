@@ -1,11 +1,5 @@
 package com.rodriguez.divingscores;
 
-import info.sqlite.helper.MeetDatabase;
-
-import java.util.Calendar;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -15,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +23,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class EnterMeet extends Activity implements
+import java.util.Calendar;
+
+import info.sqlite.helper.MeetDatabase;
+
+public class EnterMeet extends ActionBarActivity implements
 OnClickListener {
 
     private RadioGroup radioJudgesGroup;
@@ -44,7 +43,7 @@ OnClickListener {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_meet);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }

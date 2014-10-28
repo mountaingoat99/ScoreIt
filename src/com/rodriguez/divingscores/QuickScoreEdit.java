@@ -1,14 +1,17 @@
 package com.rodriguez.divingscores;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,13 +20,20 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import info.sqlite.helper.QuickScoreDatabase;
 
 
-public class QuickScoreEdit extends Activity {
+public class QuickScoreEdit extends ActionBarActivity {
 
     private TextView meetName, score1, score2, score3, score4, score5, score6, score7,
                     score8, score9, score10, score11, total;
@@ -32,6 +42,7 @@ public class QuickScoreEdit extends Activity {
                     string9 = "", string10 = "", string11 = "", stringTotal = "", nameMeetString = "";
     private int sheetId, scoreNumber;
     private final Context context = this;
+    Bitmap myBitmap;
     public boolean firstAlertQuickEdit;
 
 
@@ -39,9 +50,9 @@ public class QuickScoreEdit extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_score_edit);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setUpView();
@@ -401,7 +412,115 @@ public class QuickScoreEdit extends Activity {
             showAlertForHowTo();
         }
 
+        if(id == R.id.action_share){
+            View v1 = getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            myBitmap = v1.getDrawingCache();
+            saveBitmap(myBitmap);
+        }
+
+        if(id == R.id.action_email){
+            emailFile();
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void emailFile(){
+
+    String columnString =   "\"Diver\"," +
+            "\"Dive1\",\"Dive2\",\"Dive3\",\"Dive4\",\"Dive5\",\"Dive6\"," +
+            "\"Dive7\",\"Dive8\",\"Dive9\",\"Dive10\",\"Dive11\",\"Total\",";
+    String dataString   =   "\"" + nameMeetString + "\",\"" + string1 + "\",\"" + string2 + "\",\"" + string3 + "\",\"" + string4
+            + "\",\"" + string5 + "\",\"" + string6 + "\",\"" + string7 + "\",\"" + string8
+            + "\",\"" + string9 + "\",\"" + string10+ "\",\"" + string11 + "\",\"" + stringTotal + "\"";
+
+    String combinedString = columnString + "\n" + dataString;
+
+    File file   = null;
+    File root   = Environment.getExternalStorageDirectory();
+    if (root.canWrite()){
+        File dir    =   new File (root.getAbsolutePath() + "/PersonData");
+        dir.mkdirs();
+        file   =   new File(dir, nameMeetString + " Scores.csv");
+        FileOutputStream out   =   null;
+        try {
+            out = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            if (out != null) {
+                out.write(combinedString.getBytes());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            if (out != null) {
+                out.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    Uri u1;
+    u1 = Uri.fromFile(file);
+
+    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+    sendIntent.setData(Uri.parse("mailto:"));
+    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Diver Results");
+    sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+    sendIntent.setType("text/html");
+    startActivity(Intent.createChooser(sendIntent, "Save Results"));
+}
+
+
+
+    // create a screen shot to share on Facebook
+    public void saveBitmap(Bitmap bitmap) {
+        String filePath = Environment.getExternalStorageDirectory()
+                + File.separator + "DCIM/Camera/screenshot.png";
+        File imagePath = new File(filePath);
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(imagePath);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+            shareStatus(filePath);
+        } catch (IOException e) {
+            Log.e("GREC", e.getMessage(), e);
+        }
+    }
+
+    public void shareStatus(String path) {
+        Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+        String st = buildShareText();
+        sendIntent.setType("*/*");
+
+        sendIntent.setType("image/png");
+        Uri myUri = Uri.parse("file://" + path);
+        sendIntent.putExtra(Intent.EXTRA_STREAM, myUri);
+
+        //test
+        sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Dive Scores");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, st);
+
+        startActivity(Intent.createChooser(sendIntent, "Share your Scores!"));
+    }
+
+    public String buildShareText(){
+        String dates;
+
+        // formats the date
+        SimpleDateFormat outdate = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+        Date DateString = new Date();
+        dates = outdate.format(DateString);
+
+        return "Meet scores from " + nameMeetString
+            + " on " + dates + "." + "\n"
+                + "Sent from ScoreIt.";
     }
 
     private class GetSheetInfo extends AsyncTask<ArrayList<String>, Object, Object>{

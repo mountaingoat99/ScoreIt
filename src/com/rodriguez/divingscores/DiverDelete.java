@@ -1,16 +1,12 @@
 package com.rodriguez.divingscores;
 
-import info.sqlite.helper.DiverDatabase;
-
-import java.util.ArrayList;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +17,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DiverDelete extends Activity {
+import java.util.ArrayList;
+
+import info.sqlite.helper.DiverDatabase;
+
+public class DiverDelete extends ActionBarActivity {
 
     private TextView name, age, grade, school;
 	private String nameString;
@@ -30,13 +30,11 @@ public class DiverDelete extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_diver_delete);
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
-        }
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         name = (TextView)findViewById(R.id.deleteName);
         age = (TextView)findViewById(R.id.deleteAge);

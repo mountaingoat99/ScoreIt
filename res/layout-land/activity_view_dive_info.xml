@@ -26,6 +26,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/TextView"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header" />
 
         <TextView
@@ -82,6 +84,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/dbMeet"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header" />
 
         <TextView
@@ -187,6 +191,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/divedd"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header" />
 
         <LinearLayout
@@ -263,6 +269,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/layouts"
             android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header"/>
 
         <TableLayout

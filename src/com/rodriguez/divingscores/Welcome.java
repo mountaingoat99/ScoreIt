@@ -1,15 +1,5 @@
 package com.rodriguez.divingscores;
 
-import info.controls.NothingSelectedSpinnerAdapter;
-import info.sqlite.helper.DiverDatabase;
-import info.sqlite.helper.JudgeScoreDatabase;
-import info.sqlite.helper.MeetDatabase;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +23,14 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class Welcome extends Activity implements OnItemSelectedListener
+import java.util.ArrayList;
+import java.util.List;
+
+import info.sqlite.helper.DiverDatabase;
+import info.sqlite.helper.JudgeScoreDatabase;
+import info.sqlite.helper.MeetDatabase;
+
+public class Welcome extends ActionBarActivity implements OnItemSelectedListener
 {
     private Spinner spinnerName, spinnerMeet;
     private Button diverHistory, diverEdit, diverDelete, meetResult, meetEdit, meetDelete,
@@ -49,9 +47,9 @@ public class Welcome extends Activity implements OnItemSelectedListener
    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-       ActionBar actionBar = getActionBar();
+       android.support.v7.app.ActionBar actionBar = getSupportActionBar();
        if (actionBar != null) {
-           actionBar.setDisplayHomeAsUpEnabled(false);
+           actionBar.setDisplayHomeAsUpEnabled(true);
        }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -134,10 +132,12 @@ public class Welcome extends Activity implements OnItemSelectedListener
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
 				R.layout.spinner_item, diverName);
 		dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
- 		spinnerName.setAdapter(
- 				new NothingSelectedSpinnerAdapter(
- 						dataAdapter, R.layout.diver_name_spinner_row_nothing_selected, this));
-		
+        dataAdapter.insert("  Choose a Diver", 0);
+        spinnerName.setAdapter(dataAdapter);
+// 		spinnerName.setAdapter(
+// 				new NothingSelectedSpinnerAdapter(
+// 						dataAdapter, R.layout.diver_name_spinner_row_nothing_selected, this));
+//
 	}
 
     // call a separate thread to get the meetnames
@@ -149,9 +149,11 @@ public class Welcome extends Activity implements OnItemSelectedListener
        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
 				R.layout.spinner_item, meetName);
 		dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
-		spinnerMeet.setAdapter(
-				new NothingSelectedSpinnerAdapter(
-						dataAdapter, R.layout.meet_name_spinner_row_nothing_selected, this));
+        dataAdapter.insert("  Choose a Meet", 0);
+	    spinnerMeet.setAdapter(dataAdapter);
+//			spinnerMeet.setAdapter(
+//				new NothingSelectedSpinnerAdapter(
+//						dataAdapter, R.layout.meet_name_spinner_row_nothing_selected, this));
 	}
 
     // Checks all the buttons and makes sure the proper data is in place before the user can

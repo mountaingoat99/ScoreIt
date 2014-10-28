@@ -1,17 +1,11 @@
 package com.rodriguez.divingscores;
 
-import info.sqlite.helper.DiveNumberDatabase;
-import info.sqlite.helper.DiverDatabase;
-import info.sqlite.helper.MeetDatabase;
-
-import java.util.ArrayList;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +17,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DiverHistory extends Activity {
+import java.util.ArrayList;
+
+import info.sqlite.helper.DiveNumberDatabase;
+import info.sqlite.helper.DiverDatabase;
+import info.sqlite.helper.MeetDatabase;
+
+public class DiverHistory extends ActionBarActivity {
 
     private ListView myList;
 	private TextView name, age, grade, school;
@@ -35,7 +35,7 @@ public class DiverHistory extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diver_history);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }

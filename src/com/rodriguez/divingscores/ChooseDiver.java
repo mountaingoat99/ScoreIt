@@ -1,19 +1,5 @@
 package com.rodriguez.divingscores;
 
-import info.controls.NothingSelectedSpinnerAdapter;
-import info.sqlite.helper.DiveListDatabase;
-import info.sqlite.helper.DiveNumberDatabase;
-import info.sqlite.helper.DiveTotalDatabase;
-import info.sqlite.helper.DiverDatabase;
-import info.sqlite.helper.MeetDatabase;
-import info.sqlite.helper.ResultDatabase;
-import info.sqlite.helper.TypeDatabase;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +26,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ChooseDiver extends Activity implements OnItemSelectedListener {
+import java.util.ArrayList;
+import java.util.List;
+
+import info.sqlite.helper.DiveListDatabase;
+import info.sqlite.helper.DiveNumberDatabase;
+import info.sqlite.helper.DiveTotalDatabase;
+import info.sqlite.helper.DiverDatabase;
+import info.sqlite.helper.MeetDatabase;
+import info.sqlite.helper.ResultDatabase;
+import info.sqlite.helper.TypeDatabase;
+
+public class ChooseDiver extends ActionBarActivity implements OnItemSelectedListener {
 
     private Spinner spinnerName;
     private RadioButton rbd6, rbd11, rbd1, rbd3, rbd10, rbd75, rbd5;
@@ -60,7 +58,7 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
     public void onCreate(Bundle savedInstanceState)    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_diver);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
@@ -186,9 +184,11 @@ public class ChooseDiver extends Activity implements OnItemSelectedListener {
                 R.layout.spinner_item, diverName);
 
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        spinnerName.setAdapter(
-                new NothingSelectedSpinnerAdapter(
-                        dataAdapter, R.layout.diver_name_spinner_row_nothing_selected, this));
+        dataAdapter.insert("  Choose a Diver", 0);
+        spinnerName.setAdapter(dataAdapter);
+//        spinnerName.setAdapter(
+//                new NothingSelectedSpinnerAdapter(
+//                        dataAdapter, R.layout.diver_name_spinner_row_nothing_selected, this));
 
     }
 

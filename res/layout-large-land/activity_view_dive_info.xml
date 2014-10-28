@@ -26,6 +26,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/TextView"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header" />
 
         <TextView
@@ -33,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/View0"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:text="@string/diver_name"
             android:textSize="@dimen/text_size_medium"
@@ -57,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/dbName"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/meet_name"
             android:textSize="@dimen/text_size_medium"
@@ -82,6 +84,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/dbMeet"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header" />
 
         <TextView
@@ -89,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/View1"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:text="@string/dive_type_name"
             android:textSize="@dimen/text_size_medium"
@@ -113,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/diveTypeValue"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:text="@string/dive_name"
             android:textSize="@dimen/text_size_medium"
@@ -138,7 +142,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/diveNameValue"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:text="@string/dive_position_name"
             android:textSize="@dimen/text_size_medium"
@@ -162,7 +166,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/divePosition"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="10dp"
             android:text="@string/dd"
             android:textSize="@dimen/text_size_medium"
@@ -187,6 +191,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/divedd"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header" />
 
         <LinearLayout
@@ -194,8 +200,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/View2"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp">
 
             <View
@@ -263,6 +269,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/layouts"
             android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header"/>
 
         <TableLayout
@@ -271,8 +279,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/View3"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp">
 
             <TableRow
@@ -496,8 +504,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tableLayout1"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp">
 
