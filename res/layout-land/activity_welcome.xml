@@ -71,7 +71,7 @@
     <Spinner
         android:id="@+id/spinnerDiverNameW"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_below="@id/ShowDivers"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -79,13 +79,43 @@
         android:prompt="@string/choose_diver" />
 
     <LinearLayout
-        android:id="@+id/diverBtnLayout"
-        android:layout_width="match_parent"
+        android:id="@+id/layout2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/spinnerDiverNameW"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:orientation="horizontal" >
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/buttonDiverHistory"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/history"
+            android:textSize="@dimen/button_text"
+            android:textColor="@color/button_text"/>
+
+        <Button
+            android:id="@+id/buttonDiverEdit"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/edit"
+            android:textSize="@dimen/button_text"
+            android:textColor="@color/button_text"/>
+
+        <Button
+            android:id="@+id/buttonDiverDelete"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/delete"
+            android:textSize="@dimen/button_text"
+            android:textColor="@color/button_text"/>
 
     </LinearLayout>
 
@@ -93,7 +123,7 @@
         android:id="@+id/ShowMeets"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/diverBtnLayout"
+        android:layout_below="@id/layout2"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
@@ -106,7 +136,7 @@
     <Spinner
         android:id="@+id/spinnerMeetNameW"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_below="@id/ShowMeets"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -114,13 +144,43 @@
         android:prompt="@string/choose_meet" />
 
     <LinearLayout
-        android:id="@+id/meetBtnLayout"
-        android:layout_width="match_parent"
+        android:id="@+id/layout3"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/spinnerMeetNameW"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:orientation="horizontal" >
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/buttonMeetHistory"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/history"
+            android:textSize="@dimen/button_text"
+            android:textColor="@color/button_text"/>
+
+        <Button
+            android:id="@+id/buttonMeetEdit"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/edit"
+            android:textSize="@dimen/button_text"
+            android:textColor="@color/button_text"/>
+
+        <Button
+            android:id="@+id/buttonMeetDelete"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/delete"
+            android:textSize="@dimen/button_text"
+            android:textColor="@color/button_text"/>
 
     </LinearLayout>
 
@@ -128,7 +188,7 @@
         android:id="@+id/Divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/meetBtnLayout"
+        android:layout_below="@id/layout3"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
@@ -138,22 +198,38 @@
         android:textSize="@dimen/text_size_large"
         android:textColor="@color/white" />
 
-    <Button
-        android:id="@+id/buttonStartNewMeet"
-        style="@android:style/Widget.Holo.Button"
+    <LinearLayout
+        android:id="@+id/layout5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/Divider"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:layout_below="@id/Divider"
-        android:text="@string/start_meet"
-        android:layout_alignLeft="@+id/ShowDivers"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentLeft="true"
-        android:textSize="@dimen/button_text"
-        android:textColor="@color/button_text"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/buttonStartNewMeet"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/start_meet"
+            android:textSize="@dimen/button_text"
+            android:textColor="@color/button_text"/>
+
+        <Button
+            android:id="@+id/buttonReports"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/reports"
+            android:textSize="@dimen/button_text"
+            android:textColor="@color/button_text"
+            android:layout_marginBottom="16dp"/>
+
+    </LinearLayout>
         
 </RelativeLayout>
 

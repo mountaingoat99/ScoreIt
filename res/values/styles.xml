@@ -1,6 +1,24 @@
 <resources>
 
-   <style name="Theme.MyTheme" parent="@android:style/Theme.Black" />
+    <style name="Theme.MyTheme." parent="@style/Theme.AppCompat">
 
+        <item name="android:background">@color/background_material_dark</item>
+        <item name="android:windowBackground">@color/background_material_dark</item>
+        <item name="android:colorBackground">@color/background_material_dark</item>
+
+        <!--&lt;!&ndash;   your app branding color for the app bar &ndash;&gt;-->
+        <!--<item name="colorPrimary">@color/material_blue_grey_950</item>-->
+        <!--&lt;!&ndash;   darker variant for the status bar and contextual app bars &ndash;&gt;-->
+        <!--<item name="colorPrimaryDark">@color/material_blue_grey_900</item>-->
+        <!--&lt;!&ndash;   theme UI controls like checkboxes and text fields &ndash;&gt;-->
+        <!--<item name="colorAccent">@color/material_blue_grey_800</item>-->
+
+    </style>
+   <!--<style name="Theme.MyTheme" parent="@android:style/Theme.Black" />-->
+
+    <!-- your app's theme inherits from the Material theme -->
+    <!--<style name="AppTheme" parent="android:Theme.Material">
+         theme customizations -->
+    <!--</style>-->
 
 </resources>

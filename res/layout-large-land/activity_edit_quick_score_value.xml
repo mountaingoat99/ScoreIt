@@ -1,0 +1,84 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.rodriguez.divingscores.EditQuickScoreValue">
+
+    <TextView
+        android:id="@+id/Header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/header"
+        android:gravity="center"
+        android:text=""
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/header_text" />
+
+    <EditText
+        android:id="@+id/sheetName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/Header"
+        android:text=""
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/random_text"
+        android:inputType="textCapWords"
+        android:visibility="invisible">
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/score"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/Header"
+        android:text=""
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/random_text"
+        android:inputType="numberDecimal"
+        android:visibility="invisible">
+        <requestFocus />
+    </EditText>
+
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sheetName"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <Button
+            android:id="@+id/buttonUpdate"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/save"
+            android:textSize="16sp"
+            android:textColor="@color/button_text"/>
+
+        <Button
+            android:id="@+id/buttonReturn"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/return_button"
+            android:textSize="16sp"
+            android:textColor="@color/button_text"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

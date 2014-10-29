@@ -160,10 +160,12 @@
  <color name="Navy">#000080</color>
  <color name="Black">#000000</color>
 
- <color name="static_text">#808080</color>
- <color name="random_text">#FFFFFF</color>
- <color name="button_text">#FFFFFF</color>
- <color name="header_text">#FFFFFF</color>
- <color name="header">#0099CC</color>
- 
+    <color name="static_text">#808080</color>
+    <color name="random_text">#FFFFFF</color>
+    <color name="button_text">#FFFFFF</color>
+    <color name="header_text">#FFFFFF</color>
+    <color name="header">#0099CC</color>
+
+
+
  </resources>

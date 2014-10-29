@@ -23,7 +23,7 @@
     <Spinner
         android:id="@+id/listDives"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_below="@id/textView0B"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
@@ -63,8 +63,7 @@
             android:text="@string/straight"
             android:textSize="@dimen/text_size_small"
             android:textColor="@color/random_text"
-            android:layout_weight="1"
-            android:checked="true"  />
+            android:layout_weight="1"/>
 
         <RadioButton
             android:id="@+id/radioPike"
@@ -105,7 +104,7 @@
             android:layout_marginTop="8dp"
             android:background="@color/header"
             android:gravity="center"
-            android:text="@string/enter_scores"
+            android:text=""
             android:textSize="@dimen/text_size_large"
             android:textColor="@color/header_text" />
 
@@ -134,20 +133,20 @@
                     android:id="@+id/score1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
                     android:text="@string/score_1"
                     android:textSize="@dimen/text_size_small"
                     android:textColor="@color/static_text"/>
 
-                <EditText
+                <Spinner
                     android:id="@+id/editScore1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="3"
-                    android:inputType="numberDecimal"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/random_text">
-                    <requestFocus />
-                </EditText>
+                    android:layout_width="75dp"
+                    android:layout_height="38dp"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/random_text"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="none" >
+                </Spinner>
 
                 <View
                     android:layout_width="0dp"
@@ -158,18 +157,20 @@
                     android:id="@+id/score2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
                     android:text="@string/score_2"
                     android:textSize="@dimen/text_size_small"
                     android:textColor="@color/static_text"/>
 
-                <EditText
+                <Spinner
                     android:id="@+id/editScore2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="3"
-                    android:inputType="numberDecimal"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/random_text"/>
+                    android:layout_width="75dp"
+                    android:layout_height="38dp"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/random_text"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="none" >
+                </Spinner>
 
                 <View
                     android:layout_width="0dp"
@@ -180,40 +181,20 @@
                     android:id="@+id/score3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
                     android:text="@string/score_3"
                     android:textSize="@dimen/text_size_small"
                     android:textColor="@color/static_text"/>
 
-                <EditText
+                <Spinner
                     android:id="@+id/editScore3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="3"
-                    android:inputType="numberDecimal"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/random_text"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/score4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/score_4"
+                    android:layout_width="75dp"
+                    android:layout_height="38dp"
                     android:textSize="@dimen/text_size_small"
-                    android:textColor="@color/static_text"/>
-
-                <EditText
-                    android:id="@+id/editScore4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="3"
-                    android:inputType="numberDecimal"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/random_text"/>
+                    android:textColor="@color/random_text"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="none" >
+                </Spinner>
 
                 <View
                     android:layout_width="0dp"
@@ -235,21 +216,47 @@
                     android:layout_weight="1" />
 
                 <TextView
+                    android:id="@+id/score4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
+                    android:text="@string/score_4"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/static_text"/>
+
+                <Spinner
+                    android:id="@+id/editScore4"
+                    android:layout_width="75dp"
+                    android:layout_height="38dp"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/random_text"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="none" >
+                </Spinner>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
                     android:id="@+id/score5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
                     android:text="@string/score_5"
                     android:textSize="@dimen/text_size_small"
                     android:textColor="@color/static_text"/>
 
-                <EditText
+                <Spinner
                     android:id="@+id/editScore5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="3"
-                    android:inputType="numberDecimal"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/random_text"/>
+                    android:layout_width="75dp"
+                    android:layout_height="38dp"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/random_text"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="none" >
+                </Spinner>
 
                 <View
                     android:layout_width="0dp"
@@ -260,18 +267,34 @@
                     android:id="@+id/score6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
                     android:text="@string/score_6"
                     android:textSize="@dimen/text_size_small"
                     android:textColor="@color/static_text"/>
 
-                <EditText
+                <Spinner
                     android:id="@+id/editScore6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="3"
-                    android:inputType="numberDecimal"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/random_text"/>
+                    android:layout_width="75dp"
+                    android:layout_height="38dp"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/random_text"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="none" >
+                </Spinner>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:layout_marginTop="8dp">
 
                 <View
                     android:layout_width="0dp"
@@ -282,18 +305,20 @@
                     android:id="@+id/score7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
                     android:text="@string/score_7"
                     android:textSize="@dimen/text_size_small"
                     android:textColor="@color/static_text"/>
 
-                <EditText
+                <Spinner
                     android:id="@+id/editScore7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="3"
-                    android:inputType="numberDecimal"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/random_text"/>
+                    android:layout_width="75dp"
+                    android:layout_height="38dp"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/random_text"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="none" >
+                </Spinner>
 
                 <View
                     android:layout_width="0dp"
@@ -301,23 +326,47 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/fake"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
+                    android:text="@string/score_6"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible" />
+
+                <Spinner
+                    android:layout_width="75dp"
+                    android:layout_height="38dp"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/random_text"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="none"
+                    android:visibility="invisible" >
+                </Spinner>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
                     android:text="@string/score_7"
                     android:textSize="@dimen/text_size_small"
                     android:textColor="@color/static_text"
                     android:visibility="invisible" />
 
-                <EditText
-                    android:id="@+id/fake2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="3"
-                    android:inputType="numberDecimal"
-                    android:visibility="invisible"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/random_text"/>
+                <Spinner
+                    android:layout_width="75dp"
+                    android:layout_height="38dp"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/random_text"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="none"
+                    android:visibility="invisible" >
+                </Spinner>
 
                 <View
                     android:layout_width="0dp"

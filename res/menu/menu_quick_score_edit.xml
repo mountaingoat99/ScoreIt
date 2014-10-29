@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:divingscores="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_email"
+        android:icon="@drawable/ic_email_white_24dp"
+        android:title="@string/email_results"
+        divingscores:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_white_24dp"
+        android:title="@string/share"
+        divingscores:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/menu_how_to"
+        android:title="@string/how_to_string"
+        android:orderInCategory="100"
+        divingscores:showAsAction="collapseActionView" />
+
+    <item android:id="@+id/menu_delete_quick_list"
+        android:title="@string/delete_score_sheet"
+        android:orderInCategory="100"
+        divingscores:showAsAction="collapseActionView" />
+
+</menu>

@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/TextViewChange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/header"
+            android:gravity="center"
+            android:text="@string/change_dive_scores"
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/header_text" />
+
+        <Spinner
+            android:id="@+id/spinnerDiveNumber"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:layout_below="@id/TextViewChange"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:drawSelectorOnTop="true"
+            android:gravity="center"
+            android:prompt="@string/choose_dive_number" />
+
+        <View
+            android:id="@+id/View0"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/spinnerDiveNumber"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@color/header" />
+
+        <TextView
+            android:id="@+id/dbName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/View0"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/diver_name"
+            android:textSize="@dimen/text_size_small"
+            android:textColor="@color/static_text" />
+
+        <TextView
+            android:id="@+id/divername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/dbName"
+            android:layout_below="@id/View0"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/dbName"
+            android:text=""
+            android:textSize="@dimen/text_size_medium"
+            android:textColor="@color/random_text" />
+
+        <TextView
+            android:id="@+id/dbMeet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dbName"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/meet_name"
+            android:textSize="@dimen/text_size_small"
+            android:textColor="@color/static_text" />
+
+        <TextView
+            android:id="@+id/meetname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/dbMeet"
+            android:layout_below="@id/divername"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/dbName"
+            android:text=""
+            android:textSize="@dimen/text_size_medium"
+            android:textColor="@color/random_text" />
+
+        <View
+            android:id="@+id/View2C"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/dbMeet"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@color/header" />
+
+        <LinearLayout
+            android:id="@+id/layouts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/View2C"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/total2view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/score_total"
+                android:textSize="@dimen/text_size_medium"
+                android:textColor="@color/static_text"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/scoreTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:text=""
+                android:textSize="@dimen/text_size_medium"
+                android:textColor="@color/random_text"
+                android:inputType="numberDecimal"
+                android:visibility="invisible"
+                android:maxLength="6"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/failedView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/failed"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/static_text"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/failedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:text=""
+                android:textSize="@dimen/text_size_medium"
+                android:textColor="@color/random_text"
+                android:maxLength="1"
+                android:visibility="invisible"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/View3"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/layouts"
+            android:layout_marginTop="16dp"
+            android:background="@color/header"
+            android:visibility="gone"/>
+
+        <TableLayout
+            android:id="@+id/tableLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/View3"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone">
+
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:layout_marginTop="8dp">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/score1view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_1"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible"/>
+
+                <EditText
+                    android:id="@+id/score1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/random_text"
+                    android:inputType="numberDecimal"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/score2view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_2"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible"/>
+
+                <EditText
+                    android:id="@+id/score2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/random_text"
+                    android:inputType="numberDecimal"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:layout_marginTop="8dp">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/score3view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_3"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible"/>
+
+                <EditText
+                    android:id="@+id/score3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/random_text"
+                    android:inputType="numberDecimal"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/score4view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_4"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible"/>
+
+                <EditText
+                    android:id="@+id/score4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/random_text"
+                    android:inputType="numberDecimal"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:layout_marginTop="8dp">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/score5view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_5"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible"/>
+
+                <EditText
+                    android:id="@+id/score5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/random_text"
+                    android:inputType="numberDecimal"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/score6view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_6"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible"/>
+
+                <EditText
+                    android:id="@+id/score6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/random_text"
+                    android:inputType="numberDecimal"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:layout_marginTop="8dp"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/score7view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_7"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible" />
+
+                <EditText
+                    android:id="@+id/score7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/random_text"
+                    android:inputType="numberDecimal"
+                    android:visibility="invisible" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/fake1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/failed"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible" />
+
+                <EditText
+                    android:id="@+id/fake2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/random_text"
+                    android:inputType="text"
+                    android:digits="pfPF"
+                    android:maxLength="1"
+                    android:capitalize="characters"
+                    android:visibility="invisible" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+            </TableRow>
+
+        </TableLayout>
+
+        <LinearLayout
+            android:id="@+id/layout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tableLayout1"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/buttonChangeScore"
+                style="@android:style/Widget.Holo.Button"
+                android:layout_width="800dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/update_score"
+                android:textSize="@dimen/button_text"
+                android:textColor="@color/button_text"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/buttonReturn"
+                style="@android:style/Widget.Holo.Button"
+                android:layout_width="800dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/return_button"
+                android:textSize="@dimen/button_text"
+                android:textColor="@color/button_text"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

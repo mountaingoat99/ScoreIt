@@ -1,18 +1,11 @@
 package com.rodriguez.divingscores;
 
-import info.controls.NothingSelectedSpinnerAdapter;
-import info.sqlite.helper.DiverDatabase;
-import info.sqlite.helper.MeetDatabase;
-import info.sqlite.helper.ResultDatabase;
-
-import java.util.List;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,32 +15,32 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class Choose extends Activity implements OnItemSelectedListener {
+import java.util.List;
+
+import info.sqlite.helper.MeetDatabase;
+
+public class Choose extends ActionBarActivity implements OnItemSelectedListener {
 
     private Spinner spinnerMeet;
-	private int meetId = 0;
-    public int meetSpinPosition;
-	private boolean checkResult;
-    private int spinnerPosition;
-    private int savedPosition;
+	private int meetSpinPosition, meetId = 0;
+    private String stringId;
 	
 	@Override
 		public void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_choose); 
-		ActionBar actionBar = getActionBar();
+		setContentView(R.layout.activity_choose);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         spinnerMeet = (Spinner)findViewById(R.id.spinnerMeetName);
         loadSpinnerMeet();
+        spinnerMeet.setOnItemSelectedListener(this);
 
         Bundle b = getIntent().getExtras();
         if(b != null) {
@@ -55,10 +48,7 @@ public class Choose extends Activity implements OnItemSelectedListener {
             spinnerMeet.setSelection(meetSpinPosition);
         }
 
-		// call the button press method
 		addListenerOnButton();
-
-		spinnerMeet.setOnItemSelectedListener(this);
 	}
 
     @Override
@@ -70,18 +60,18 @@ public class Choose extends Activity implements OnItemSelectedListener {
     }
    
    private void loadSpinnerMeet(){
-	    MeetDatabase db = new MeetDatabase(getApplicationContext());
-	    
-		List<String> meetName = db.getMeetNames();
+       GetMeetInfo meet = new GetMeetInfo();
+       List<String> meetName = meet.doInBackground();
 		
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, meetName);
 		
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
- 		spinnerMeet.setPrompt("Choose Meet");
- 		spinnerMeet.setAdapter(
- 				new NothingSelectedSpinnerAdapter(
- 						dataAdapter, R.layout.meet_name_spinner_row_nothing_selected, this));
+		dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
+        dataAdapter.insert("  Choose a Meet", 0);
+        spinnerMeet.setAdapter(dataAdapter);
+// 		spinnerMeet.setAdapter(
+// 				new NothingSelectedSpinnerAdapter(
+// 						dataAdapter, R.layout.meet_name_spinner_row_nothing_selected, this));
 	}
    
    public void addListenerOnButton()
@@ -117,11 +107,10 @@ public class Choose extends Activity implements OnItemSelectedListener {
 	}
    
    public int getId(){
-	   String stringId;
        int id;
-	   stringId = spinnerMeet.getSelectedItem().toString();
-	   MeetDatabase db = new MeetDatabase(getApplicationContext());
-	   id = db.getId(stringId);
+	   stringId = spinnerMeet.getSelectedItem().toString().trim();
+       GetMeetId ID = new GetMeetId();
+       id = ID.doInBackground(stringId);
 	   return id;
 	}
    
@@ -135,17 +124,50 @@ public class Choose extends Activity implements OnItemSelectedListener {
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
+        final Context context = this;
         switch (item.getItemId()) 
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_enter_diver:
+                Intent intent = new Intent(context, EnterDiver.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_enter_meet:
+                Intent intent1 = new Intent(context, EnterMeet.class);
+                startActivity(intent1);
+                break;
+            case R.id.menu_rankings:
+                Intent intent2 = new Intent(context, Rankings.class);
+                startActivity(intent2);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }	
 	
-	public void onNothingSelected(AdapterView<?> arg0) 
-	{
-		// TODO Auto-generated method stub		
-	}		
+	public void onNothingSelected(AdapterView<?> arg0) {
+
+	}
+
+    private class GetMeetInfo extends AsyncTask<List<String>, List<String>, List<String>> {
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        List<String> meetName;
+
+        @SafeVarargs
+        @Override
+        protected final List<String> doInBackground(List<String>... params) {
+            return meetName = db.getMeetNames();
+        }
+    }
+
+    private class GetMeetId extends AsyncTask<String, Integer, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        int ids;
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            return ids = db.getId(stringId);
+        }
+    }
 }

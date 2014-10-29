@@ -1,42 +1,40 @@
 package com.rodriguez.divingscores;
 
-import info.sqlite.helper.DiverDatabase;
-
-import java.util.ArrayList;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DiverDelete extends Activity {
+import java.util.ArrayList;
 
-    private TextView name;
-	private TextView age;
-	private TextView grade;
-	private TextView school;
+import info.sqlite.helper.DiverDatabase;
+
+public class DiverDelete extends ActionBarActivity {
+
+    private TextView name, age, grade, school;
 	private String nameString;
     private int diverId;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diver_delete);
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
-        }
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         name = (TextView)findViewById(R.id.deleteName);
         age = (TextView)findViewById(R.id.deleteAge);
@@ -44,21 +42,16 @@ public class DiverDelete extends Activity {
         school = (TextView)findViewById(R.id.deleteSchool);
         
         Bundle b = getIntent().getExtras();
-        diverId = b.getInt("key"); 
-        //fill Edit Text Boxes
+        diverId = b.getInt("key");
+
         fillEditText();
-        
-        // call the button press method
-        addListenerOnButton();        
-        
-      //changes the title display
-        setTitle("Delete Diver");
+        addListenerOnButton();
     }
 	
 	public void fillEditText(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());
 		ArrayList<String> diverInfo;
-		diverInfo = db.getDiverInfo(diverId);
+        GetDiverInfo info = new GetDiverInfo();
+		diverInfo = info.doInBackground();
 						
 		if(!diverInfo.isEmpty()){
 			nameString = diverInfo.get(0);
@@ -81,11 +74,6 @@ public class DiverDelete extends Activity {
 		}
 	}
 	
-	public void deleteDiverinDB(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());
-		db.deleteDiver(diverId);
-	}
-	
 	public void addListenerOnButton()
     {
     	final Context context = this;
@@ -95,7 +83,8 @@ public class DiverDelete extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                deleteDiverinDB();
+                DeleteDiverinDB delete = new DeleteDiverinDB();
+                delete.doInBackground();
 
                 Toast.makeText(getApplicationContext(),
                         "Diver " + nameString + " has been deleted",
@@ -116,14 +105,39 @@ public class DiverDelete extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
+        final Context context = this;
         switch (item.getItemId()) 
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_how_to:
+                Intent intent3 = new Intent(context, HowTo.class);
+                startActivity(intent3);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
 
+    private class DeleteDiverinDB extends AsyncTask<Integer, Object, Object> {
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(Integer... params) {
+            db.deleteDiver(diverId);
+            return null;
+        }
+    }
+
+    private class GetDiverInfo extends AsyncTask<ArrayList<String>, Object, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        ArrayList<String> diverinfo;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return diverinfo = db.getDiverInfo(diverId);
+        }
+    }
 }

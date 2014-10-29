@@ -1,0 +1,92 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.rodriguez.divingscores.Reports">
+
+    <TextView
+        android:id="@+id/Reports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/AndroidDarkBlue"
+        android:gravity="center"
+        android:text="@string/reports"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/white"/>
+
+    <Spinner
+        android:id="@+id/spinnerDiver"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/Reports"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:prompt="@string/choose_diver" />
+
+    <TextView
+        android:id="@+id/View0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/spinnerDiver"
+        android:background="@color/AndroidDarkBlue"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/white"/>
+
+    <Spinner
+        android:id="@+id/spinnerMeet"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/View0"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:prompt="@string/choose_meet" />
+
+    <TextView
+        android:id="@+id/View1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/spinnerMeet"
+        android:background="@color/AndroidDarkBlue"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@color/white"/>
+
+    <Spinner
+        android:id="@+id/spinnerReports"
+        android:layout_width="fill_parent"
+        android:layout_height="55dp"
+        android:layout_below="@id/View1"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:prompt="@string/report_name" />
+
+    <Button
+        android:id="@+id/buttonSendReport"
+        style="@android:style/Widget.Holo.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/spinnerReports"
+        android:text="@string/send_report"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:textSize="@dimen/button_text"
+        android:textColor="@color/button_text"
+        android:layout_marginBottom="16dp"/>
+
+</RelativeLayout>

@@ -1,12 +1,11 @@
 package com.rodriguez.divingscores;
 
-import info.sqlite.helper.DiverDatabase;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,41 +15,27 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class EnterDiver extends Activity {
+import info.sqlite.helper.DiverDatabase;
+
+public class EnterDiver extends ActionBarActivity {
 	
 	Button btnEnterDiver;
-	TextView name;
-	TextView age;
-	TextView grade;
-	TextView school;
-	String nameString;
-	String ageString;
-	String gradeString;
-	String schoolString;
+	TextView name, age, grade, school;
+	String nameString, ageString, gradeString, schoolString;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_diver);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        // call the button press method
-        addListenerOnButton();        
-        
-      //changes the title display
-        setTitle("Enter Diver");
+        addListenerOnButton();
     }
-	
-	public void writeNameToDB(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());		
-				
-		db.fillDiver(nameString, ageString, gradeString, schoolString);		
-	}
-	
+
 	public void addListenerOnButton()
     {
     	final Context context = this;
@@ -62,13 +47,13 @@ public class EnterDiver extends Activity {
     			// write to database
     			// gets the data from the text boxes and converts
     	        name = (TextView)findViewById(R.id.editTextNameE);
-    	        nameString = name.getText().toString();
+    	        nameString = name.getText().toString().trim();
     	        age = (TextView)findViewById(R.id.editTextAgeN);
-    	        ageString = age.getText().toString();
+    	        ageString = age.getText().toString().trim();
     	        grade = (TextView)findViewById(R.id.editTextGradeN);
-    	        gradeString = grade.getText().toString();
+    	        gradeString = grade.getText().toString().trim();
     	        school = (TextView)findViewById(R.id.editTextSchoolN);
-    	        schoolString = school.getText().toString();
+    	        schoolString = school.getText().toString().trim();
     	        if(nameString.isEmpty() || ageString.isEmpty()
     	        		|| gradeString.isEmpty() || schoolString.isEmpty())
     	        {
@@ -76,7 +61,10 @@ public class EnterDiver extends Activity {
     	        			"Please make an entry in all fields", Toast.LENGTH_LONG).show();
     	        }
     	        else{
-    	        	writeNameToDB();
+                    // calls a separate thread to write to the db
+                    WriteNewDiver newdiver = new WriteNewDiver();
+                    newdiver.doInBackground();
+
     	        	Toast.makeText(getApplicationContext(),
     	        			"Diver has been saved", Toast.LENGTH_SHORT).show();
     	        	Intent intent = new Intent(context, Welcome.class);
@@ -96,14 +84,29 @@ public class EnterDiver extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
-        switch (item.getItemId()) 
+        final Context context = this;
+        switch (item.getItemId())
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_how_to:
+                Intent intent3 = new Intent(context, HowTo.class);
+                startActivity(intent3);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    // Async database tasks
+    private class WriteNewDiver extends AsyncTask<String, Object, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.fillDiver(nameString, ageString, gradeString, schoolString);
+            return null;
+        }
+    }
 
 }

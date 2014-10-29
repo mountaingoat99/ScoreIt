@@ -88,6 +88,8 @@
          android:layout_height="1dp"
          android:layout_below="@id/layout1"
          android:layout_marginTop="8dp"
+         android:layout_marginStart="8dp"
+         android:layout_marginEnd="8dp"
          android:background="@color/header" />
      
      <LinearLayout
@@ -189,6 +191,8 @@
          android:layout_height="1dp"
          android:layout_below="@id/layout3"
          android:layout_marginTop="8dp"
+         android:layout_marginStart="8dp"
+         android:layout_marginEnd="8dp"
          android:background="@color/header" />
 
         <LinearLayout
@@ -254,6 +258,8 @@
         android:layout_height="1dp"
         android:layout_below="@id/layouts"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@color/header" />
 
     <TableLayout
@@ -282,11 +288,12 @@
                 android:id="@+id/score1view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/dive_1"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/static_text"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/score1"
@@ -295,7 +302,8 @@
                 android:text=""
                 android:textSize="@dimen/text_size_medium"
                 android:textColor="@color/random_text"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <View
                 android:layout_width="0dp"
@@ -306,11 +314,12 @@
                 android:id="@+id/score2view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/dive_2"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/static_text"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/score2"
@@ -319,7 +328,8 @@
                 android:text=""
                 android:textSize="@dimen/text_size_medium"
                 android:textColor="@color/random_text"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <View
                 android:layout_width="0dp"
@@ -330,11 +340,12 @@
                 android:id="@+id/score3view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/dive_3"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/static_text"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/score3"
@@ -343,7 +354,8 @@
                 android:text=""
                 android:textSize="@dimen/text_size_medium"
                 android:textColor="@color/random_text"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <View
                 android:layout_width="0dp"
@@ -354,11 +366,12 @@
                 android:id="@+id/score4view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/dive_4"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/static_text"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/score4"
@@ -367,7 +380,8 @@
                 android:text=""
                 android:textSize="@dimen/text_size_medium"
                 android:textColor="@color/random_text"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <View
                 android:layout_width="0dp"
@@ -392,11 +406,12 @@
                 android:id="@+id/score5view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/dive_5"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/static_text"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/score5"
@@ -405,7 +420,8 @@
                 android:text=""
                 android:textSize="@dimen/text_size_medium"
                 android:textColor="@color/random_text"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <View
                 android:layout_width="0dp"
@@ -416,11 +432,12 @@
                 android:id="@+id/score6view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/dive_6"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/static_text"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/score6"
@@ -429,7 +446,8 @@
                 android:text=""
                 android:textSize="@dimen/text_size_medium"
                 android:textColor="@color/random_text"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <View
                 android:layout_width="0dp"
@@ -440,11 +458,12 @@
                 android:id="@+id/score7view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/dive_7"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/static_text"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/score7"
@@ -453,7 +472,8 @@
                 android:text=""
                 android:textSize="@dimen/text_size_medium"
                 android:textColor="@color/random_text"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <View
                 android:layout_width="0dp"
@@ -464,11 +484,12 @@
                 android:id="@+id/score8view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/dive_8"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/static_text"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/score8"
@@ -477,7 +498,8 @@
                 android:text=""
                 android:textSize="@dimen/text_size_medium"
                 android:textColor="@color/random_text"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <View
                 android:layout_width="0dp"
@@ -502,11 +524,12 @@
                 android:id="@+id/score9view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/dive_9"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/static_text"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/score9"
@@ -515,7 +538,8 @@
                 android:text=""
                 android:textSize="@dimen/text_size_medium"
                 android:textColor="@color/random_text"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <View
                 android:layout_width="0dp"
@@ -526,11 +550,12 @@
                 android:id="@+id/score10view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/dive_10"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/static_text"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/score10"
@@ -539,7 +564,8 @@
                 android:text=""
                 android:textSize="@dimen/text_size_medium"
                 android:textColor="@color/random_text"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <View
                 android:layout_width="0dp"
@@ -550,11 +576,12 @@
                 android:id="@+id/score11view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/dive_11"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/static_text"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/score11"
@@ -563,7 +590,8 @@
                 android:text=""
                 android:textSize="@dimen/text_size_medium"
                 android:textColor="@color/random_text"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:clickable="true"/>
 
             <View
                 android:layout_width="0dp"
@@ -574,7 +602,7 @@
                 android:id="@+id/fake"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="8dp"
                 android:text="@string/dive_11"
                 android:textSize="@dimen/text_size_small"
                 android:textColor="@color/static_text"

@@ -1,13 +1,13 @@
 package info.sqlite.helper;
 
-import info.sqlite.model.ResultsDB;
-
-import java.util.ArrayList;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
+
+import info.sqlite.model.ResultsDB;
 
 public class ResultDatabase extends DatabaseHelper {
 
@@ -43,6 +43,8 @@ public class ResultDatabase extends DatabaseHelper {
                 resultsInfo.add(c.getDouble(11));
             }while(c.moveToNext());
         }
+        c.close();
+        db.close();
         return resultsInfo;
     }
 
@@ -74,6 +76,8 @@ public class ResultDatabase extends DatabaseHelper {
                 resultsInfo.add(c.getDouble(11));
             }while(c.moveToNext());
         }
+        c.close();
+        db.close();
         return resultsInfo;
     }
 
@@ -96,7 +100,9 @@ public class ResultDatabase extends DatabaseHelper {
 				r.add(c.getString(3));
 				r.add(c.getString(4));
 			}while(c.moveToNext());
-		}		
+		}
+        c.close();
+        db.close();
 		return r;
 	}
 	
@@ -108,8 +114,12 @@ public class ResultDatabase extends DatabaseHelper {
 							+ " AND diver_id = " + diverid;
 		Cursor c = db.rawQuery(selectQuery, null);
 		if(c.getCount() <= 0){
+            c.close();
+            db.close();
 			return false;
-		}		
+		}
+        c.close();
+        db.close();
 		return true;		
 	}
 	
@@ -120,6 +130,7 @@ public class ResultDatabase extends DatabaseHelper {
 								0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		
 		createResults(result, db);
+        db.close();
 	}
 
     public void createResults(ResultsDB results, SQLiteDatabase db){
@@ -188,6 +199,64 @@ public class ResultDatabase extends DatabaseHelper {
                 + meetid + " AND diver_id= " + diverid;
 
         db.execSQL(selectQuery);
+        db.close();
+    }
+
+    //-----------------gets a record in the database with a score-----------------------------//
+    public Double getDiveScore(int meetid, int diverid, int columnindex){
+        double totalScore = 0;
+        String column = null;
+        switch (columnindex){
+            case 1:
+                column = "dive_1";
+                break;
+            case 2:
+                column = "dive_2";
+                break;
+            case 3:
+                column = "dive_3";
+                break;
+            case 4:
+                column = "dive_4";
+                break;
+            case 5:
+                column = "dive_5";
+                break;
+            case 6:
+                column = "dive_6";
+                break;
+            case 7:
+                column = "dive_7";
+                break;
+            case 8:
+                column = "dive_8";
+                break;
+            case 9:
+                column = "dive_9";
+                break;
+            case 10:
+                column = "dive_10";
+                break;
+            case 11:
+                column = "dive_11";
+                break;
+        }
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT " + column + " FROM " + getTableResults()
+                + " WHERE meet_id= " + meetid
+                + " AND diver_id= " + diverid;
+
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c != null && c.getCount()>0 && c.moveToFirst()){
+            do{
+                totalScore = c.getDouble(0);
+            }while (c.moveToNext());
+        }
+        if (c != null) {
+            c.close();
+        }
+        db.close();
+        return totalScore;
     }
 
     //--------------gets the Score total from the database------------------------------//
@@ -209,6 +278,7 @@ public class ResultDatabase extends DatabaseHelper {
         if (c != null) {
             c.close();
         }
+        db.close();
         return totalScore;
     }
 }

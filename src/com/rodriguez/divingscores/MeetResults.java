@@ -1,18 +1,11 @@
 package com.rodriguez.divingscores;
 
-import info.sqlite.helper.DiverDatabase;
-import info.sqlite.helper.MeetDatabase;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-
-import android.app.ActionBar;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,23 +17,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MeetResults extends Activity {
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
+import info.sqlite.helper.DiveNumberDatabase;
+import info.sqlite.helper.DiverDatabase;
+import info.sqlite.helper.MeetDatabase;
+
+public class MeetResults extends ActionBarActivity {
 	
-	private TextView name;
-	private TextView school;
-	private TextView city;
-	private TextView state;
-	private TextView date;
-    private int diverId;
-	private int meetId;
-	private ListView myList;
+	private TextView name, school, city, state, date;
+    private ListView myList;
+    private int diverId, meetId, diveNumber;
+    private String stringId;
+
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meet_results);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
@@ -57,21 +56,16 @@ public class MeetResults extends Activity {
         fillText();
         
         populateListViewFromDB();
-             
-        
-      //changes the title display
-        setTitle("Meet Results");
-        
-     // heads up for the user
+
         Toast.makeText(getApplicationContext(),
     			"Click a diver to see the scores",
     			Toast.LENGTH_LONG).show();
     }	
 	
 	public void fillText(){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		ArrayList<String> meetInfo;
-		meetInfo = db.getMeetInfo(meetId);
+        ArrayList<String> meetInfo;
+        GetMeetInfo info = new GetMeetInfo();
+		meetInfo = info.doInBackground();
 		
 		if(!meetInfo.isEmpty()){
             String nameString = meetInfo.get(0);
@@ -107,41 +101,44 @@ public class MeetResults extends Activity {
 	}
 	
 	public void populateListViewFromDB(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());
 		ArrayList<String> diverInfo;
-		diverInfo = db.getDiverHistory(meetId);
-		
-		if (!diverInfo.isEmpty()){
-			ArrayAdapter<String> adapter = new ArrayAdapter<>(
-					this, R.layout.list_item, diverInfo);
-			myList.setAdapter(adapter);
-		}else{
-			Toast.makeText(getApplicationContext(),
-        			"Meet has no divers associated with it",
-        			Toast.LENGTH_LONG).show();
-			Intent intent = new Intent(getBaseContext(), Welcome.class);
-			startActivity(intent);
-		}
-		
+        GetDiverHistory his = new GetDiverHistory();
+		diverInfo = his.doInBackground();
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(
+			this, R.layout.list_item, diverInfo);
+		myList.setAdapter(adapter);
 		myList.setOnItemClickListener(new OnItemClickListener(){
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				String stringId = myList.getItemAtPosition(position).toString();
-				
-				DiverDatabase db = new DiverDatabase(getApplicationContext());				
-				diverId = db.getId(stringId);
-				
-				Intent intent = new Intent(getBaseContext(), MeetScores.class);
-				Bundle b = new Bundle();
-				b.putInt("key", diverId);
-				b.putInt("key2", meetId);
-				intent.putExtras(b);
-				startActivity(intent);				
+                stringId = myList.getItemAtPosition(position).toString();
+                GetDiverId diveid = new GetDiverId();
+                diverId = diveid.doInBackground();
+                getDiveNumber();
+                if(diveNumber == 0){
+                    Toast.makeText(getApplicationContext(),
+                            "Diver has no scores at this meet yet",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    stringId = myList.getItemAtPosition(position).toString();
+                    diverId = diveid.doInBackground();
+                    Intent intent = new Intent(getBaseContext(), MeetScores.class);
+                    Bundle b = new Bundle();
+                    b.putInt("key", diverId);
+                    b.putInt("key2", meetId);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
 			}			
 		});	
 	}
+
+    private void getDiveNumber(){
+        GetDiveNumber num = new GetDiveNumber();
+        diveNumber = num.doInBackground();
+    }
 	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) 
@@ -153,12 +150,63 @@ public class MeetResults extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
-        switch (item.getItemId()) 
+        final Context context = this;
+        switch (item.getItemId())
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_how_to:
+                Intent intent3 = new Intent(context, HowTo.class);
+                startActivity(intent3);
+                break;
+            case R.id.menu_rankings:
+                Intent intent2 = new Intent(context, Rankings.class);
+                startActivity(intent2);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class GetMeetInfo extends AsyncTask<ArrayList<String>, Object, Object> {
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        ArrayList<String> meetinfo;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return meetinfo = db.getMeetInfo(meetId);
+        }
+    }
+
+    private class GetDiverHistory extends AsyncTask<ArrayList<String>, Object, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        ArrayList<String> info;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return info = db.getDiverHistory(meetId);
+        }
+    }
+
+    private class GetDiverId extends AsyncTask<String, Integer, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        int ids;
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            return ids = db.getId(stringId);
+        }
+    }
+
+    private class GetDiveNumber extends AsyncTask<Integer, Object, Object>{
+        DiveNumberDatabase db =  new DiveNumberDatabase(getApplicationContext());
+        int number;
+
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            return number = db.getDiveNumber(meetId, diverId);
+        }
     }
 }

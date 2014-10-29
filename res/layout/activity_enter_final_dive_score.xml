@@ -1,0 +1,169 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/AndroidDarkBlue"
+            android:gravity="center"
+            android:text="@string/choose_dive"
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/white" />
+
+        <Spinner
+            android:id="@+id/listDives"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@id/textView0"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="none" >
+        </Spinner>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/listDives"
+            android:layout_gravity="left"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/AndroidDarkBlue"
+            android:gravity="center"
+            android:text="@string/choose_position"
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/white" />
+
+        <LinearLayout
+            android:id="@+id/layout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/textView">
+
+            <RadioButton
+                android:id="@+id/radioStraight"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:text="@string/straight"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/random_text"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:id="@+id/radioPike"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:text="@string/pike"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/random_text"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/layout1" >
+
+            <RadioButton
+                android:id="@+id/radioTuck"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:text="@string/tuck"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/random_text"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:id="@+id/radioFree"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:text="@string/free"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/random_text"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/Divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout2"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/AndroidDarkBlue"
+            android:gravity="center"
+            android:text=""
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/score1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="6dp"
+                android:layout_below="@id/Divider"
+                android:text="@string/total_score"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/static_text" />
+
+            <EditText
+                android:id="@+id/editScore1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/score1"
+                android:layout_below="@id/Divider"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/score1"
+                android:ems="10"
+                android:text="@string/initial_total_score"
+                android:inputType="numberDecimal"
+                android:maxLength="5"
+                android:layout_marginRight="8dp"
+                android:layout_alignParentEnd="true"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/random_text">
+            </EditText>
+
+        <Button
+            android:id="@+id/buttonScore"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editScore1"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="@string/total"
+            android:textSize="@dimen/button_text"
+            android:textColor="@color/button_text"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"/>
+
+    </RelativeLayout>
+
+</ScrollView>
+

@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/editTextName"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="16dp"
         android:text="@string/name"
         android:textSize="@dimen/text_size_medium"
         android:textColor="@color/static_text"/>
@@ -68,6 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/editTextSchool"
         android:layout_alignLeft="@+id/EnterMeetM"
+        android:layout_marginStart="8dp"
         android:text="@string/enter_school"
         android:textSize="@dimen/text_size_medium"
         android:textColor="@color/static_text"/>
@@ -94,7 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/editTextCity"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="16dp"
         android:text="@string/enter_city"
         android:textSize="@dimen/text_size_medium"
         android:textColor="@color/static_text"/>
@@ -120,7 +121,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/editTextState"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="16dp"
         android:text="@string/enter_state"
         android:textSize="@dimen/text_size_medium"
         android:textColor="@color/static_text"/>
@@ -132,6 +133,7 @@
         android:layout_alignLeft="@+id/editTextState"
         android:layout_below="@+id/editTextState"
         android:layout_marginTop="16dp"
+        android:focusable="false"
         android:ems="10"
         android:hint="@string/date_enter_style"
         android:maxLines="1"
@@ -155,7 +157,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/TextDate"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="26dp"
         android:gravity="center"
         android:text="@string/enter_judges"
@@ -221,8 +223,8 @@
         android:textSize="@dimen/button_text"
         android:textColor="@color/button_text"
         style="@android:style/Widget.Holo.Button"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentLeft="true"/>

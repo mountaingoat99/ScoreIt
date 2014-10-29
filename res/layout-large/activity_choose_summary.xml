@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent" >
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp">
 
         <TextView
             android:id="@+id/TextViewChooseC"
@@ -32,22 +29,55 @@
         	android:gravity="center"
         	android:prompt="@string/please_choose" />
 
-    	<View
-    	    android:id="@+id/View1C"
-    	    android:layout_width="fill_parent"
-    	    android:layout_height="1dp"
-    	    android:layout_below="@id/spinnerDiveCatC"
-    	    android:background="@color/header"
-            android:layout_marginTop="8dp" />
+        <LinearLayout
+            android:id="@+id/layout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spinnerDiveCatC"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp" >
+
+            <Button
+                android:id="@+id/buttonJudgeScore"
+                style="@android:style/Widget.Holo.Button"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/enter_judge_scores"
+                android:textSize="@dimen/button_text"
+                android:textColor="@color/button_text"/>
+
+            <Button
+                android:id="@+id/buttonTotalScore"
+                style="@android:style/Widget.Holo.Button"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/enter_total_score"
+                android:textSize="@dimen/button_text"
+                android:textColor="@color/button_text"/>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/View0"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/layout3"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/header" />
 
         <LinearLayout
             android:id="@+id/layout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
-            android:layout_below="@id/View1C">
+            android:layout_below="@id/View0">
 
             <View
                 android:layout_width="0dp"
@@ -87,8 +117,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/layout1"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp">
 
             <View
@@ -131,6 +161,8 @@
             android:layout_height="1dp"
             android:layout_below="@id/layout2"
             android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header" />
 
         <LinearLayout
@@ -138,8 +170,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/View2C"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp" >
 
             <TextView
@@ -159,7 +191,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="8dp"
-                android:text="200.2"
+                android:text=""
                 android:textSize="@dimen/text_size_large"
                 android:textColor="@color/random_text"
                 android:visibility="invisible"/>
@@ -187,7 +219,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
-                android:text="3 Meter"
+                android:text=""
                 android:textSize="@dimen/text_size_large"
                 android:textColor="@color/random_text"
                 android:visibility="invisible"/>
@@ -200,7 +232,15 @@
             android:layout_height="1dp"
             android:layout_below="@id/layouts"
             android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/header" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/View3"
+        android:layout_marginBottom="8dp">
 
         <TableLayout
             android:id="@+id/tableLayout1"
@@ -208,8 +248,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/View3"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp">
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
 
             <TableRow
                 android:id="@+id/tableRow1"
@@ -227,7 +267,7 @@
                     android:id="@+id/score1view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_1"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -247,40 +287,7 @@
                     android:layout_weight="1"/>
 
                 <TextView
-                    android:id="@+id/score2view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:text="@string/dive_2"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/static_text"
-                    android:visibility="invisible"/>
-
-                <TextView
-                    android:id="@+id/score2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="@dimen/text_size_large"
-                    android:textColor="@color/random_text"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"/>
-
-                <TextView
-                    android:id="@+id/score3view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:text="@string/dive_3"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/static_text"
-                    android:visibility="invisible"/>
-
-                <TextView
-                    android:id="@+id/score3"
+                    android:id="@+id/diveInfo1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -307,17 +314,17 @@
                     android:layout_weight="1"/>
 
                 <TextView
-                    android:id="@+id/score4view"
+                    android:id="@+id/score2view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:text="@string/dive_4"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_2"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
                     android:visibility="invisible"/>
 
                 <TextView
-                    android:id="@+id/score4"
+                    android:id="@+id/score2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -330,40 +337,7 @@
                     android:layout_weight="1"/>
 
                 <TextView
-                    android:id="@+id/score5view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:text="@string/dive_5"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/static_text"
-                    android:visibility="invisible"/>
-
-                <TextView
-                    android:id="@+id/score5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="@dimen/text_size_large"
-                    android:textColor="@color/random_text"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"/>
-
-                <TextView
-                    android:id="@+id/score6view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:text="@string/dive_6"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/static_text"
-                    android:visibility="invisible"/>
-
-                <TextView
-                    android:id="@+id/score6"
+                    android:id="@+id/diveInfo2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -390,23 +364,22 @@
                     android:layout_weight="1"/>
 
                 <TextView
-                    android:id="@+id/score7view"
+                    android:id="@+id/score3view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:text="@string/dive_7"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_3"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"/>
 
                 <TextView
-                    android:id="@+id/score7"
+                    android:id="@+id/score3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
                     android:textSize="@dimen/text_size_large"
-                    android:textColor="@color/random_text"
-                    android:visibility="invisible" />
+                    android:textColor="@color/random_text"/>
 
                 <View
                     android:layout_width="0dp"
@@ -414,47 +387,12 @@
                     android:layout_weight="1"/>
 
                 <TextView
-                    android:id="@+id/score8view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:text="@string/dive_8"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/static_text"
-                    android:visibility="invisible" />
-
-                <TextView
-                    android:id="@+id/score8"
+                    android:id="@+id/diveInfo3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
                     android:textSize="@dimen/text_size_large"
-                    android:textColor="@color/random_text"
-                    android:visibility="invisible" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"/>
-
-                <TextView
-                    android:id="@+id/score9view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:text="@string/dive_9"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/static_text"
-                    android:visibility="invisible" />
-
-                <TextView
-                    android:id="@+id/score9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="@dimen/text_size_large"
-                    android:textColor="@color/random_text"
-                    android:visibility="invisible" />
+                    android:textColor="@color/random_text"/>
 
                 <View
                     android:layout_width="0dp"
@@ -476,10 +414,313 @@
                     android:layout_weight="1"/>
 
                 <TextView
+                    android:id="@+id/score4view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_4"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible"/>
+
+                <TextView
+                    android:id="@+id/score4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/diveInfo4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:layout_marginTop="16dp">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/score5view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_5"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible"/>
+
+                <TextView
+                    android:id="@+id/score5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/diveInfo5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:layout_marginTop="16dp">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/score6view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_6"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible"/>
+
+                <TextView
+                    android:id="@+id/score6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/diveInfo6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:layout_marginTop="16dp">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/score7view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_7"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/score7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"
+                    android:visibility="invisible" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/diveInfo7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:layout_marginTop="16dp">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/score8view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_8"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/score8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"
+                    android:visibility="invisible" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/diveInfo8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:layout_marginTop="16dp">
+
+                <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/score9view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/dive_9"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textColor="@color/static_text"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/score9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"
+                    android:visibility="invisible" />
+
+                <View
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"/>
+
+                <TextView
+                    android:id="@+id/diveInfo9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"/>
+
+                <View
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:layout_marginTop="16dp">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
                     android:id="@+id/score10view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_10"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -500,10 +741,38 @@
                     android:layout_weight="1"/>
 
                 <TextView
+                    android:id="@+id/diveInfo10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/random_text"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
                     android:id="@+id/score11view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="8dp"
                     android:text="@string/dive_11"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/static_text"
@@ -524,23 +793,12 @@
                     android:layout_weight="1"/>
 
                 <TextView
-                    android:id="@+id/fake"
+                    android:id="@+id/diveInfo11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:text="@string/dive_11"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/static_text"
-                    android:visibility="invisible" />
-
-                <TextView
-                    android:id="@+id/fake1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="38.2"
+                    android:text=""
                     android:textSize="@dimen/text_size_large"
-                    android:textColor="@color/random_text"
-                    android:visibility="invisible" />
+                    android:textColor="@color/random_text"/>
 
                 <View
                     android:layout_width="0dp"
@@ -551,6 +809,6 @@
 
         </TableLayout>
 
-    </RelativeLayout>
+    </ScrollView>
 
-</ScrollView>
+</RelativeLayout>

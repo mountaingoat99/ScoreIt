@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:divingscores="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/menu_how_to"
+        android:title="@string/how_to_string"
+        android:orderInCategory="100"
+        divingscores:showAsAction="collapseActionView" />
+
+    <item android:id="@+id/menu_about"
+        android:title="@string/about_string"
+        android:orderInCategory="200"
+        divingscores:showAsAction="collapseActionView" />
+
+</menu>

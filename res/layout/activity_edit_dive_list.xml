@@ -1,0 +1,169 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/DiveNumberView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/AndroidDarkBlue"
+            android:gravity="center"
+            android:text="@string/edit"
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/white" />
+
+        <View
+            android:id="@+id/View2C"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/DiveNumberView"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/header" />
+
+        <Spinner
+            android:id="@+id/DiveCategory"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@id/View2C"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="none" />
+
+        <View
+            android:id="@+id/View"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/DiveCategory"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/header" />
+
+        <Spinner
+            android:id="@+id/DiveStyle"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@id/View"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="none" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/DiveStyle"
+            android:layout_gravity="start"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/AndroidDarkBlue"
+            android:gravity="center"
+            android:text="@string/choose_position"
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/white" />
+
+        <LinearLayout
+            android:id="@+id/layout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/textView">
+
+            <RadioButton
+                android:id="@+id/radioStraight"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:text="@string/straight"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/random_text"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:id="@+id/radioPike"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:text="@string/pike"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/random_text"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/layout1" >
+
+            <RadioButton
+                android:id="@+id/radioTuck"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:text="@string/tuck"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/random_text"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:id="@+id/radioFree"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:text="@string/free"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/random_text"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/DODView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout2"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/AndroidDarkBlue"
+            android:gravity="center"
+            android:text=""
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/buttonScore"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/DODView"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:text="@string/enter"
+            android:textSize="@dimen/button_text"
+            android:textColor="@color/button_text"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"/>
+
+
+    </RelativeLayout>
+
+</ScrollView>

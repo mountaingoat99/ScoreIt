@@ -1,27 +1,31 @@
 package com.rodriguez.divingscores;
 
-import info.sqlite.helper.MeetDatabase;
-
-import java.util.ArrayList;
-
-import android.app.ActionBar;
-import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-public class MeetEdit extends Activity {
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import info.sqlite.helper.MeetDatabase;
+
+public class MeetEdit extends ActionBarActivity implements
+        OnClickListener{
 
     private RadioGroup radioJudgesGroup;
     private RadioButton judge3, judge5, judge7;
@@ -35,11 +39,22 @@ public class MeetEdit extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meet_edit);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        setupView();
+        date.setOnClickListener(this);
+
+        Bundle b = getIntent().getExtras();
+        meetId = b.getInt("key");
+
+        fillEditText();
+        addListenerOnButton();
+    }
+
+    private void setupView() {
         name = (EditText)findViewById(R.id.editTextNameEM);
         school = (EditText)findViewById(R.id.editTextSchoolEM);
         city = (EditText)findViewById(R.id.editTextCityEM);
@@ -49,25 +64,13 @@ public class MeetEdit extends Activity {
         judge3 = (RadioButton)findViewById(R.id.radio3J);
         judge5 = (RadioButton)findViewById(R.id.radio5J);
         judge7 = (RadioButton)findViewById(R.id.radio7J);
-
-        
-        // get the parameter diver id from the Intent        
-        Bundle b = getIntent().getExtras();
-        meetId = b.getInt("key");
-        //fill Edit Text Boxes
-        fillEditText();
-        
-        // call the button press method
-        addListenerOnButton();        
-        
-      //changes the title display
-        setTitle("Edit Meet");
     }
-	
-	public void fillEditText(){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
+
+    public void fillEditText(){
 		ArrayList<String> meetInfo;
-		meetInfo = db.getMeetInfo(meetId);
+        GetInfoForMeet meetinfo = new GetInfoForMeet();
+        meetInfo = meetinfo.doInBackground();
+
 		
 		if(!meetInfo.isEmpty()){
 			nameString = meetInfo.get(0);
@@ -108,35 +111,65 @@ public class MeetEdit extends Activity {
 			startActivity(intent);
 		}
 	}
-	
-	public void editNameinDB(String newName){
+
+    private class EditNameinDB extends AsyncTask<String, Object, Object>{
 		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		db.editMeetName(meetId, newName);
-	}
-	
-	public void editSchoolinDB(String newSchool){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		db.editMeetSchool(meetId, newSchool);
-	}
-	
-	public void editCityinDB(String newCity){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		db.editMeetCity(meetId, newCity);
-	}
-	
-	public void editStateinDB(String newState){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		db.editMeetState(meetId, newState);
-	}
-	
-	public void editDateinDB(String newDate){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		db.editMeetDate(meetId, newDate);
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editMeetName(meetId, nameEdit);
+            return null;
+        }
 	}
 
-    public void editJudgeinDB(int newJudge){
+    private class EditSchoolinDB extends AsyncTask<String, Object, Object>{
         MeetDatabase db = new MeetDatabase(getApplicationContext());
-        db.editMeetJudges(meetId, newJudge);
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editMeetSchool(meetId, schoolEdit);
+            return null;
+        }
+	}
+
+    private class EditCityinDB extends AsyncTask<String, Object, Object>{
+		MeetDatabase db = new MeetDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editMeetCity(meetId, cityEdit);
+            return null;
+        }
+	}
+
+    private class EditStateinDB extends AsyncTask<String, Object, Object>{
+		MeetDatabase db = new MeetDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editMeetState(meetId, stateEdit);
+            return null;
+        }
+	}
+
+    private class EditDateinDB extends AsyncTask<String, Object, Object>{
+		MeetDatabase db = new MeetDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editMeetDate(meetId, dateEdit);
+            return null;
+        }
+	}
+
+    private class EditJudgeinDB extends AsyncTask<String, Object, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editMeetJudges(meetId, judges);
+            return null;
+        }
     }
 	
 	public void addListenerOnButton()
@@ -147,11 +180,11 @@ public class MeetEdit extends Activity {
     	btnEditMeet.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                nameEdit = name.getText().toString();
-                schoolEdit = school.getText().toString();
-                cityEdit = city.getText().toString();
-                stateEdit = state.getText().toString();
-                dateEdit = date.getText().toString();
+                nameEdit = name.getText().toString().trim();
+                schoolEdit = school.getText().toString().trim();
+                cityEdit = city.getText().toString().trim();
+                stateEdit = state.getText().toString().trim();
+                dateEdit = date.getText().toString().trim();
                 judgeChecked = radioJudgesGroup.getCheckedRadioButtonId();
                 if (judgeChecked == R.id.radio3J)
                     judges = 3;
@@ -168,22 +201,27 @@ public class MeetEdit extends Activity {
                     return;
                 }
                 if (!nameEdit.equals(nameString)) {
-                    editNameinDB(nameEdit);
+                    EditNameinDB eName = new EditNameinDB();
+                    eName.doInBackground();
                 }
                 if (!schoolEdit.equals(schoolString)) {
-                    editSchoolinDB(schoolEdit);
+                    EditSchoolinDB eSchool = new EditSchoolinDB();
+                    eSchool.doInBackground();
                 }
                 if (!cityEdit.equals(cityString)) {
-                    editCityinDB(cityEdit);
+                    EditCityinDB eCity = new EditCityinDB();
+                    eCity.doInBackground();
                 }
                 if (!stateEdit.equals(stateString)) {
-                    editStateinDB(stateEdit);
+                    EditStateinDB eState = new EditStateinDB();
+                    eState.doInBackground();
                 }
                 if (!dateEdit.equals(dateString)) {
-                    editDateinDB(dateEdit);
+                    EditDateinDB eDate = new EditDateinDB();
+                    eDate.doInBackground();
                 }
-
-                editJudgeinDB(judges);
+                EditJudgeinDB eJudge = new EditJudgeinDB();
+                eJudge.doInBackground();
                 Toast.makeText(getApplicationContext(),
                         "Diver has been edited to " + nameEdit + ", "
                                 + schoolEdit + ", " + cityEdit + ", "
@@ -206,12 +244,56 @@ public class MeetEdit extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
-        switch (item.getItemId()) 
+        final Context context = this;
+        switch (item.getItemId())
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_how_to:
+                Intent intent3 = new Intent(context, HowTo.class);
+                startActivity(intent3);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if (v == date) {
+
+            // Process to get Current Date
+            final Calendar c = Calendar.getInstance();
+            int mYear = c.get(Calendar.YEAR);
+            int mMonth = c.get(Calendar.MONTH);
+            int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+            // Launch Date Picker Dialog
+            DatePickerDialog dpd = new DatePickerDialog(this,
+                    new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(DatePicker view, int year,
+                                              int monthOfYear, int dayOfMonth) {
+                            // Display Selected date in textbox
+                            date.setText(dayOfMonth + "-"
+                                    + (monthOfYear + 1) + "-" + year);
+                        }
+                    }, mYear, mMonth, mDay
+            );
+            dpd.show();
+        }
+    }
+
+    private class GetInfoForMeet extends AsyncTask<ArrayList<String>, Object, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        ArrayList<String> info;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return info = db.getMeetInfo(meetId);
+        }
     }
 }

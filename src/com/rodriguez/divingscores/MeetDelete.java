@@ -1,43 +1,39 @@
 package com.rodriguez.divingscores;
 
-import info.sqlite.helper.MeetDatabase;
-
-import java.util.ArrayList;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MeetDelete extends Activity {
+import java.util.ArrayList;
 
-    private TextView name;
-	private TextView school;
-	private TextView city;
-	private TextView state;
-	private TextView date;
+import info.sqlite.helper.MeetDatabase;
+
+public class MeetDelete extends ActionBarActivity {
+
+    private TextView name, school, city, state, date;
 	private String nameString;
     private int meetId;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meet_delete);
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
-        }
+        setContentView(R.layout.activity_meet_delete);ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         name = (TextView)findViewById(R.id.deleteMName);
         school = (TextView)findViewById(R.id.deleteSchool);
@@ -47,20 +43,15 @@ public class MeetDelete extends Activity {
         
         Bundle b = getIntent().getExtras();
         meetId = b.getInt("key");
-        // fill edit text boxes
+
         fillEditText();
-        
-        // call the button press method
-        addListenerOnButton();        
-        
-      //changes the title display
-        setTitle("Delete Meet");
+        addListenerOnButton();
     }
 	
 	public void fillEditText(){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
 		ArrayList<String> meetInfo;
-		meetInfo = db.getMeetInfo(meetId);
+        GetMeetInfo info = new GetMeetInfo();
+		meetInfo = info.doInBackground();
 		
 		if(!meetInfo.isEmpty()){
 			nameString = meetInfo.get(0);
@@ -85,11 +76,6 @@ public class MeetDelete extends Activity {
 		}
 	}
 	
-	public void deleteMeetinDB(){
-		MeetDatabase db = new MeetDatabase(getApplicationContext());
-		db.deleteMeet(meetId);
-	}
-	
 	public void addListenerOnButton()
     {
     	final Context context = this;
@@ -97,7 +83,9 @@ public class MeetDelete extends Activity {
     	btnDelete.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                deleteMeetinDB();
+
+                DeleteMeetinDB delete = new DeleteMeetinDB();
+                delete.doInBackground();
 
                 Toast.makeText(getApplicationContext(),
                         "Meet " + nameString + " has been deleted",
@@ -118,12 +106,38 @@ public class MeetDelete extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
-        switch (item.getItemId()) 
+        final Context context = this;
+        switch (item.getItemId())
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_how_to:
+                Intent intent3 = new Intent(context, HowTo.class);
+                startActivity(intent3);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class DeleteMeetinDB extends AsyncTask<Integer, Object, Object> {
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+
+        @Override
+        protected Object doInBackground(Integer... params) {
+            db.deleteMeet(meetId);
+            return null;
+        }
+    }
+
+    private class GetMeetInfo extends AsyncTask<ArrayList<String>, Object, Object>{
+        MeetDatabase db = new MeetDatabase(getApplicationContext());
+        ArrayList<String> meetinfo;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return meetinfo = db.getMeetInfo(meetId);
+        }
     }
 }

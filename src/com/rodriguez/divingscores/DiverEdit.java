@@ -1,15 +1,11 @@
 package com.rodriguez.divingscores;
 
-import info.sqlite.helper.DiverDatabase;
-
-import java.util.ArrayList;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,20 +15,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class DiverEdit extends Activity {
+import java.util.ArrayList;
 
-    private EditText name;
-	private EditText age;
-	private EditText grade;
-	private EditText school;
-	private String nameString;
-	private String ageString;
-	private String gradeString;
-	private String schoolString;
-	private String nameEdit;
-	private String ageEdit;
-	private String gradeEdit;
-	private String schoolEdit;
+import info.sqlite.helper.DiverDatabase;
+
+public class DiverEdit extends ActionBarActivity {
+
+    private EditText name, age, grade, school;
+	private String nameString, ageString, gradeString, schoolString, nameEdit,
+                    ageEdit, gradeEdit, schoolEdit;
 	private int diverId;	
 	
 	@Override
@@ -40,7 +31,7 @@ public class DiverEdit extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diver_edit);
-        ActionBar actionBar = getActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
@@ -49,24 +40,18 @@ public class DiverEdit extends Activity {
         age = (EditText)findViewById(R.id.editTextAgeED);
         grade = (EditText)findViewById(R.id.editTextGradeED);
         school = (EditText)findViewById(R.id.editTextSchoolED);
-        
-        // get the parameter diver id from the Intent        
         Bundle b = getIntent().getExtras();
         diverId = b.getInt("key");
-        //fill Edit Text Boxes
+
         fillEditText();
-        
-        // call the button press method
-        addListenerOnButton();        
-        
-      //changes the title display
-        setTitle("Edit Diver");
+        addListenerOnButton();
     }
 	
 	public void fillEditText(){
-		DiverDatabase db = new DiverDatabase(getApplicationContext());
-		ArrayList<String> diverInfo;
-		diverInfo = db.getDiverInfo(diverId);
+        // calls a separate thread
+        ArrayList<String> diverInfo;
+        GetInfoForDiver diveinfo = new GetInfoForDiver();
+        diverInfo = diveinfo.doInBackground();
 			
 		if(!diverInfo.isEmpty()){
 			nameString = diverInfo.get(0);
@@ -89,24 +74,44 @@ public class DiverEdit extends Activity {
 		}
 	}
 	
-	public void editNameinDB(String newName){
+	private class EditNameinDB extends AsyncTask<String, Object, Object>{
 		DiverDatabase db = new DiverDatabase(getApplicationContext());
-		db.editDiverName(diverId, newName);
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editDiverName(diverId, nameEdit);
+            return null;
+        }
 	}
-	
-	public void editAgeinDB(String newAge){
+
+    private class EditAgeinDB extends AsyncTask<String, Object, Object>{
 		DiverDatabase db = new DiverDatabase(getApplicationContext());
-		db.editDiverAge(diverId, newAge);
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editDiverAge(diverId, ageEdit);
+            return null;
+        }
 	}
-	
-	public void editGradeinDB(String newGrade){
+
+    private class EditGradeinDB extends AsyncTask<String, Object, Object>{
 		DiverDatabase db = new DiverDatabase(getApplicationContext());
-		db.editDiverGrade(diverId, newGrade);
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editDiverGrade(diverId, gradeEdit);
+            return null;
+        }
 	}
-	
-	public void editSchoolinDB(String newSchool){
+
+    private class EditSchoolinDB extends AsyncTask<String, Object, Object>{
 		DiverDatabase db = new DiverDatabase(getApplicationContext());
-		db.editDiverSchool(diverId, newSchool);
+
+        @Override
+        protected Object doInBackground(String... params) {
+            db.editDiverSchool(diverId, schoolEdit);
+            return null;
+        }
 	}
 	
 	public void addListenerOnButton()
@@ -116,24 +121,32 @@ public class DiverEdit extends Activity {
     	btnEditDiver.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                nameEdit = name.getText().toString();
-                ageEdit = age.getText().toString();
-                gradeEdit = grade.getText().toString();
-                schoolEdit = school.getText().toString();
+                nameEdit = name.getText().toString().trim();
+                ageEdit = age.getText().toString().trim();
+                gradeEdit = grade.getText().toString().trim();
+                schoolEdit = school.getText().toString().trim();
                 if (nameEdit.isEmpty() || ageEdit.isEmpty()
                         || gradeEdit.isEmpty() || schoolEdit.isEmpty()) {
                     Toast.makeText(getApplicationContext(),
                             "Please make an entry in all fields", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if (!nameEdit.equals(nameString))
-                    editNameinDB(nameEdit);
-                if (!ageEdit.equals(ageString))
-                    editAgeinDB(ageEdit);
-                if (!gradeEdit.equals(gradeString))
-                    editGradeinDB(gradeEdit);
-                if (!schoolEdit.equals(schoolString))
-                    editSchoolinDB(schoolEdit);
+                if (!nameEdit.equals(nameString)) {
+                    EditNameinDB eName = new EditNameinDB();
+                    eName.doInBackground();
+                }
+                if (!ageEdit.equals(ageString)) {
+                    EditAgeinDB eAge = new EditAgeinDB();
+                    eAge.doInBackground();
+                }
+                if (!gradeEdit.equals(gradeString)) {
+                    EditGradeinDB eGrade = new EditGradeinDB();
+                    eGrade.doInBackground();
+                }
+                if (!schoolEdit.equals(schoolString)) {
+                    EditSchoolinDB eSchool = new EditSchoolinDB();
+                    eSchool.doInBackground();
+                }
                 Toast.makeText(getApplicationContext(),
                         "Diver has been edited to " + nameEdit + ", "
                                 + ageEdit + ", " + gradeEdit + ", "
@@ -155,12 +168,28 @@ public class DiverEdit extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
-        switch (item.getItemId()) 
+        final Context context = this;
+        switch (item.getItemId())
         {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_how_to:
+                Intent intent3 = new Intent(context, HowTo.class);
+                startActivity(intent3);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class GetInfoForDiver extends AsyncTask<ArrayList<String>, Object, Object>{
+        DiverDatabase db = new DiverDatabase(getApplicationContext());
+        ArrayList<String> info;
+
+        @SafeVarargs
+        @Override
+        protected final ArrayList<String> doInBackground(ArrayList<String>... params) {
+            return info = db.getDiverInfo(diverId);
+        }
     }
 }
