@@ -52,7 +52,8 @@ public class Dives extends ActionBarActivity implements OnItemSelectedListener
     private Spinner score1, score2, score3, score4, score5, score6, score7;
     private int judges, diverId, meetId, diveType, diveNumber, divePosition;
     private double boardType = 0.0;
-    private double sc1, sc2, sc3, sc4, sc5, sc6, sc7, diveScoreTotal = 0.0, multiplier = 0.0, roundedDiveTotal = 0.0;
+    double diveTotal;
+    private double sc1, sc2, sc3, sc4, sc5, sc6, sc7, diveScoreTotal = 0.0, multiplier = 0.0;
     private ArrayList<DiveStyleSpinner> searchDives;
     private ArrayList<Double> Scores = new ArrayList<>();
     private boolean ifZeroTotal = true;
@@ -528,7 +529,7 @@ public class Dives extends ActionBarActivity implements OnItemSelectedListener
     private void calcScores() {
         ifZeroTotal = true;
         GetTotalScore tScore = new GetTotalScore();
-        double diveTotal;
+
         double total = tScore.doInBackground();
         // Converts and sorts the ArrayList for processing
         Double[] theScores = new Double[ Scores.size()];
@@ -569,11 +570,11 @@ public class Dives extends ActionBarActivity implements OnItemSelectedListener
             diveTotal = diveScoreTotal;
         }
 
-        roundedDiveTotal = .5 * Math.round(diveTotal * 2);
+        //roundedDiveTotal = .5 * Math.round(diveTotal * 2);
 
-        total = total + roundedDiveTotal;
+        total = total + diveTotal;
 
-        if(roundedDiveTotal < .5){
+        if(diveTotal < .5){
             ifZeroTotal = false;
             return;
         }
@@ -583,58 +584,58 @@ public class Dives extends ActionBarActivity implements OnItemSelectedListener
         int resultIndex;
         if(diveNumber == 1){
             resultIndex = 3;
-            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             updateDiveListToYes();
             return;
         }
         if(diveNumber == 2){
             resultIndex = 4;
-            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
         if(diveNumber == 3){
             resultIndex = 5;
-            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
         if(diveNumber == 4){
             resultIndex = 6;
-            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
         if(diveNumber == 5){
             resultIndex = 7;
-            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
         if(diveNumber == 6){
             resultIndex = 8;
-            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
         if(diveNumber == 7){
             resultIndex = 9;
-            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
         if(diveNumber == 8){
             resultIndex = 10;
-            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
         if(diveNumber == 9){
             resultIndex = 11;
-            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
         if(diveNumber == 10){
             resultIndex = 12;
-            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
             return;
         }
         if(diveNumber == 11){
             resultIndex = 13;
-            db.writeDiveScore(meetId, diverId, resultIndex, roundedDiveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
         }
     }
 
@@ -699,7 +700,7 @@ public class Dives extends ActionBarActivity implements OnItemSelectedListener
         String diveTypeName = i + " - " + name.getText().toString();
 
         db.fillNewJudgeScores(meetId, diverId, diveNumber, diveCategory, diveTypeName, DivePosition,
-                             failedDive, roundedDiveTotal,  sc1, sc2, sc3, sc4, sc5, sc6, sc7, multiplier);
+                             failedDive, diveTotal,  sc1, sc2, sc3, sc4, sc5, sc6, sc7, multiplier);
     }
 
     // this is used when a meet only has two judges

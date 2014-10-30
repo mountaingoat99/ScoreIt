@@ -291,7 +291,7 @@ public class ChangeDiveScore extends ActionBarActivity implements OnItemSelected
     public void updateScores() {
         ResultDatabase rdb = new ResultDatabase(getApplicationContext());
         JudgeScoreDatabase jdb = new JudgeScoreDatabase(getApplicationContext());
-        double newTotal, roundedNumber;
+        double newTotal, roundedNumber = 0;
         int index = 0;
         switch (showDiveNumber) {
             case 1:
@@ -333,24 +333,24 @@ public class ChangeDiveScore extends ActionBarActivity implements OnItemSelected
                     || editTotal.equals("00.00") || editTotal.equals("0.00") || editTotal.equals("000.00")) {
                 editFailed = "F";
                 jdb.updateJudgeScoreFailed(meetId, diverId, showDiveNumber, editFailed, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-                newTotal = 0.0;
+                //newTotal = 0.0;
             } else {
                 editFailed = "P";
                 roundedNumber = Double.parseDouble(editTotal);
-                newTotal = .5 * Math.round(roundedNumber * 2);
-                jdb.updateJudgeScoreFailed(meetId, diverId, showDiveNumber, editFailed, newTotal, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+                //newTotal = .5 * Math.round(roundedNumber * 2);
+                jdb.updateJudgeScoreFailed(meetId, diverId, showDiveNumber, editFailed, roundedNumber, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
             }
-            allScoreTotal = calcNewOverall(newTotal);
-            rdb.writeDiveScore(meetId, diverId, index, newTotal, allScoreTotal);
+            allScoreTotal = calcNewOverall(roundedNumber);
+            rdb.writeDiveScore(meetId, diverId, index, roundedNumber, allScoreTotal);
             return;
         } else {
             roundedNumber = getMultiplerScore();
-            newTotal = .5 * Math.round(roundedNumber * 2);
-            jdb.updateJudgeScoreFailed(meetId, diverId, showDiveNumber, failedString, newTotal, e1, e2, e3, e4, e5, e6, e7);
+            //newTotal = .5 * Math.round(roundedNumber * 2);
+            jdb.updateJudgeScoreFailed(meetId, diverId, showDiveNumber, failedString, roundedNumber, e1, e2, e3, e4, e5, e6, e7);
         }
-        allScoreTotal = calcNewOverall(newTotal);
-        rdb.writeDiveScore(meetId, diverId, index, newTotal, allScoreTotal);
+        allScoreTotal = calcNewOverall(roundedNumber);
+        rdb.writeDiveScore(meetId, diverId, index, roundedNumber, allScoreTotal);
     }
 
     private void showAlert(){
@@ -432,9 +432,9 @@ public class ChangeDiveScore extends ActionBarActivity implements OnItemSelected
             score = score * multiplier;
         }
 
-        roundedDiveTotal = .5 *Math.round(score * 2);
+        //roundedDiveTotal = .5 *Math.round(score * 2);
 
-        return  roundedDiveTotal;
+        return  score;
     }
 
     private void getJudgeTotal(){

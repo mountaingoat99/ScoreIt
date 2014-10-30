@@ -667,13 +667,14 @@ public class EnterFinalDiveScore extends ActionBarActivity implements OnItemSele
     }
 
     private void getScoreText(){
-        double roundedNumber;
+        //double roundedNumber;
         String testNumber = score1.getText().toString();
         if(testNumber.equals("")){
             testNumber = "0.0";
         }
-        roundedNumber = Double.parseDouble(testNumber);
-        sc1 = .5 * Math.round(roundedNumber * 2);
+//        roundedNumber = Double.parseDouble(testNumber);
+//        sc1 = .5 * Math.round(roundedNumber * 2);
+        sc1 = Double.parseDouble(testNumber);
     }
 
     private void updateDiveListToYes(){
