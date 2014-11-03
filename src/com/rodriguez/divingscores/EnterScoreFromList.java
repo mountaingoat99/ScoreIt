@@ -20,6 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiveTotalDatabase;
@@ -36,7 +37,7 @@ public class EnterScoreFromList extends ActionBarActivity implements AdapterView
     private Button btnTotal;
     private int judges, diverId, meetId, diveNumber, dbDiveNumber, diverSpinnerPosition, totalDives;
     private double sc1, sc2, sc3, sc4, sc5, sc6, sc7, diveScoreTotal = 0.0,
-            multiplier = 0.0, diveTotal = 0.0; //roundedDiveTotal = 0.0;
+            multiplier = 0.0, diveTotal = 0.0, oldTotalScore, newTotalScore, total;
     private ArrayList<Double> Scores = new ArrayList<>();
     private boolean ifZeroTotal = true;
     private String stringId, className = "EnterScoreFromList";
@@ -46,6 +47,7 @@ public class EnterScoreFromList extends ActionBarActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_score_from_list);
+
         if (savedInstanceState != null) {
             stringId = savedInstanceState.getString(KEY_TEXT_VALUE);
         }
@@ -57,6 +59,7 @@ public class EnterScoreFromList extends ActionBarActivity implements AdapterView
         setUpView();
 
         Bundle b = getIntent().getExtras();
+
         diverId = b.getInt("keyDiver");
         meetId = b.getInt("keyMeet");
         diveNumber = b.getInt("diveNumber");
@@ -111,11 +114,6 @@ public class EnterScoreFromList extends ActionBarActivity implements AdapterView
         SearchDiveTotals search = new SearchDiveTotals();
         totalDives = search.doInBackground();
     }
-
-//    private void updateDiveListToYes(){
-//        UpdateDiveListToYes yes = new UpdateDiveListToYes();
-//        yes.doInBackground();
-//    }
 
     private void getDiveNumber(){
         GetDiveNumber num = new GetDiveNumber();
@@ -184,9 +182,6 @@ public class EnterScoreFromList extends ActionBarActivity implements AdapterView
 
     private void calcScores() {
         ifZeroTotal = true;
-        GetTotalScore tScore = new GetTotalScore();
-        //double diveTotal;
-        double total = tScore.doInBackground();
         // Converts and sorts the ArrayList for processing
         Double[] theScores = new Double[ Scores.size()];
         Scores.toArray(theScores);
@@ -228,68 +223,84 @@ public class EnterScoreFromList extends ActionBarActivity implements AdapterView
 
         //roundedDiveTotal = .5 * Math.round(diveTotal * 2);
 
-        total = total + diveTotal;
+
 
         if(diveTotal < .5){
             ifZeroTotal = false;
             return;
         }
 
+
+        // Get the old score, even if it is the first entry
+        GetDiveScore oldS = new GetDiveScore();
+        oldTotalScore = oldS.doInBackground();
+
+
+        // grabbing the old total score here
+        GetTotalScore tScore = new GetTotalScore();
+        total = tScore.doInBackground();
+
+        // subtract the old score, and then add the new score
+        // had to do it this way incase they change a dive score. Old way was incrementing edited totals
+        double scoreTemp = total - oldTotalScore;
+        newTotalScore = scoreTemp + diveTotal;
+
+
         ResultDatabase db = new ResultDatabase(getApplicationContext());
         int resultIndex;
         if(diveNumber == 1){
             resultIndex = 3;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, newTotalScore);
             return;
         }
         if(diveNumber == 2){
             resultIndex = 4;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, newTotalScore);
             return;
         }
         if(diveNumber == 3){
             resultIndex = 5;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, newTotalScore);
             return;
         }
         if(diveNumber == 4){
             resultIndex = 6;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, newTotalScore);
             return;
         }
         if(diveNumber == 5){
             resultIndex = 7;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, newTotalScore);
             return;
         }
         if(diveNumber == 6){
             resultIndex = 8;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, newTotalScore);
             return;
         }
         if(diveNumber == 7){
             resultIndex = 9;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, newTotalScore);
             return;
         }
         if(diveNumber == 8){
             resultIndex = 10;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, newTotalScore);
             return;
         }
         if(diveNumber == 9){
             resultIndex = 11;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, newTotalScore);
             return;
         }
         if(diveNumber == 10){
             resultIndex = 12;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, newTotalScore);
             return;
         }
         if(diveNumber == 11){
             resultIndex = 13;
-            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, total);
+            db.writeDiveScore(meetId, diverId, resultIndex, diveTotal, newTotalScore);
         }
     }
 
@@ -500,11 +511,11 @@ public class EnterScoreFromList extends ActionBarActivity implements AdapterView
 
     private class GetTotalScore extends AsyncTask<Double, Object, Object>{
         ResultDatabase db = new ResultDatabase(getApplicationContext());
-        double total;
+        double Total;
 
         @Override
         protected Double doInBackground(Double... params) {
-            return total = db.getTotalScore(meetId, diverId);
+            return Total = db.getTotalScore(meetId, diverId);
         }
     }
 
@@ -549,16 +560,6 @@ public class EnterScoreFromList extends ActionBarActivity implements AdapterView
         }
     }
 
-//    private class UpdateDiveListToYes extends AsyncTask<Object, Object, Object>{
-//        DiveListDatabase db = new DiveListDatabase(getApplicationContext());
-//
-//        @Override
-//        protected Object doInBackground(Object... params){
-//            db.setNoList(meetId, diverId);
-//            return null;
-//        }
-//    }
-
     private class SearchDiveTotals extends AsyncTask<Integer, Object, Object>{
         DiveTotalDatabase db = new DiveTotalDatabase(getApplicationContext());
         int number;
@@ -566,6 +567,16 @@ public class EnterScoreFromList extends ActionBarActivity implements AdapterView
         @Override
         protected Integer doInBackground(Integer... params) {
             return number = db.searchTotals(meetId, diverId);
+        }
+    }
+
+    private class GetDiveScore extends AsyncTask<Double, Object, Object>{
+        ResultDatabase db = new ResultDatabase(getApplicationContext());
+        double theOldtotal;
+
+        @Override
+        protected Double doInBackground(Double... params){
+            return theOldtotal = db.getDiveScore(meetId, diverId, diveNumber);
         }
     }
 }
