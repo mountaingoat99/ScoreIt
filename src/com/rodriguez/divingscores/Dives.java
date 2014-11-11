@@ -708,8 +708,8 @@ public class Dives extends ActionBarActivity implements OnItemSelectedListener
         double roundedScore;
         sc1 = Double.parseDouble(score1.getSelectedItem().toString().trim());
         sc2 = Double.parseDouble(score2.getSelectedItem().toString().trim());
-        //score = (sc1 + sc2) / 2;
-        roundedScore = .5 * Math.round(((sc1 + sc2) / 2) * 2);
+        roundedScore = (sc1 + sc2) / 2;
+        //roundedScore = .5 * Math.round(((sc1 + sc2) / 2) * 2);
         sc3 = roundedScore;
         sc4 = 0.0;
         sc5 = 0.0;
