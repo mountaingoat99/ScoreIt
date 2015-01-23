@@ -83,9 +83,10 @@ public class ChangeDiveScore extends ActionBarActivity implements OnItemSelected
                 R.layout.spinner_item, diveNum);
 
         dataAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        spinner.setAdapter(
-                new NothingSelectedSpinnerAdapter(
-                        dataAdapter, R.layout.diver_number_spinner_row_nothing_selected, this));
+        spinner.setAdapter(dataAdapter);
+        //spinner.setAdapter(
+                //new NothingSelectedSpinnerAdapter(
+                        //dataAdapter, R.layout.diver_number_spinner_row_nothing_selected, this));
 
     }
 
@@ -97,37 +98,37 @@ public class ChangeDiveScore extends ActionBarActivity implements OnItemSelected
             noSpinChoice = false;
         } else {
             switch (position){
-                case 1:
+                case 0:
                     showDiveNumber = 1;
                     break;
-                case 2:
+                case 1:
                     showDiveNumber = 2;
                     break;
-                case 3:
+                case 2:
                     showDiveNumber = 3;
                     break;
-                case 4:
+                case 3:
                     showDiveNumber = 4;
                     break;
-                case 5:
+                case 4:
                     showDiveNumber = 5;
                     break;
-                case 6:
+                case 5:
                     showDiveNumber = 6;
                     break;
-                case 7:
+                case 6:
                     showDiveNumber = 7;
                     break;
-                case 8:
+                case 7:
                     showDiveNumber = 8;
                     break;
-                case 9:
+                case 8:
                     showDiveNumber = 9;
                     break;
-                case 10:
+                case 9:
                     showDiveNumber = 10;
                     break;
-                case 11:
+                case 10:
                     showDiveNumber = 11;
                     break;
             }
