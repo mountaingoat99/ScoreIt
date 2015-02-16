@@ -480,7 +480,7 @@ public class QuickScoreEdit extends ActionBarActivity {
     // create a screen shot to share on Facebook
     public void saveBitmap(Bitmap bitmap) {
         String filePath = Environment.getExternalStorageDirectory()
-                + File.separator + "DCIM/Camera/screenshot.png";
+                + File.separator + "DCIM/screenshot.png";
         File imagePath = new File(filePath);
         FileOutputStream fos;
         try {
