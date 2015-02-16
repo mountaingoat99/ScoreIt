@@ -330,5 +330,6 @@
     <string name="delete_score_sheet">Delete Score Sheet</string>
     <string name="edit_dive_list_info">After entering all the dives in the list you will have the option to score them. You can edit a dive by long clicking the dive name.</string>
     <string name="score_my_dive_elite">Score My Dive Elite</string>
+    <string name="title_activity_elite_dialog">Elite Dialog</string>
 
 </resources>
