@@ -79,6 +79,9 @@ public class Home extends ActionBarActivity {
                 Intent intent2 = new Intent(context, About.class);
                 startActivity(intent2);
                 break;
+            case R.id.elite:
+                // add in new activity
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

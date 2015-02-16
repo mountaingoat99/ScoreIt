@@ -11,4 +11,9 @@
         android:orderInCategory="200"
         divingscores:showAsAction="collapseActionView" />
 
+    <item android:id="@+id/elite"
+        android:title="@string/score_my_dive_elite"
+        android:orderInCategory="200"
+        divingscores:showAsAction="collapseActionView" />
+
 </menu>
