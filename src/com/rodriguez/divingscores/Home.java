@@ -1,13 +1,17 @@
 package com.rodriguez.divingscores;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
@@ -15,6 +19,7 @@ import android.widget.Button;
 public class Home extends ActionBarActivity {
 
     private Button btnQuick, btnDetailed;
+    private boolean eliteAlert;
     private final Context context = this;
 
     @Override
@@ -26,6 +31,31 @@ public class Home extends ActionBarActivity {
         btnDetailed = (Button)findViewById(R.id.buttonDetailScore);
 
         addListenerOnButton();
+
+        // shared preference for the alert dialog
+        loadSavedPreferences();
+        if (!eliteAlert) {
+            showAlert();
+            savePreferences("eliteAlert", true);
+        }
+    }
+
+    private void loadSavedPreferences(){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        eliteAlert = sp.getBoolean("eliteAlert",false);
+    }
+
+    private void savePreferences(String key, boolean value){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    private void showAlert(){
+
+        Intent intent = new Intent(context, eliteDialog.class);
+        startActivity(intent);
     }
 
     // do not allow any back presses on the Welcome screen to other activities
@@ -80,7 +110,8 @@ public class Home extends ActionBarActivity {
                 startActivity(intent2);
                 break;
             case R.id.elite:
-                // add in new activity
+                Intent intent1 = new Intent(context, eliteDialog.class);
+                startActivity(intent1);
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -329,7 +329,14 @@
     <string name="save">Save</string>
     <string name="delete_score_sheet">Delete Score Sheet</string>
     <string name="edit_dive_list_info">After entering all the dives in the list you will have the option to score them. You can edit a dive by long clicking the dive name.</string>
-    <string name="score_my_dive_elite">Score My Dive Elite</string>
+    <string name="score_my_dive_elite">GET ELITE!</string>
     <string name="title_activity_elite_dialog">Elite Dialog</string>
+    <string name="elite_text_box">We just released a premium version to the Google Play Store which has big improvements to the interface and design, making it easier to navigate and score an entire meet.
+                                    </string>
+
+    <string name="elite_warning">Warning, Because it was a full rebuild you will not be able to upgrade this version to this premium version.
+                                But rest assured, both versions will be fully supported so you don\'t have to worry about losing anything you already have entered.</string>
+    <string name="introducing_elite">Introducing Score My Dive Elite!</string>
+    <string name="google_play">Get it now at the Google Play Store:</string>
 
 </resources>

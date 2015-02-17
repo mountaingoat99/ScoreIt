@@ -25,7 +25,7 @@
         android:layout_below="@id/Howto"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:textSize="@dimen/text_size_small"
+        android:textSize="@dimen/text_size_medium"
         android:textColor="@color/random_text"
         android:singleLine="false"/>
 
@@ -38,7 +38,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:textSize="@dimen/text_size_super_mini"
+        android:textSize="@dimen/text_size_mini"
         android:textColor="@color/random_text"
         android:singleLine="false"/>
 
@@ -60,7 +60,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/google_play"
-            android:textSize="@dimen/text_size_small"
+            android:textSize="@dimen/text_size_medium"
             android:textColor="@color/random_text"
             android:singleLine="false"/>
 
@@ -70,6 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_weight=".2"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:src="@drawable/promographic"
             android:contentDescription="@string/youtubelink" />
 
@@ -85,7 +87,7 @@
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginBottom="16dp"
-        android:textSize="@dimen/text_size_super_mini"
+        android:textSize="@dimen/text_size_mini"
         android:textColor="@color/random_text"
         android:singleLine="false"/>
 
