@@ -5,15 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+
+import java.io.File;
 
 
 public class Home extends ActionBarActivity {
@@ -30,6 +34,8 @@ public class Home extends ActionBarActivity {
         btnQuick = (Button)findViewById(R.id.buttonQuickScore);
         btnDetailed = (Button)findViewById(R.id.buttonDetailScore);
 
+        createShareDirectory();
+
         addListenerOnButton();
 
         // shared preference for the alert dialog
@@ -37,6 +43,16 @@ public class Home extends ActionBarActivity {
         if (!eliteAlert) {
             showAlert();
             savePreferences("eliteAlert", true);
+        }
+    }
+
+    private void createShareDirectory(){
+
+        File newDir = new File(Environment.getExternalStorageDirectory() + "/ScoreMyDive/");
+        if (!newDir.exists()) {
+            newDir.mkdirs();
+        } else {
+            Log.d("Error", "Directory Already Exists");
         }
     }
 
