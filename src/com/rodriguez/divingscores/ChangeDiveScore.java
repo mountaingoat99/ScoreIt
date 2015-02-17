@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import info.controls.NothingSelectedSpinnerAdapter;
 import info.sqlite.helper.DiveNumberDatabase;
 import info.sqlite.helper.DiverDatabase;
 import info.sqlite.helper.JudgeScoreDatabase;
